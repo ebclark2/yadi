@@ -4,6 +4,8 @@
 
 #include <yadi/factory.hpp>
 
+#include <iostream>
+
 namespace yadi {
 
 struct my_type {};
@@ -37,7 +39,7 @@ int main() {
   }
 
   {
-                 my_raw_ptr::register_type<my_raw_ptr>("raw");
+    my_raw_ptr::register_type<my_raw_ptr>("raw");
     my_raw_ptr::ptr_type p = my_raw_ptr::create("raw");
   }
 
