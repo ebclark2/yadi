@@ -4,8 +4,6 @@
 
 #include <yadi/factory.hpp>
 
-#include <iostream>
-
 namespace yadi {
 
 struct my_type {};
