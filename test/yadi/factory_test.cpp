@@ -4,7 +4,15 @@
 
 #include <yadi/factory.hpp>
 
-int main() 
+struct my_type { };
+
+struct my_type_1 : public my_type {
+};
+
+int main()
 {
-return 0;
+    yadi::factory<my_type>::register_type<my_type_1>("my_type_1");
+    yadi::ptr_type_t<my_type> p = yadi::factory<my_type>::create("my_type_1");
+
+    return 0;
 }
