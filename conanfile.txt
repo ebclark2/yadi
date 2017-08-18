@@ -1,0 +1,2 @@
+[requires]
+yaml-cpp/0.5.3@ebclark2/testing
