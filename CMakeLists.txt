@@ -4,6 +4,8 @@ project(yadi)
 
 set (CMAKE_CXX_STANDARD 14)
 
+add_definitions(-W -Wall -Wextra -pedantic)
+
 set(SOURCES src/yadi/factory.hpp)
 
 add_library(yadi INTERFACE)
