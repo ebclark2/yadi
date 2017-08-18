@@ -16,4 +16,4 @@ enable_testing()
 add_executable(yadi_test ${TEST_SOURCES})
 target_link_libraries(yadi_test yadi)
 
-add_test(yadi_test yadi_type)
+add_test(yadi_test yadi_test)
