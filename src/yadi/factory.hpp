@@ -24,6 +24,7 @@ class factory
 public:
     using base_type = BaseType;
     using initializer_type = std::function<ptr_type_t<base_type> (std::string)>;
+    using ptr_type = ptr_type_t<base_type>;
 
 private:
     struct type_info
@@ -49,7 +50,7 @@ public:
         });
     }
 
-    static ptr_type_t<base_type> create(std::string const& type, std::string arg="")
+    static ptr_type create(std::string const& type, std::string arg="")
     {
         typename type_store::const_iterator type_iter = types().find(type);
         if(type_iter == types().end())
@@ -66,12 +67,6 @@ private:
         static type_store TYPES;
         return TYPES;
     }
-
-    factory()=delete;
-    factory(factory const&)=delete;
-    factory & operator=(factory const&)=delete;
-
-
 };
 
 
