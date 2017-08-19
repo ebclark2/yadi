@@ -28,7 +28,7 @@ struct my_unique_ptr : public factory<my_unique_ptr> {};
 
 } // namespace yadi
 
-int main() {
+int test() {
   using namespace yadi;
 
   {
