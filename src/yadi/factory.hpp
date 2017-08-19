@@ -126,16 +126,16 @@ void register_alias(std::string alias, std::string type, YAML::Node config) {
     });
 }
 
-    template <typename base_t>
-    void register_aliases(YAML::Node aliases) {
-        // TODO error handling
-        std::map<std::string, YAML::Node> aliasesMap = aliases.as<std::map<std::string, YAML::Node>>();
-        for(auto const& entry : aliasesMap) {
-            std::string type = entry.second["type"].as<std::string>();
-            YAML::Node config = entry.second["config"];
-            register_alias<base_t>(entry.first, type, config);
-        }
+template <typename base_t>
+void register_aliases(YAML::Node aliases) {
+    // TODO error handling
+    std::map<std::string, YAML::Node> aliasesMap = aliases.as<std::map<std::string, YAML::Node>>();
+    for (auto const& entry : aliasesMap) {
+        std::string type = entry.second["type"].as<std::string>();
+        YAML::Node config = entry.second["config"];
+        register_alias<base_t>(entry.first, type, config);
     }
+}
 
 }  // namespace yadi
 
