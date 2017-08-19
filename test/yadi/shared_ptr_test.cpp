@@ -6,13 +6,13 @@
 
 namespace yadi {
 
-struct my_type {};
+struct my_shared_type {};
 
-struct my_type_1 : public my_type {};
+struct my_shared_type_1 : public my_shared_type {};
 
 YADI_TEST(shared_ptr_create) {
-    register_type_no_arg<my_type, my_type_1>("my_type_1");
-    ptr_type_t<my_type> p = factory<my_type>::create("my_type_1");
+    register_type_no_arg<my_shared_type, my_shared_type_1>("my_type_1");
+    std::shared_ptr<my_shared_type> p = factory<my_shared_type>::create("my_type_1");
     return p.get();
 }
 
