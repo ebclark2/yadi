@@ -23,7 +23,7 @@ namespace yadi
     public: \
         bool run() override final; \
     }; \
-    ::yadi::registrator_no_arg<::yadi::test, NAME> NAME__(#NAME); \
+    ::yadi::registrator_no_arg<::yadi::test, NAME> NAME##__(#NAME); \
     bool NAME::run()
 
 #endif //YADI_TEST_HPP
