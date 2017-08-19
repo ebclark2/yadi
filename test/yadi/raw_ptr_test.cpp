@@ -17,7 +17,7 @@ struct factory_traits<my_raw_ptr> {
 struct my_raw_ptr : public factory<my_raw_ptr> {};
 
 YADI_TEST(raw_ptr_create) {
-  my_raw_ptr::register_type<my_raw_ptr>("raw");
+  register_type_no_arg<my_raw_ptr, my_raw_ptr>("raw");
   my_raw_ptr::ptr_type p = my_raw_ptr::create("raw");
   return p;
 }

@@ -5,5 +5,7 @@
 #include "test.hpp"
 
 namespace yadi {
-YADI_TEST(yaml_string_config) {}
+YADI_TEST(yaml_string_config) {
+        return true;
+    }
 }  // namespace yadi

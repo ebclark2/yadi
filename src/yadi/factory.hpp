@@ -55,7 +55,7 @@ class factory {
     }
 
     if (factory_config.IsScalar()) {
-      std::string type = factory_config.as_if<std::string>("");
+      std::string type = factory_config.as<std::string>("");
       if (type.empty()) {
         throw std::runtime_error("Factory config scalar not valid");
       }
@@ -68,13 +68,13 @@ class factory {
       if (!typeNode.IsDefined()) {
         throw std::runtime_error("Factory config type not defined");
       }
-      std::string type = typeNode.as_if<std::string>("");
+      std::string type = typeNode.as<std::string>("");
       if (type.empty()) {
         throw std::runtime_error("Factory config type not valid");
       }
 
       YAML::Node configNode = factory_config["config"];
-      return create(type, config);
+      return create(type, configNode);
     }
 
     throw std::runtime_error(
@@ -95,16 +95,15 @@ using initializer_type_t = typename factory<base_t>::initializer_type;
 
 template <typename base_t, typename impl_t>
 static void register_type_no_arg(std::string type) {
-  register_type(type, [](YAML::Node) {
-    ptr_type_t<base_type> p(new impl_t);
+  factory<base_t>::register_type(type, [](YAML::Node) {
+    ptr_type_t<base_t> p(new impl_t);
     return p;
   });
 }
 
-]
-    template <typename base_t>
-    class registrator
-    {
+template <typename base_t>
+class registrator
+{
  public:
   registrator(std::string type, initializer_type_t<base_t> initializer) {
     factory<base_t>::register_type(type, initializer);
