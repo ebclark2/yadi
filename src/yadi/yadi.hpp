@@ -50,9 +50,7 @@ class factory {
      * @param type
      * @param initializer
      */
-    static void register_type(std::string type, initializer_type initializer) {
-        mut_types()[type].initializer = initializer;
-    }
+    static void register_type(std::string type, initializer_type initializer);
 
     /**
      * @brief Calls the initializer associated with type passing the given YAML config.
@@ -61,14 +59,7 @@ class factory {
      * @return The result of the registered initializer
      * @throws std::runtime_error if no initializer is registered for type
      */
-    static ptr_type create(std::string const& type, YAML::Node const& config = {}) {
-        typename type_store::const_iterator type_iter = mut_types().find(type);
-        if (type_iter == mut_types().end()) {
-            throw std::runtime_error(type + " not found");
-        }
-
-        return type_iter->second.initializer(config);
-    }
+    static ptr_type create(std::string const& type, YAML::Node const& config = {});
 
     /**
      * @brief A copy of the stored types and their registered initializers and help.
@@ -82,6 +73,22 @@ class factory {
         return TYPES;
     }
 };
+
+template <typename base_t>
+void factory<base_t>::register_type(std::string type, initializer_type initializer) {
+    mut_types()[type].initializer = initializer;
+}
+
+template <typename base_t>
+typename factory<base_t>::ptr_type factory<base_t>::create(std::string const& type,
+                                                           YAML::Node const& config) {
+    typename type_store::const_iterator type_iter = mut_types().find(type);
+    if (type_iter == mut_types().end()) {
+        throw std::runtime_error(type + " not found");
+    }
+
+    return type_iter->second.initializer(config);
+}
 
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
