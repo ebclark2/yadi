@@ -23,4 +23,4 @@ enable_testing()
 add_executable(yadi_test ${TEST_SOURCES})
 target_link_libraries(yadi_test yadi)
 
-add_test(yadi_test yadi_test)
+add_test(yadi_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/yadi_test)
