@@ -10,25 +10,25 @@
 
 namespace yadi {
 
-    /**
-     * @brief Factory traits that can be changed for base_t.
-     * @tparam base_t
-     */
+/**
+ * @brief Factory traits that can be changed for base_t.
+ * @tparam base_t
+ */
 template <typename base_t>
 struct factory_traits {
-    using ptr_type = std::shared_ptr<base_t>; /// The type of pointer to return from create.
+    using ptr_type = std::shared_ptr<base_t>;  /// The type of pointer to return from create.
 };
 
-    /**
-     * @brief The type of pointer the base_t factory creates.
-     */
+/**
+ * @brief The type of pointer the base_t factory creates.
+ */
 template <typename base_t>
 using ptr_type_t = typename factory_traits<base_t>::ptr_type;
 
-    /**
-     * A YAML based factory.
-     * @tparam base_t
-     */
+/**
+ * A YAML based factory.
+ * @tparam base_t
+ */
 template <typename base_t>
 class factory {
    public:
@@ -45,8 +45,8 @@ class factory {
 
    public:
     /**
-     * @brief Registers initializer to type.  When create is called with type this initializer will be called.
-     * Overwrites initializer if already registered (will change).
+     * @brief Registers initializer to type.  When create is called with type this initializer will
+     * be called. Overwrites initializer if already registered (will change).
      * @param type
      * @param initializer
      */
@@ -71,9 +71,10 @@ class factory {
     }
 
     /**
-     * @brief Pulls type and config from YAML.  This function is especially usefil when loading nested types
-     * from YAML configuration.  If factory_config is a scalar string it will be used as type.  If factory_config
-     * is a map then "type" and "config" keys will be pulled from it and used as such.
+     * @brief Pulls type and config from YAML.  This function is especially usefil when loading
+     * nested types from YAML configuration.  If factory_config is a scalar string it will be used
+     * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
+     * used as such.
      * @param factory_config
      * @return
      */
@@ -124,14 +125,14 @@ class factory {
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
 
-    /**
-     * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
-     * ptr_type_t<base_t>.
-     * @tparam base_t Use to determine pointer type.
-     * @tparam impl_t Type to construct
-     * @param config Argument to constructor.
-     * @return The constructed type as ptr_type_t<base_t>
-     */
+/**
+ * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
+ * ptr_type_t<base_t>.
+ * @tparam base_t Use to determine pointer type.
+ * @tparam impl_t Type to construct
+ * @param config Argument to constructor.
+ * @return The constructed type as ptr_type_t<base_t>
+ */
 template <typename base_t, typename impl_t>
 ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
     ptr_type_t<base_t> ret(new impl_t(config));
@@ -139,42 +140,43 @@ ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
 };
 
 // TODO complete function
-    // TODO change argument names
-    /**
-     * If both types are maps then they are merged.  If right is not defined then left is used.  Otherwise, error.
-     * @param left
-     * @return
-     */
+// TODO change argument names
+/**
+ * If both types are maps then they are merged.  If right is not defined then left is used.
+ * Otherwise, error.
+ * @param left
+ * @return
+ */
 inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */) { return left; }
 
-    /**
-     * @brief Equivalent to factory<baes_t>::register_type(type, initializer)
-     * @tparam base_t
-     * @param type
-     * @param initializer
-     */
+/**
+ * @brief Equivalent to factory<baes_t>::register_type(type, initializer)
+ * @tparam base_t
+ * @param type
+ * @param initializer
+ */
 template <typename base_t>
 void register_type(std::string type, initializer_type_t<base_t> initializer) {
     factory<base_t>::register_type(type, initializer);
 };
 
-    /**
-     * @brief Registers type using yaml_init function as initializer.
-     * @tparam base_t
-     * @tparam impl_t
-     * @param type
-     */
+/**
+ * @brief Registers type using yaml_init function as initializer.
+ * @tparam base_t
+ * @tparam impl_t
+ * @param type
+ */
 template <typename base_t, typename impl_t>
 void register_type(std::string type) {
     register_type<base_t>(type, &yaml_init<base_t, impl_t>);
 };
 
-    /**
-     * @brief Registers type to initializer that will construct impl_t using default constructor.
-     * @tparam base_t
-     * @tparam impl_t
-     * @param type
-     */
+/**
+ * @brief Registers type to initializer that will construct impl_t using default constructor.
+ * @tparam base_t
+ * @tparam impl_t
+ * @param type
+ */
 template <typename base_t, typename impl_t>
 void register_type_no_arg(std::string type) {
     register_type<base_t>(type, [](YAML::Node) {
@@ -183,14 +185,15 @@ void register_type_no_arg(std::string type) {
     });
 }
 
-    /**
-     * @brief Registers alias to type and config pair.  When create is called for alias the passed in and registered
-     * configs are merged and the initializer registered to type is called with the result.
-     * @tparam base_t
-     * @param alias
-     * @param type
-     * @param config
-     */
+/**
+ * @brief Registers alias to type and config pair.  When create is called for alias the passed in
+ * and registered configs are merged and the initializer registered to type is called with the
+ * result.
+ * @tparam base_t
+ * @param alias
+ * @param type
+ * @param config
+ */
 template <typename base_t>
 void register_alias(std::string alias, std::string type, YAML::Node config) {
     register_type<base_t>(alias, [type, config](YAML::Node const& passedConfig) {
@@ -199,16 +202,16 @@ void register_alias(std::string alias, std::string type, YAML::Node config) {
     });
 }
 
-    /**
-     * @brief Loads aliases from a YAML file.  The file should be a map of the format...
-     * alias:
-     *   type: actualType
-     *   config: ...
-     *
-     * For each entry register_alias() is called.
-     * @tparam base_t
-     * @param aliases
-     */
+/**
+ * @brief Loads aliases from a YAML file.  The file should be a map of the format...
+ * alias:
+ *   type: actualType
+ *   config: ...
+ *
+ * For each entry register_alias() is called.
+ * @tparam base_t
+ * @param aliases
+ */
 template <typename base_t>
 void register_aliases(YAML::Node aliases) {
     // TODO error handling
