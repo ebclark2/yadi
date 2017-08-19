@@ -4,12 +4,17 @@ project(yadi)
 
 set (CMAKE_CXX_STANDARD 14)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+
+
 add_definitions(-W -Wall -Wextra -pedantic)
 
 set(SOURCES src/yadi/factory.hpp)
 
 add_library(yadi INTERFACE)
 target_include_directories(yadi INTERFACE src)
+target_link_libraries(yadi INTERFACE CONAN_PKG::yaml-cpp)
 
 set(TEST_SOURCES test/yadi/factory_test.cpp)
 
