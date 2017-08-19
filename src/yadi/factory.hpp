@@ -99,6 +99,12 @@ ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
   return ret;
 };
 
+// TODO complete function
+inline YAML::Node merge_yaml(YAML::Node const& left,
+                             YAML::Node const& /* right */) {
+  return left;
+}
+
 template <typename base_t>
 static void register_type(std::string type,
                           initializer_type_t<base_t> initializer) {
@@ -115,6 +121,15 @@ static void register_type_no_arg(std::string type) {
   register_type<base_t>(type, [](YAML::Node) {
     ptr_type_t<base_t> p(new impl_t);
     return p;
+  });
+}
+
+template <typename base_t>
+static void register_alias(std::string alias, std::string type,
+                           YAML::Node config) {
+  register_type<base_t>(alias, [type, config](YAML::Node const& passedConfig) {
+    YAML::Node mergedConfig = merge_yaml(config, passedConfig);
+    return factory<base_t>::create(type, mergedConfig);
   });
 }
 
