@@ -11,7 +11,7 @@ struct my_raw_ptr;
 
 template <>
 struct factory_traits<my_raw_ptr> {
-  using ptr_type = my_raw_ptr *;
+  using ptr_type = my_raw_ptr*;
 };
 
 struct my_raw_ptr : public factory<my_raw_ptr> {};

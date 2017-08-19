@@ -13,8 +13,8 @@ int main() {
   bool success = true;
 
   test::type_store types = test::types();
-  for (auto const &entry : types) {
-    std::string const &type = entry.first;
+  for (auto const& entry : types) {
+    std::string const& type = entry.first;
     ptr_type_t<test> t = test::create(type);
     std::cout << "[" << type << "] running...\n";
     bool result = t->run();
