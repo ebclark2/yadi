@@ -93,9 +93,14 @@ class factory {
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
 
+    template <typename base_t>
+    static void register_type(std::string type, initializer_type_t<base_t> initializer) {
+        factory<base_t>::register_type(type, initializer);
+    };
+
 template <typename base_t, typename impl_t>
 static void register_type_no_arg(std::string type) {
-  factory<base_t>::register_type(type, [](YAML::Node) {
+  register_type<base_t>(type, [](YAML::Node) {
     ptr_type_t<base_t> p(new impl_t);
     return p;
   });
