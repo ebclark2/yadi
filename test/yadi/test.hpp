@@ -5,7 +5,7 @@
 #ifndef YADI_TEST_HPP
 #define YADI_TEST_HPP
 
-#include <yadi/factory.hpp>
+#include <yadi/yadi.hpp>
 
 namespace yadi {
 class test;

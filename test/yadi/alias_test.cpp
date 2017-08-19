@@ -2,7 +2,6 @@
 // Created by Ed Clark on 8/18/17.
 //
 
-#include <iostream>
 #include "test.hpp"
 
 namespace yadi {
