@@ -106,23 +106,10 @@ static void register_type_no_arg(std::string type) {
   });
 }
 
-template <typename base_t>
-class registrator
-{
- public:
-  registrator(std::string type, initializer_type_t<base_t> initializer) {
-    factory<base_t>::register_type(type, initializer);
-  }
-};
-
-template <typename base_t, typename impl_t>
-class registrator_no_arg {
- public:
-  registrator_no_arg(std::string type) {
-    register_type_no_arg<base_t, impl_t>(type);
-  }
-};
-
 }  // namespace yadi
+
+#define YADI_INIT_BEGIN namespace { struct static_initialization { static_initialization() {
+
+#define YADI_INIT_END }}; static_initialization static_initialization__; }
 
 #endif  // YADI_FACTORY_HPP__

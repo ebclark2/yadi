@@ -27,7 +27,9 @@ class test : public factory<test> {
    public:                                                        \
     bool run() override final;                                    \
   };                                                              \
-  ::yadi::registrator_no_arg<::yadi::test, NAME> NAME##__(#NAME); \
+  YADI_INIT_BEGIN \
+  ::yadi::register_type_no_arg<::yadi::test, NAME>(#NAME); \
+YADI_INIT_END \
   bool NAME::run()
 
 #endif  // YADI_TEST_HPP
