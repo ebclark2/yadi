@@ -117,9 +117,9 @@ void register_type(std::string type, initializer_type_t<base_t> initializer);
 
 /**
  * @brief Registers type using yaml_init function as initializer.
- * @tparam base_t
- * @tparam impl_t
- * @param type
+ * @tparam base_t The factory type to use
+ * @tparam impl_t The type to create
+ * @param type The name to register the type under
  */
 template <typename base_t, typename impl_t>
 void register_type(std::string type);
@@ -158,6 +158,21 @@ void register_alias(std::string alias, std::string type, YAML::Node config);
 template <typename base_t>
 void register_aliases(YAML::Node aliases);
 
+#define YADI_INIT_BEGIN_N(NAME)           \
+    namespace {                           \
+    struct static_initialization_##NAME { \
+        static_initialization_##NAME() {
+#define YADI_INIT_END_N(NAME)                                      \
+    }                                                              \
+    }                                                              \
+    ;                                                              \
+    static_initialization_##NAME static_initialization_##NAME##__; \
+    }
+
+#define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
+#define YADI_INIT_END YADI_INIT_END_N(ANON)
+
+// ################# IMPL ################################
 template <typename base_t>
 void factory<base_t>::register_type(std::string type, initializer_type initializer) {
     mut_types()[type].initializer = initializer;
@@ -175,12 +190,12 @@ typename factory<base_t>::ptr_type factory<base_t>::create(std::string const& ty
 }
 
 template <typename base_t>
-typename factory<base_t>::type_store types() {
+typename factory<base_t>::type_store factory<base_t>::types() {
     return mut_types();
 }
 
 template <typename base_t>
-typename factory<base_t>::type_store& mut_types() {
+typename factory<base_t>::type_store& factory<base_t>::mut_types() {
     static type_store TYPES;
     return TYPES;
 }
@@ -230,7 +245,7 @@ void register_type(std::string type, initializer_type_t<base_t> initializer) {
     factory<base_t>::register_type(type, initializer);
 };
 
-template <typename base_t>
+template <typename base_t, typename impl_t>
 void register_type(std::string type) {
     register_type<base_t>(type, &yaml_init<base_t, impl_t>);
 };
@@ -263,19 +278,5 @@ void register_aliases(YAML::Node aliases) {
 }
 
 }  // namespace yadi
-
-#define YADI_INIT_BEGIN_N(NAME)           \
-    namespace {                           \
-    struct static_initialization_##NAME { \
-        static_initialization_##NAME() {
-#define YADI_INIT_END_N(NAME)                                      \
-    }                                                              \
-    }                                                              \
-    ;                                                              \
-    static_initialization_##NAME static_initialization_##NAME##__; \
-    }
-
-#define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
-#define YADI_INIT_END YADI_INIT_END_N(ANON)
 
 #endif  // YADI_FACTORY_HPP__
