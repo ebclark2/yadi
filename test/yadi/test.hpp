@@ -7,23 +7,27 @@
 
 #include <yadi/factory.hpp>
 
-namespace yadi
-{
-    class test
-    {
-    public:
-        virtual bool run()=0;
-    };
+namespace yadi {
+class test;
 
-}
+template <>
+struct factory_traits<test> {
+  using ptr_type = std::unique_ptr<test>;
+};
+
+class test : public factory<test> {
+ public:
+  virtual bool run() = 0;
+};
+}  // namespace yadi
 
 #define YADI_TEST(NAME) YADI_TEST_(NAME)
-#define YADI_TEST_(NAME) \
-    class NAME : public ::yadi::test { \
-    public: \
-        bool run() override final; \
-    }; \
-    ::yadi::registrator_no_arg<::yadi::test, NAME> NAME##__(#NAME); \
-    bool NAME::run()
+#define YADI_TEST_(NAME)                                          \
+  class NAME : public ::yadi::test {                              \
+   public:                                                        \
+    bool run() override final;                                    \
+  };                                                              \
+  ::yadi::registrator_no_arg<::yadi::test, NAME> NAME##__(#NAME); \
+  bool NAME::run()
 
-#endif //YADI_TEST_HPP
+#endif  // YADI_TEST_HPP

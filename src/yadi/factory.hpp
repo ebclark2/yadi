@@ -10,41 +10,37 @@
 
 namespace yadi {
 
-template <typename base_t> struct factory_traits {
+template <typename base_t>
+struct factory_traits {
   using ptr_type = std::shared_ptr<base_t>;
 };
 
 template <typename base_t>
 using ptr_type_t = typename factory_traits<base_t>::ptr_type;
 
-template <typename base_t> class factory {
-public:
+template <typename base_t>
+class factory {
+ public:
   using base_type = base_t;
   using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
   using ptr_type = ptr_type_t<base_type>;
 
-private:
+ private:
   struct type_info {
     initializer_type initializer;
     std::string help;
   };
 
-public:
+ public:
   using type_store = std::map<std::string, type_info>;
 
-public:
+ public:
   static void register_type(std::string type, initializer_type initializer) {
     mut_types()[type].initializer = initializer;
   }
 
-  template <typename impl_t> static void register_type(std::string type) {
-    register_type(type, [](YAML::Node) {
-      ptr_type_t<base_type> p(new impl_t);
-      return p;
-    });
-  }
-
-  static ptr_type create(std::string const &type, YAML::Node const& config = {}) {
+  static ptr_type create(std::string const& type,
+                         YAML::Node const& config = {}) {
     typename type_store::const_iterator type_iter = mut_types().find(type);
     if (type_iter == mut_types().end()) {
       throw std::runtime_error(type + " not found");
@@ -53,40 +49,76 @@ public:
     return type_iter->second.initializer(config);
   }
 
-    static type_store types() {
-        return mut_types();
+  static ptr_type create(YAML::Node const& factory_config) {
+    if (!factory_config.IsDefined()) {
+      throw std::runtime_error("Factory config not defined");
     }
 
-private:
-  static type_store &mut_types() {
+    if (factory_config.IsScalar()) {
+      std::string type = factory_config.as_if<std::string>("");
+      if (type.empty()) {
+        throw std::runtime_error("Factory config scalar not valid");
+      }
+
+      return create(type);
+    }
+
+    if (factory_config.IsMap()) {
+      YAML::Node typeNode = factory_config["type"];
+      if (!typeNode.IsDefined()) {
+        throw std::runtime_error("Factory config type not defined");
+      }
+      std::string type = typeNode.as_if<std::string>("");
+      if (type.empty()) {
+        throw std::runtime_error("Factory config type not valid");
+      }
+
+      YAML::Node configNode = factory_config["config"];
+      return create(type, config);
+    }
+
+    throw std::runtime_error(
+        "Factory config not valid, YAML must be scalar string or map");
+  }
+
+  static type_store types() { return mut_types(); }
+
+ private:
+  static type_store& mut_types() {
     static type_store TYPES;
     return TYPES;
   }
 };
 
-    template <typename base_t>
-    using initializer_type_t = typename factory<base_t>::initializer_type;
+template <typename base_t>
+using initializer_type_t = typename factory<base_t>::initializer_type;
 
+template <typename base_t, typename impl_t>
+static void register_type_no_arg(std::string type) {
+  register_type(type, [](YAML::Node) {
+    ptr_type_t<base_type> p(new impl_t);
+    return p;
+  });
+}
+
+]
     template <typename base_t>
     class registrator
     {
-    public:
-        registrator(std::string type, initializer_type_t<base_t> initializer)
-        {
-            factory<base_t>::register_type(type, initializer);
-        }
-    };
+ public:
+  registrator(std::string type, initializer_type_t<base_t> initializer) {
+    factory<base_t>::register_type(type, initializer);
+  }
+};
 
-    template <typename base_t, typename impl_t>
-    class registrator_no_arg
-    {
-    public:
-        registrator_no_arg(std::string type)
-        {
-            factory<base_t>::template register_type<impl_t>(type);
-        }
-    };
-    
-} // namespace yadi
+template <typename base_t, typename impl_t>
+class registrator_no_arg {
+ public:
+  registrator_no_arg(std::string type) {
+    register_type_no_arg<base_t, impl_t>(type);
+  }
+};
 
-#endif // YADI_FACTORY_HPP__
+}  // namespace yadi
+
+#endif  // YADI_FACTORY_HPP__

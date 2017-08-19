@@ -12,10 +12,10 @@ int main() {
 
   bool success = true;
 
-  factory<test>::type_store types = factory<test>::types();
+  test::type_store types = test::types();
   for (auto const &entry : types) {
     std::string const &type = entry.first;
-    ptr_type_t<test> t = factory<test>::create(type);
+    ptr_type_t<test> t = test::create(type);
     std::cout << "[" << type << "] running...\n";
     bool result = t->run();
     success = success && result;
