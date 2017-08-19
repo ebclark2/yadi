@@ -101,17 +101,17 @@ ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
 inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */) { return left; }
 
 template <typename base_t>
-static void register_type(std::string type, initializer_type_t<base_t> initializer) {
+void register_type(std::string type, initializer_type_t<base_t> initializer) {
     factory<base_t>::register_type(type, initializer);
 };
 
 template <typename base_t, typename impl_t>
-static void register_type(std::string type) {
+void register_type(std::string type) {
     register_type<base_t>(type, &yaml_init<base_t, impl_t>);
 };
 
 template <typename base_t, typename impl_t>
-static void register_type_no_arg(std::string type) {
+void register_type_no_arg(std::string type) {
     register_type<base_t>(type, [](YAML::Node) {
         ptr_type_t<base_t> p(new impl_t);
         return p;
@@ -119,12 +119,23 @@ static void register_type_no_arg(std::string type) {
 }
 
 template <typename base_t>
-static void register_alias(std::string alias, std::string type, YAML::Node config) {
+void register_alias(std::string alias, std::string type, YAML::Node config) {
     register_type<base_t>(alias, [type, config](YAML::Node const& passedConfig) {
         YAML::Node mergedConfig = merge_yaml(config, passedConfig);
         return factory<base_t>::create(type, mergedConfig);
     });
 }
+
+    template <typename base_t>
+    void register_aliases(YAML::Node aliases) {
+        // TODO error handling
+        std::map<std::string, YAML::Node> aliasesMap = aliases.as<std::map<std::string, YAML::Node>>();
+        for(auto const& entry : aliasesMap) {
+            std::string type = entry.second["type"].as<std::string>();
+            YAML::Node config = entry.second["config"];
+            register_alias<base_t>(entry.first, type, config);
+        }
+    }
 
 }  // namespace yadi
 
