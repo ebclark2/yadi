@@ -71,10 +71,10 @@ class factory {
     static type_store& mut_types();
 };
 
-    template <typename base_t>
-    using initializer_type_t = typename factory<base_t>::initializer_type;
+template <typename base_t>
+using initializer_type_t = typename factory<base_t>::initializer_type;
 
-    /**
+/**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
@@ -82,10 +82,10 @@ class factory {
  * @param factory_config
  * @return
  */
-    template <typename base_t>
-    ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
+template <typename base_t>
+ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
 
-    /**
+/**
  * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
  * ptr_type_t<base_t>.
  * @tparam base_t Use to determine pointer type.
@@ -93,10 +93,10 @@ class factory {
  * @param config Argument to constructor.
  * @return The constructed type as ptr_type_t<base_t>
  */
-    template <typename base_t, typename impl_t>
-    ptr_type_t<base_t> yaml_init(YAML::Node const& config);
+template <typename base_t, typename impl_t>
+ptr_type_t<base_t> yaml_init(YAML::Node const& config);
 
-    // TODO complete function
+// TODO complete function
 // TODO change argument names
 /**
  * If both types are maps then they are merged.  If right is not defined then left is used.
@@ -104,36 +104,36 @@ class factory {
  * @param left
  * @return
  */
-    YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */);
+YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */);
 
-    /**
+/**
  * @brief Equivalent to factory<baes_t>::register_type(type, initializer)
  * @tparam base_t
  * @param type
  * @param initializer
  */
-    template <typename base_t>
-    void register_type(std::string type, initializer_type_t<base_t> initializer);
+template <typename base_t>
+void register_type(std::string type, initializer_type_t<base_t> initializer);
 
-    /**
+/**
  * @brief Registers type using yaml_init function as initializer.
  * @tparam base_t
  * @tparam impl_t
  * @param type
  */
-    template <typename base_t, typename impl_t>
-    void register_type(std::string type);
+template <typename base_t, typename impl_t>
+void register_type(std::string type);
 
-    /**
+/**
  * @brief Registers type to initializer that will construct impl_t using default constructor.
  * @tparam base_t
  * @tparam impl_t
  * @param type
  */
-    template <typename base_t, typename impl_t>
-    void register_type_no_arg(std::string type);
+template <typename base_t, typename impl_t>
+void register_type_no_arg(std::string type);
 
-    /**
+/**
  * @brief Registers alias to type and config pair.  When create is called for alias the passed in
  * and registered configs are merged and the initializer registered to type is called with the
  * result.
@@ -142,10 +142,10 @@ class factory {
  * @param type
  * @param config
  */
-    template <typename base_t>
-    void register_alias(std::string alias, std::string type, YAML::Node config);
+template <typename base_t>
+void register_alias(std::string alias, std::string type, YAML::Node config);
 
-    /**
+/**
  * @brief Loads aliases from a YAML file.  The file should be a map of the format...
  * alias:
  *   type: actualType
@@ -155,10 +155,10 @@ class factory {
  * @tparam base_t
  * @param aliases
  */
-    template <typename base_t>
-    void register_aliases(YAML::Node aliases);
+template <typename base_t>
+void register_aliases(YAML::Node aliases);
 
-        template <typename base_t>
+template <typename base_t>
 void factory<base_t>::register_type(std::string type, initializer_type initializer) {
     mut_types()[type].initializer = initializer;
 }
@@ -174,16 +174,18 @@ typename factory<base_t>::ptr_type factory<base_t>::create(std::string const& ty
     return type_iter->second.initializer(config);
 }
 
-    template <typename base_t>
-    typename factory<base_t>::type_store types() { return mut_types(); }
+template <typename base_t>
+typename factory<base_t>::type_store types() {
+    return mut_types();
+}
 
-    template <typename base_t>
-    typename factory<base_t>::type_store& mut_types() {
-        static type_store TYPES;
-        return TYPES;
-    }
+template <typename base_t>
+typename factory<base_t>::type_store& mut_types() {
+    static type_store TYPES;
+    return TYPES;
+}
 
-    template <typename base_t>
+template <typename base_t>
 ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config) {
     if (!factory_config.IsDefined()) {
         throw std::runtime_error("Factory config not defined");
@@ -228,7 +230,7 @@ void register_type(std::string type, initializer_type_t<base_t> initializer) {
     factory<base_t>::register_type(type, initializer);
 };
 
-    template <typename base_t>
+template <typename base_t>
 void register_type(std::string type) {
     register_type<base_t>(type, &yaml_init<base_t, impl_t>);
 };
