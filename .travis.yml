@@ -5,6 +5,7 @@ compiler:
 #  - clang
 
 before_script:
+  - pip2 install conan
   - mkdir build
   - cd build
   - conan install .. --build
