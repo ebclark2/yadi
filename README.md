@@ -2,6 +2,7 @@
 Yet another dependency injection library!  Or, maybe yadi ain't dependency inject, just some config tool?
 
 ### Build requirements
+ - c++14
  - conan.io, see http://conan.io
  - cmake 3.5
 
