@@ -86,7 +86,7 @@ class factory {
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
 
-    /**
+/**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
@@ -95,39 +95,38 @@ using initializer_type_t = typename factory<base_t>::initializer_type;
  * @return
  */
 template <typename base_t>
-    ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config) {
-        if (!factory_config.IsDefined()) {
-            throw std::runtime_error("Factory config not defined");
-        }
-
-        if (factory_config.IsScalar()) {
-            std::string type = factory_config.as<std::string>("");
-            if (type.empty()) {
-                throw std::runtime_error("Factory config scalar not valid");
-            }
-
-            return factory<base_t>::create(type);
-        }
-
-        if (factory_config.IsMap()) {
-            YAML::Node typeNode = factory_config["type"];
-            if (!typeNode.IsDefined()) {
-                throw std::runtime_error("Factory config type not defined");
-            }
-            std::string type = typeNode.as<std::string>("");
-            if (type.empty()) {
-                throw std::runtime_error("Factory config type not valid");
-            }
-
-            YAML::Node configNode = factory_config["config"];
-            return factory<base_t>::create(type, configNode);
-        }
-
-        throw std::runtime_error("Factory config not valid, YAML must be scalar string or map");
+ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config) {
+    if (!factory_config.IsDefined()) {
+        throw std::runtime_error("Factory config not defined");
     }
 
+    if (factory_config.IsScalar()) {
+        std::string type = factory_config.as<std::string>("");
+        if (type.empty()) {
+            throw std::runtime_error("Factory config scalar not valid");
+        }
 
-    /**
+        return factory<base_t>::create(type);
+    }
+
+    if (factory_config.IsMap()) {
+        YAML::Node typeNode = factory_config["type"];
+        if (!typeNode.IsDefined()) {
+            throw std::runtime_error("Factory config type not defined");
+        }
+        std::string type = typeNode.as<std::string>("");
+        if (type.empty()) {
+            throw std::runtime_error("Factory config type not valid");
+        }
+
+        YAML::Node configNode = factory_config["config"];
+        return factory<base_t>::create(type, configNode);
+    }
+
+    throw std::runtime_error("Factory config not valid, YAML must be scalar string or map");
+}
+
+/**
  * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
  * ptr_type_t<base_t>.
  * @tparam base_t Use to determine pointer type.

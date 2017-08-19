@@ -19,7 +19,7 @@ YADI_TEST(yaml_argument_test) {
 }
 
 YADI_TEST(yaml_factory_config_string) {
-    auto ret = factory<YAML::Node>::create(YAML::Load("yaml"));
+    auto ret = from_yaml<YAML::Node>(YAML::Load("yaml"));
     return ret.get();
 }
 
@@ -28,7 +28,7 @@ YADI_TEST(yaml_factory_config_map) {
 type: "yaml"
 config: "Hello World!"
 )raw";
-    ptr_type_t<YAML::Node> ymlPtr = factory<YAML::Node>::create(YAML::Load(yaml_factory_config));
+    ptr_type_t<YAML::Node> ymlPtr = from_yaml<YAML::Node>(YAML::Load(yaml_factory_config));
     if (!ymlPtr) {
         return false;
     }
