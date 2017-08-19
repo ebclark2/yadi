@@ -93,10 +93,22 @@ class factory {
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
 
-    template <typename base_t>
-    static void register_type(std::string type, initializer_type_t<base_t> initializer) {
-        factory<base_t>::register_type(type, initializer);
-    };
+template <typename base_t, typename impl_t>
+ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
+  ptr_type_t<base_t> ret(new impl_t(config));
+  return ret;
+};
+
+template <typename base_t>
+static void register_type(std::string type,
+                          initializer_type_t<base_t> initializer) {
+  factory<base_t>::register_type(type, initializer);
+};
+
+template <typename base_t, typename impl_t>
+static void register_type(std::string type) {
+  register_type<base_t>(type, &yaml_init<base_t, impl_t>);
+};
 
 template <typename base_t, typename impl_t>
 static void register_type_no_arg(std::string type) {
@@ -108,8 +120,18 @@ static void register_type_no_arg(std::string type) {
 
 }  // namespace yadi
 
-#define YADI_INIT_BEGIN namespace { struct static_initialization { static_initialization() {
+#define YADI_INIT_BEGIN_N(NAME)         \
+  namespace {                           \
+  struct static_initialization_##NAME { \
+    static_initialization_##NAME() {
+#define YADI_INIT_END_N(NAME)                                    \
+  }                                                              \
+  }                                                              \
+  ;                                                              \
+  static_initialization_##NAME static_initialization_##NAME##__; \
+  }
 
-#define YADI_INIT_END }}; static_initialization static_initialization__; }
+#define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
+#define YADI_INIT_END YADI_INIT_END_N(ANON)
 
 #endif  // YADI_FACTORY_HPP__
