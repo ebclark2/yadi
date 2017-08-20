@@ -16,7 +16,7 @@ namespace yadi {
  */
 template <typename base_t>
 struct factory_traits {
-    using ptr_type = std::shared_ptr<base_t>;  /// The type of pointer to return from create.
+    using ptr_type = std::unique_ptr<base_t>;  /// The type of pointer to return from create.
 };
 
 /**

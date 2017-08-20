@@ -8,11 +8,6 @@ namespace yadi {
 
 struct my_unique_type;
 
-template <>
-struct factory_traits<my_unique_type> {
-    using ptr_type = std::unique_ptr<my_unique_type>;
-};
-
 struct my_unique_type : public factory<my_unique_type> {};
 
 YADI_TEST(unique_ptr_create) {
