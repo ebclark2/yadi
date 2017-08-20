@@ -86,6 +86,16 @@ template <typename base_t>
 ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
 
 /**
+ * @brief Populate output iterator from sequence of factory configs (anything from_yaml accepts).
+ * @tparam base_t
+ * @tparam output_iterator
+ * @param factory_configs
+ * @param out
+ */
+template <typename base_t, typename output_iterator>
+void from_yamls(YAML::Node const& factory_configs, output_iterator out);
+
+/**
  * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
  * ptr_type_t<base_t>.
  * @tparam base_t Use to determine pointer type.
@@ -230,6 +240,25 @@ ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config) {
     }
 
     throw std::runtime_error("Factory config not valid, YAML must be scalar string or map");
+}
+
+template <typename base_t, typename output_iterator>
+void from_yamls(YAML::Node const& factory_configs, output_iterator out) {
+    if (!factory_configs.IsDefined()) {
+        throw std::runtime_error("From YAML factory configs not defined");
+    }
+    // If it's not a sequence then parse single
+    if (!factory_configs.IsSequence()) {
+        *out = from_yaml<base_t>(factory_configs);
+        ++out;
+        return;
+    }
+
+    // A sequence!
+    for (YAML::Node const& entry : factory_configs) {
+        *out = from_yaml<base_t>(entry);
+        ++out;
+    }
 }
 
 template <typename base_t, typename impl_t>
