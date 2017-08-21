@@ -102,6 +102,51 @@ ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
 template <typename base_t, typename output_iterator>
 void from_yamls(YAML::Node const& factory_configs, output_iterator out);
 
+template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
+struct derive_base_type_by_value {
+    using base_type = T;
+};
+
+template <typename left, typename right, typename type_type,
+          typename = typename std::enable_if<std::is_same<left, right>::value>::type>
+struct if_same_then {
+    using type = type_type;
+};
+
+template <typename left, typename right, typename type_type>
+using is_same_then_t = typename if_same_then<left, right, type_type>::type;
+
+template <typename T>
+struct derive_base_type {
+    using base_type = typename derive_base_type_by_value<T>::base_type;
+};
+
+template <typename T>
+struct derive_base_type<std::shared_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<std::unique_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<T*> {
+    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
+};
+
+template <typename ptr_type>
+void parse(ptr_type& out, YAML::Node const& factory_config) {
+    out = from_yaml<typename derive_base_type<ptr_type>::base_type>(factory_config);
+}
+
+/**
+ * @brief Returns config.as<T>().  Signature matches factory initializer.
+ * @tparam T
+ * @param config
+ * @return
+ */
 template <typename T>
 T yaml_as(YAML::Node const& config);
 

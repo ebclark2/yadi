@@ -41,4 +41,12 @@ class test : public factory<test> {
             return false;                                                         \
         }                                                                         \
     }
+
+#define YADI_ASSERT_NE(LEFT, RIGHT)                                                        \
+    {                                                                                      \
+        if (LEFT == RIGHT) {                                                               \
+            std::cout << "Expected \"" << LEFT << "\" not to equal \"" << RIGHT << "\"\n"; \
+            return false;                                                                  \
+        }                                                                                  \
+    }
 #endif  // YADI_TEST_HPP

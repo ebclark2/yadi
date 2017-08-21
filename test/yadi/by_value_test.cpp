@@ -15,6 +15,10 @@ YADI_TEST(by_value) {
 
     int i = from_yaml<int>(YAML::Load("56"));
     YADI_ASSERT_EQ(56, i);
+
+    std::string out;
+    parse(out, YAML::Load("asdf"));
+    YADI_ASSERT_EQ("asdf", out);
     return true;
 }
 
