@@ -18,6 +18,7 @@ namespace yadi {
 template <typename base_t>
 struct factory_traits {
     using ptr_type = std::unique_ptr<base_t>;  /// The type of pointer to return from create.
+    static const bool direct_from_yaml = false;
 };
 
 /**
@@ -221,6 +222,10 @@ typename factory<base_t>::type_store& factory<base_t>::mut_types() {
 
 template <typename base_t>
 ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config) {
+    if (factory_traits<base_t>::direct_from_yaml) {
+        return factory<base_t>::create("", factory_config);
+    }
+
     if (!factory_config.IsDefined()) {
         throw std::runtime_error("Factory config not defined");
     }
