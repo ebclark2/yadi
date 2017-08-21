@@ -13,6 +13,3 @@ Yet another dependency injection library!  Or, maybe yadi ain't dependency injec
  - cmake ..
  - make
  - ctest
-
-# TODO
-Return by value

@@ -9,13 +9,19 @@
 
 namespace yadi {
 
-YADI_TEST(by_value) {
+YADI_TEST(string_by_value) {
     std::string str = from_yaml<std::string>(YAML::Load("Hello World!"));
     YADI_ASSERT_EQ("Hello World!", str);
+    return true;
+}
 
+YADI_TEST(int_by_value) {
     int i = from_yaml<int>(YAML::Load("56"));
     YADI_ASSERT_EQ(56, i);
+    return true;
+}
 
+YADI_TEST(parse_string) {
     std::string out;
     parse(out, YAML::Load("asdf"));
     YADI_ASSERT_EQ("asdf", out);
