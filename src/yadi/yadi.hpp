@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <type_traits>
 
 namespace yadi {
 
@@ -24,6 +25,11 @@ struct factory_traits {
  */
 template <typename base_t>
 using ptr_type_t = typename factory_traits<base_t>::ptr_type;
+
+template <typename base_t>
+struct is_by_value {
+    static const bool value = std::is_same<base_t, ptr_type_t<base_t>>::value;
+};
 
 /**
  * A YAML based factory.
@@ -94,6 +100,9 @@ ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
  */
 template <typename base_t, typename output_iterator>
 void from_yamls(YAML::Node const& factory_configs, output_iterator out);
+
+template <typename T>
+T yaml_as(YAML::Node const& config);
 
 /**
  * @brief Constructs impl_t via a constructor that accepts YAML and returns as pointer to base_t,
@@ -261,10 +270,74 @@ void from_yamls(YAML::Node const& factory_configs, output_iterator out) {
     }
 }
 
+template <typename T>
+T yaml_as(YAML::Node const& config) {
+    // TODO Improved error message
+    return config.as<T>();
+}
+
+template <typename base_t, typename impl_t,
+          typename = typename std::enable_if<is_by_value<base_t>::value &&
+                                             std::is_same<base_t, impl_t>::value>::type>
+struct yaml_init_value {
+    static ptr_type_t<base_t> init(YAML::Node const& config) {
+        base_t ret(config);
+        return ret;
+    }
+};
+
+template <typename base_t, typename impl_t, bool by_value = is_by_value<base_t>::value>
+struct yaml_init_helper {};
+
+template <typename base_t, typename impl_t>
+struct yaml_init_helper<base_t, impl_t, false> {
+    static ptr_type_t<base_t> init(YAML::Node const& config) {
+        ptr_type_t<base_t> ret(new impl_t(config));
+        return ret;
+    }
+};
+
+template <typename base_t, typename impl_t>
+struct yaml_init_helper<base_t, impl_t, true> {
+    static ptr_type_t<base_t> init(YAML::Node const& config) {
+        return yaml_init_value<base_t, impl_t>::init(config);
+    }
+};
+
 template <typename base_t, typename impl_t>
 ptr_type_t<base_t> yaml_init(YAML::Node const& config) {
-    ptr_type_t<base_t> ret(new impl_t(config));
-    return ret;
+    return yaml_init_helper<base_t, impl_t>::init(config);
+};
+
+template <typename base_t, typename impl_t,
+          typename = typename std::enable_if<is_by_value<base_t>::value &&
+                                             std::is_same<base_t, impl_t>::value>::type>
+struct no_arg_init_value {
+    static ptr_type_t<base_t> init() {
+        base_t ret;
+        return ret;
+    }
+};
+
+template <typename base_t, typename impl_t, bool by_value = is_by_value<base_t>::value>
+struct no_arg_init_helper {};
+
+template <typename base_t, typename impl_t>
+struct no_arg_init_helper<base_t, impl_t, false> {
+    static ptr_type_t<base_t> init() {
+        ptr_type_t<base_t> ret(new impl_t);
+        return ret;
+    }
+};
+
+template <typename base_t, typename impl_t>
+struct no_arg_init_helper<base_t, impl_t, true> {
+    static ptr_type_t<base_t> init() { return no_arg_init_value<base_t, impl_t>::init(); }
+};
+
+template <typename base_t, typename impl_t>
+ptr_type_t<base_t> no_arg_init(YAML::Node const&) {
+    return no_arg_init_helper<base_t, impl_t>::init();
 };
 
 inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */) { return left; }
@@ -281,10 +354,7 @@ void register_type(std::string type) {
 
 template <typename base_t, typename impl_t>
 void register_type_no_arg(std::string type) {
-    register_type<base_t>(type, [](YAML::Node) {
-        ptr_type_t<base_t> p(new impl_t);
-        return p;
-    });
+    register_type<base_t>(type, &no_arg_init<base_t, impl_t>);
 }
 
 template <typename base_t>
