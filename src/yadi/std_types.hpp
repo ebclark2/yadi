@@ -22,6 +22,7 @@ namespace yadi {
 
 TYPE_BY_VALUE(std::string, string)
 TYPE_BY_VALUE(int, int)
+TYPE_BY_VALUE(double, double)
 
 }  // namespace yadi
 
