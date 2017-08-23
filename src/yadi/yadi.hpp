@@ -237,7 +237,8 @@ void register_aliases(YAML::Node aliases);
 #define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
 #define YADI_INIT_END YADI_INIT_END_N(ANON)
 
-#define TYPE_BY_VALUE(TYPE, INIT_NAME)               \
+/// Expose types yaml supports directly
+#define YADI_YAML_TYPE_BY_VALUE(TYPE, INIT_NAME)     \
     template <>                                      \
     struct factory_traits<TYPE> {                    \
         using ptr_type = TYPE;                       \
@@ -249,13 +250,13 @@ void register_aliases(YAML::Node aliases);
     YADI_INIT_END_N(INIT_NAME)
 
 #ifndef YADI_NO_STD_STRING
-TYPE_BY_VALUE(std::string, string)
+YADI_YAML_TYPE_BY_VALUE(std::string, string)
 #endif
 #ifndef YADI_NO_STD_INT
-TYPE_BY_VALUE(int, int)
+YADI_YAML_TYPE_BY_VALUE(int, int)
 #endif
 #ifndef YADI_NO_STD_DOUBLE
-TYPE_BY_VALUE(double, double)
+YADI_YAML_TYPE_BY_VALUE(double, double)
 #endif
 
 // ################# IMPL ################################
