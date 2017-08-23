@@ -9,7 +9,7 @@ Yet another dependency injection library!  Or, maybe yadi ain't dependency injec
 ### Building from repository
  - mkdir build
  - cd build
- - conan install ..
+ - conan install .. (`conan install .. --build` perhaps)
  - cmake ..
  - make
  - ctest
