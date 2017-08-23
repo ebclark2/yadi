@@ -2,7 +2,6 @@
 // Created by Ed Clark on 8/20/17.
 //
 
-#include <yadi/std_types.hpp>
 #include "test.hpp"
 
 #include <string>

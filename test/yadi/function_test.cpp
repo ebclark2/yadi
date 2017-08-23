@@ -2,7 +2,6 @@
 // Created by Ed Clark on 8/21/17.
 //
 
-#include <yadi/std_types.hpp>
 #include "test.hpp"
 
 #include <functional>
@@ -18,11 +17,6 @@ template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
 struct print_thing {
     static void print(YAML::Node const& yaml) {
         using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>;
-        // std::cout << typeid(std::tuple_element_t<std::tuple_size<tuple_t>::value-1-index,
-        // tuple_t>).name() << '\n';
-        //        std::cout << yaml[std::tuple_size<tuple_t>::value-1-index].template
-        //        as<std::tuple_element_t<std::tuple_size<tuple_t>::value-1-index, tuple_t>>() <<
-        //        '\n';
         std::cout << ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1 - index]) << '\n';
         print_thing<tuple_t, index - 1>::print(yaml);
     }
@@ -39,9 +33,6 @@ template <typename tuple_t>
 struct print_thing<tuple_t, 0> {
     static void print(YAML::Node const& yaml) {
         using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>;
-        // std::cout << typeid(std::tuple_element_t<std::tuple_size<tuple_t>::value-1,
-        // tuple_t>).name() << '\n';  std::cout << yaml[std::tuple_size<tuple_t>::value-1].template
-        // as<std::tuple_element_t<std::tuple_size<tuple_t>::value-1, tuple_t>>() << '\n';
         std::cout << ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1]) << '\n';
     }
 

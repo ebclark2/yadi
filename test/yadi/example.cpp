@@ -4,7 +4,6 @@
 
 #include "test.hpp"
 
-#include <yadi/std_types.hpp>
 #include <yadi/yadi.hpp>
 
 #include <iterator>
