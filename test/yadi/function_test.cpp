@@ -151,8 +151,8 @@ YADI_TEST(function_test) {
 
     {
         // create initializer type the factory will use...
-        auto initializer = make_initializer<double>(&sum);
-        YADI_ASSERT_EQ(11.5, initializer(YAML::Load(YAML)));
+        ::yadi::register_type<double>("sum_of_4", make_initializer<double>(&sum));
+        YADI_ASSERT_EQ(11.5, ::yadi::create<double>("sum_of_4", YAML::Load(YAML)));
     }
 
     return true;

@@ -82,6 +82,16 @@ template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
 
 /**
+ * @brief Same as factory<base_t>::create(type, config)
+ * @tparam base_t
+ * @param type
+ * @param config
+ * @return
+ */
+template <typename base_t>
+ptr_type_t<base_t> create(std::string const& type, YAML::Node const& config = {});
+
+/**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
@@ -260,6 +270,11 @@ YADI_YAML_TYPE_BY_VALUE(double, double)
 #endif
 
 // ################# IMPL ################################
+template <typename base_t>
+ptr_type_t<base_t> create(std::string const& type, YAML::Node const& config) {
+    return factory<base_t>::create(type, config);
+}
+
 template <typename base_t>
 void factory<base_t>::register_type(std::string type, initializer_type initializer) {
     mut_types()[type].initializer = initializer;
