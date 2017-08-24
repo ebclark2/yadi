@@ -4,9 +4,6 @@
 
 #include "test.hpp"
 
-#include <functional>
-#include <iostream>
-
 double sum(double a1, double a2, int a3, double a4) { return a1 + a2 + a3 + a4; }
 
 struct Foo {
