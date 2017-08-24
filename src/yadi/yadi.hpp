@@ -27,6 +27,10 @@ struct factory_traits {
 template <typename base_t>
 using ptr_type_t = typename factory_traits<base_t>::ptr_type;
 
+/**
+ * @brief Determine is factory returns by value
+ * @tparam base_t
+ */
 template <typename base_t>
 struct is_by_value {
     static const bool value = std::is_same<base_t, ptr_type_t<base_t>>::value;
@@ -112,11 +116,21 @@ ptr_type_t<base_t> from_yaml(YAML::Node const& factory_config);
 template <typename base_t, typename output_iterator>
 void from_yamls(YAML::Node const& factory_configs, output_iterator out);
 
+/**
+ * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
+ * @tparam T
+ */
 template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
 struct derive_base_type_by_value {
     using base_type = T;
 };
 
+/**
+ * If lest is same as right then provide type_type as type.
+ * @tparam left
+ * @tparam right
+ * @tparam type_type
+ */
 template <typename left, typename right, typename type_type,
           typename = typename std::enable_if<std::is_same<left, right>::value>::type>
 struct if_same_then {
@@ -126,6 +140,11 @@ struct if_same_then {
 template <typename left, typename right, typename type_type>
 using is_same_then_t = typename if_same_then<left, right, type_type>::type;
 
+/**
+ * For type T, provide the factory base type that creates T. For example, for T std::unique_ptr<int>, int would
+ * be the base type.
+ * @tparam T
+ */
 template <typename T>
 struct derive_base_type {
     using base_type = typename derive_base_type_by_value<T>::base_type;
@@ -146,10 +165,14 @@ struct derive_base_type<T*> {
     using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
 };
 
+/**
+ * @brief Populate out from factory config.  The factory type is derived from ptr_type.
+ * @tparam ptr_type
+ * @param out
+ * @param factory_config
+ */
 template <typename ptr_type>
-void parse(ptr_type& out, YAML::Node const& factory_config) {
-    out = from_yaml<typename derive_base_type<ptr_type>::base_type>(factory_config);
-}
+void parse(ptr_type& out, YAML::Node const& factory_config);
 
 /**
  * @brief Returns config.as<T>().  Signature matches factory initializer.
@@ -354,6 +377,11 @@ void from_yamls(YAML::Node const& factory_configs, output_iterator out) {
         *out = from_yaml<base_t>(entry);
         ++out;
     }
+}
+
+template <typename ptr_type>
+void parse(ptr_type& out, YAML::Node const& factory_config) {
+    out = from_yaml<typename derive_base_type<ptr_type>::base_type>(factory_config);
 }
 
 template <typename T>
