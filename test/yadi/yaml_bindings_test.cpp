@@ -13,7 +13,7 @@ struct Foo {
     static double sum(double a1, double a2, int a3, double a4) { return a1 + a2 + a3 + a4; }
 };
 
-YADI_TEST(function_test) {
+YADI_TEST(yaml_bindings_test) {
     std::string YAML = R"raw(
 ---
 - 1.5
