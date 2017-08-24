@@ -11,6 +11,9 @@
 
 namespace yadi {
 
+template <typename T>
+using bare_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+
 /**
  * @brief Factory traits that can be changed for base_t.
  * @tparam base_t
@@ -117,15 +120,6 @@ template <typename base_t, typename output_iterator>
 void from_yamls(YAML::Node const& factory_configs, output_iterator out);
 
 /**
- * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
- * @tparam T
- */
-template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
-struct derive_base_type_by_value {
-    using base_type = T;
-};
-
-/**
  * If lest is same as right then provide type_type as type.
  * @tparam left
  * @tparam right
@@ -141,6 +135,15 @@ template <typename left, typename right, typename type_type>
 using is_same_then_t = typename if_same_then<left, right, type_type>::type;
 
 /**
+ * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
+ * @tparam T
+ */
+template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
+struct derive_base_type_by_value {
+    using base_type = T;
+};
+
+/**
  * For type T, provide the factory base type that creates T. For example, for T std::unique_ptr<int>, int would
  * be the base type.
  * @tparam T
@@ -151,19 +154,7 @@ struct derive_base_type {
 };
 
 template <typename T>
-struct derive_base_type<std::shared_ptr<T>> {
-    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
-};
-
-template <typename T>
-struct derive_base_type<std::unique_ptr<T>> {
-    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
-};
-
-template <typename T>
-struct derive_base_type<T*> {
-    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
-};
+using derive_base_type_t = typename derive_base_type<T>::base_type;
 
 /**
  * @brief Populate out from factory config.  The factory type is derived from ptr_type.
@@ -492,9 +483,9 @@ void register_aliases(YAML::Node aliases) {
 template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
 struct yaml_to_tuple {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
-        using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>;
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
         std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
-            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
+            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
         yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
     }
 };
@@ -502,9 +493,9 @@ struct yaml_to_tuple {
 template <typename tuple_t>
 struct yaml_to_tuple<tuple_t, 0> {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
-        using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>;
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
         std::get<std::tuple_size<tuple_t>::value - 1>(out) =
-            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1]);
+            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1]);
     }
 };
 
@@ -514,7 +505,7 @@ struct function_call_via_yaml;
 template <typename R, typename... Args>
 struct function_call_via_yaml_base {
     using result_type = R;
-    using params_type = std::tuple<Args...>;
+    using params_type = std::tuple<bare_t<Args>...>;
 
     static result_type call(std::function<R(Args...)> const& func, YAML::Node const& yaml);
 
@@ -559,6 +550,21 @@ template <typename F>
 function_args_to_tuple_result_type<F> call_from_yaml(F const& func, YAML::Node const& yaml) {
     return function_call_via_yaml<F>::call(func, yaml);
 }
+
+template <typename T>
+struct derive_base_type<std::shared_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<std::unique_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<T*> {
+    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
+};
 
 template <typename base_t, typename F>
 ::yadi::initializer_type_t<base_t> make_initializer(F func) {
