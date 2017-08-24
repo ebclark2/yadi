@@ -18,10 +18,10 @@ struct power_plant {
 };
 
 struct electric : public power_plant {
-    electric(YAML::Node const& config) {
-        ::yadi::parse(this->make, config["make"]);
-        ::yadi::parse(this->watts, config["watts"]);
+    static std::unique_ptr<electric> make_electric(std::string make, int watts) {
+        return std::make_unique<electric>(make, watts);
     }
+    electric(std::string make, int watts) : make(std::move(make)), watts(std::move(watts)) {}
 
     int power() const { return this->watts; }
 
@@ -46,10 +46,8 @@ struct gas : public power_plant {
 };
 
 struct car {
-    car(YAML::Node const& config) {
-        ::yadi::parse(this->make, config["make"]);
-        ::yadi::parse(this->motor, config["motor"]);
-    }
+    static car make_car(std::string make, std::unique_ptr<power_plant>& motor) { return car{std::move(make), motor}; }
+    car(std::string make, std::unique_ptr<power_plant>& motor) : make(std::move(make)) { this->motor.swap(motor); }
 
     std::string make;
     std::unique_ptr<power_plant> motor;
@@ -62,28 +60,26 @@ struct factory_traits<car> {
 };
 
 YADI_INIT_BEGIN
-::yadi::register_type<car, car>("");
+::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car));
 register_type<power_plant, gas>("gas");
-register_type<power_plant, electric>("electric");
+register_type<power_plant>("electric", ::yadi::make_initializer<power_plant>(&electric::make_electric));
 YADI_INIT_END
 
 YADI_TEST(nested_example_test) {
     std::string YAML_CONFIG = R"raw(
 ---
-- make: gm
-  motor:
-    type: gas
+- - "gm"
+  - type: gas
     config:
       make: LQ4
       cylinder_count: 8
-      bore: 10
+      bore: 1
       stroke: 8
-- make: tesla
-  motor:
-    type: electric
+- - "tesla"
+  - type: electric
     config:
-      make: japan
-      watts: 1200
+      - japan
+      - 1200
 )raw";
 
     std::list<car> cars;

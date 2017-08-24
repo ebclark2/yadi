@@ -507,30 +507,30 @@ struct function_call_via_yaml_base {
     using result_type = R;
     using params_type = std::tuple<bare_t<Args>...>;
 
-    static result_type call(std::function<R(Args...)> const& func, YAML::Node const& yaml);
+    static result_type call(std::function<R(Args...)> func, YAML::Node const& yaml);
 
    private:
-    function_call_via_yaml_base(std::function<R(Args...)> func, std::tuple<Args...> params)
-        : func(func), params(params) {}
+    function_call_via_yaml_base(std::function<R(Args...)> func, params_type* params)
+        : func(std::move(func)), params(params) {}
 
     template <std::size_t... I>
     R call_func(std::index_sequence<I...>) {
-        return func(std::get<I>(params)...);
+        return func(std::get<I>(*params)...);
     }
 
     result_type delayed_dispatch() { return call_func(std::index_sequence_for<Args...>{}); }
 
     std::function<R(Args...)> func;
-    std::tuple<Args...> params;
+    params_type* params;
 };
 
 template <typename R, typename... Args>
 typename function_call_via_yaml_base<R, Args...>::result_type function_call_via_yaml_base<R, Args...>::call(
-    std::function<R(Args...)> const& func, YAML::Node const& yaml) {
+    std::function<R(Args...)> func, YAML::Node const& yaml) {
     // Use std::apply in c++17
     params_type params;
     yaml_to_tuple<params_type>::to_tuple(params, yaml);
-    function_call_via_yaml_base<R, Args...> f = {func, params};
+    function_call_via_yaml_base<R, Args...> f{func, &params};
     return f.delayed_dispatch();
 }
 
