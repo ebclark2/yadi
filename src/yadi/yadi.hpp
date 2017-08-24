@@ -256,6 +256,9 @@ void register_alias(std::string alias, std::string type, YAML::Node config);
 template <typename base_t>
 void register_aliases(YAML::Node aliases);
 
+template <typename base_t, typename F>
+::yadi::initializer_type_t<base_t> make_initializer(F func);
+
 #define YADI_INIT_BEGIN_N(NAME)           \
     namespace {                           \
     struct static_initialization_##NAME { \
@@ -485,6 +488,82 @@ void register_aliases(YAML::Node aliases) {
         register_alias<base_t>(entry.first, type, config);
     }
 }
+
+template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
+struct yaml_to_tuple {
+    static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
+        using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>;
+        std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
+            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
+        yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
+    }
+};
+
+template <typename tuple_t>
+struct yaml_to_tuple<tuple_t, 0> {
+    static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
+        using element_type = std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>;
+        std::get<std::tuple_size<tuple_t>::value - 1>(out) =
+            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1]);
+    }
+};
+
+template <typename T>
+struct function_call_via_yaml;
+
+template <typename R, typename... Args>
+struct function_call_via_yaml_base {
+    using result_type = R;
+    using params_type = std::tuple<Args...>;
+
+    static result_type call(std::function<R(Args...)> const& func, YAML::Node const& yaml);
+
+   private:
+    function_call_via_yaml_base(std::function<R(Args...)> func, std::tuple<Args...> params)
+        : func(func), params(params) {}
+
+    template <std::size_t... I>
+    R call_func(std::index_sequence<I...>) {
+        return func(std::get<I>(params)...);
+    }
+
+    result_type delayed_dispatch() { return call_func(std::index_sequence_for<Args...>{}); }
+
+    std::function<R(Args...)> func;
+    std::tuple<Args...> params;
+};
+
+template <typename R, typename... Args>
+typename function_call_via_yaml_base<R, Args...>::result_type function_call_via_yaml_base<R, Args...>::call(
+    std::function<R(Args...)> const& func, YAML::Node const& yaml) {
+    // Use std::apply in c++17
+    params_type params;
+    yaml_to_tuple<params_type>::to_tuple(params, yaml);
+    function_call_via_yaml_base<R, Args...> f = {func, params};
+    return f.delayed_dispatch();
+}
+
+template <typename R, typename... Args>
+struct function_call_via_yaml<R (*)(Args...)> : public function_call_via_yaml_base<R, Args...> {};
+
+template <typename R, typename... Args>
+struct function_call_via_yaml<std::function<R(Args...)>> : public function_call_via_yaml_base<R, Args...> {};
+
+template <typename T>
+using function_args_to_tuple_params_type = typename function_call_via_yaml<T>::params_type;
+
+template <typename T>
+using function_args_to_tuple_result_type = typename function_call_via_yaml<T>::result_type;
+
+template <typename F>
+function_args_to_tuple_result_type<F> call_from_yaml(F const& func, YAML::Node const& yaml) {
+    return function_call_via_yaml<F>::call(func, yaml);
+}
+
+template <typename base_t, typename F>
+::yadi::initializer_type_t<base_t> make_initializer(F func) {
+    return [func](YAML::Node const& yaml) { return call_from_yaml(func, yaml); };
+};
 
 }  // namespace yadi
 
