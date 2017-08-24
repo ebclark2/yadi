@@ -20,7 +20,7 @@ YADI_TEST(yaml_bindings_test) {
 )raw";
     using ctr_sig = std::function<double(double, double, int, double)>;
 
-    ::yadi::function_args_to_tuple_params_type<ctr_sig> test;
+    ::yadi::function_traits_params_type<ctr_sig> test;
     ::yadi::yaml_to_tuple<decltype(test)>::to_tuple(test, YAML::Load(YAML));
     YADI_ASSERT_EQ(std::get<0>(test), 1.5);
     YADI_ASSERT_EQ(std::get<1>(test), 2.5);

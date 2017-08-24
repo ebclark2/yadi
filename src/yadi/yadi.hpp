@@ -500,54 +500,71 @@ struct yaml_to_tuple<tuple_t, 0> {
 };
 
 template <typename T>
-struct function_call_via_yaml;
+struct function_traits;
 
 template <typename R, typename... Args>
-struct function_call_via_yaml_base {
+struct function_traits<R (*)(Args...)> {
     using result_type = R;
     using params_type = std::tuple<bare_t<Args>...>;
-
-    static result_type call(std::function<R(Args...)> func, YAML::Node const& yaml);
-
-   private:
-    function_call_via_yaml_base(std::function<R(Args...)> func, params_type* params)
-        : func(std::move(func)), params(params) {}
-
-    template <std::size_t... I>
-    R call_func(std::index_sequence<I...>) {
-        return func(std::get<I>(*params)...);
-    }
-
-    result_type delayed_dispatch() { return call_func(std::index_sequence_for<Args...>{}); }
-
-    std::function<R(Args...)> func;
-    params_type* params;
+    using function_type = std::function<R(Args...)>;
+    using index_sequence = std::index_sequence_for<Args...>;
 };
 
 template <typename R, typename... Args>
-typename function_call_via_yaml_base<R, Args...>::result_type function_call_via_yaml_base<R, Args...>::call(
-    std::function<R(Args...)> func, YAML::Node const& yaml) {
+struct function_traits<std::function<R(Args...)>> {
+    using result_type = R;
+    using params_type = std::tuple<bare_t<Args>...>;
+    using function_type = std::function<R(Args...)>;
+    using index_sequence = std::index_sequence_for<Args...>;
+};
+
+template <typename T>
+using function_traits_params_type = typename function_traits<T>::params_type;
+
+template <typename T>
+using function_traits_result_type = typename function_traits<T>::result_type;
+
+template <typename T>
+using function_traits_function_type = typename function_traits<T>::function_type;
+
+template <typename T>
+using function_traits_index_sequence = typename function_traits<T>::index_sequence;
+
+template <typename T>
+struct function_call_via_yaml {
+    using result_type = function_traits_result_type<T>;
+    using params_type = function_traits_params_type<T>;
+    using function_type = function_traits_function_type<T>;
+    using index_sequence = function_traits_index_sequence<T>;
+
+    static result_type call(function_type func, YAML::Node const& yaml);
+
+   private:
+    function_call_via_yaml(function_type func, params_type* params) : func(std::move(func)), params(params) {}
+
+    template <std::size_t... I>
+    result_type call_func(std::index_sequence<I...>) {
+        return func(std::get<I>(*params)...);
+    }
+
+    result_type delayed_dispatch() { return call_func(index_sequence{}); }
+
+    function_type func;
+    params_type* params;
+};
+
+template <typename T>
+typename function_call_via_yaml<T>::result_type function_call_via_yaml<T>::call(function_type func,
+                                                                                YAML::Node const& yaml) {
     // Use std::apply in c++17
     params_type params;
     yaml_to_tuple<params_type>::to_tuple(params, yaml);
-    function_call_via_yaml_base<R, Args...> f{func, &params};
+    function_call_via_yaml<T> f{func, &params};
     return f.delayed_dispatch();
 }
 
-template <typename R, typename... Args>
-struct function_call_via_yaml<R (*)(Args...)> : public function_call_via_yaml_base<R, Args...> {};
-
-template <typename R, typename... Args>
-struct function_call_via_yaml<std::function<R(Args...)>> : public function_call_via_yaml_base<R, Args...> {};
-
-template <typename T>
-using function_args_to_tuple_params_type = typename function_call_via_yaml<T>::params_type;
-
-template <typename T>
-using function_args_to_tuple_result_type = typename function_call_via_yaml<T>::result_type;
-
 template <typename F>
-function_args_to_tuple_result_type<F> call_from_yaml(F const& func, YAML::Node const& yaml) {
+function_traits_result_type<F> call_from_yaml(F const& func, YAML::Node const& yaml) {
     return function_call_via_yaml<F>::call(func, yaml);
 }
 
