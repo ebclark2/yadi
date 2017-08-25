@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 namespace yadi {
 
@@ -585,7 +586,22 @@ struct derive_base_type<T*> {
 
 template <typename base_t, typename F>
 ::yadi::initializer_type_t<base_t> make_initializer(F func) {
+    // TODO Error checking for yaml sequence type
     return [func](YAML::Node const& yaml) { return call_from_yaml(func, yaml); };
+};
+
+template <typename base_t, typename F>
+::yadi::initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields) {
+    return [func, fields](YAML::Node const& yaml) {
+        // Convert yaml map to sequence via ordered field list
+        // TODO error checking for yaml map type
+        YAML::Node sequence;
+        for (std::string const& field : fields) {
+            // TODO error checking for field
+            sequence.push_back(yaml[field]);
+        }
+        return call_from_yaml(func, sequence);
+    };
 };
 
 }  // namespace yadi

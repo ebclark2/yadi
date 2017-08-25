@@ -18,8 +18,9 @@ struct power_plant {
 };
 
 struct electric : public power_plant {
-    static std::unique_ptr<electric> make_electric(std::string make, int watts) {
-        return std::make_unique<electric>(make, watts);
+    static std::unique_ptr<power_plant> make_electric(std::string make, int watts) {
+        std::unique_ptr<power_plant> ret(new electric(make, watts));
+        return ret;
     }
     electric(std::string make, int watts) : make(std::move(make)), watts(std::move(watts)) {}
 
@@ -30,12 +31,13 @@ struct electric : public power_plant {
 };
 
 struct gas : public power_plant {
-    gas(YAML::Node const& config) {
-        ::yadi::parse(this->make, config["make"]);
-        ::yadi::parse(this->cylinder_count, config["cylinder_count"]);
-        ::yadi::parse(this->bore, config["bore"]);
-        ::yadi::parse(this->stroke, config["stroke"]);
+    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, int bore, int stroke) {
+        std::unique_ptr<power_plant> ret(new gas(make, cylinder_count, bore, stroke));
+        return ret;
     }
+
+    gas(std::string make, int cylinder_count, int bore, int stroke)
+        : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke) {}
 
     int power() const { return this->bore * this->stroke * this->cylinder_count; }
 
@@ -46,8 +48,10 @@ struct gas : public power_plant {
 };
 
 struct car {
-    static car make_car(std::string make, std::unique_ptr<power_plant>& motor) { return car{std::move(make), motor}; }
-    car(std::string make, std::unique_ptr<power_plant>& motor) : make(std::move(make)) { this->motor.swap(motor); }
+    static car make_car(std::string make, std::unique_ptr<power_plant>& motor) {
+        return car{std::move(make), std::move(motor)};
+    }
+    car(std::string make, std::unique_ptr<power_plant> motor) : make(std::move(make)) { this->motor.swap(motor); }
 
     std::string make;
     std::unique_ptr<power_plant> motor;
@@ -60,8 +64,12 @@ struct factory_traits<car> {
 };
 
 YADI_INIT_BEGIN
+// Make car from sequenced args
 ::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car));
-register_type<power_plant, gas>("gas");
+// Make gas from mapped args
+register_type<power_plant>("gas", ::yadi::make_initializer<power_plant>(&gas::make_gas,
+                                                                        {"make", "cylinder_count", "bore", "stroke"}));
+// Make electric from sequenced args
 register_type<power_plant>("electric", ::yadi::make_initializer<power_plant>(&electric::make_electric));
 YADI_INIT_END
 
