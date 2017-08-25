@@ -248,8 +248,30 @@ void register_alias(std::string alias, std::string type, YAML::Node config);
 template <typename base_t>
 void register_aliases(YAML::Node aliases);
 
+/**
+ * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
+ * passed as a YAML factory config to the factory of the argument type.  The results will be passed in to function
+ * func.
+ * @tparam base_t
+ * @tparam F
+ * @param func
+ * @return
+ */
 template <typename base_t, typename F>
 ::yadi::initializer_type_t<base_t> make_initializer(F func);
+
+/**
+ * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
+ * in the order the fields are provided.  Once the sequence is created it's treated the behavior is the same as
+ * make_initializer(F).
+ * @tparam base_t
+ * @tparam F
+ * @param func
+ * @param fields
+ * @return
+ */
+template <typename base_t, typename F>
+::yadi::initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields);
 
 #define YADI_INIT_BEGIN_N(NAME)           \
     namespace {                           \
