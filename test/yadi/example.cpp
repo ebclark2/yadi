@@ -66,6 +66,7 @@ struct factory_traits<car> {
 YADI_INIT_BEGIN
 // Make car from mapped args
 ::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car, {"make", "power_plant"}));
+
 // Make gas from mapped args
 register_type<power_plant>("gas", ::yadi::make_initializer<power_plant>(&gas::make_gas,
                                                                         {"make", "cylinder_count", "bore", "stroke"}));
