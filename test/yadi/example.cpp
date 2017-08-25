@@ -64,8 +64,8 @@ struct factory_traits<car> {
 };
 
 YADI_INIT_BEGIN
-// Make car from sequenced args
-::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car));
+// Make car from mapped args
+::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car, {"make", "power_plant"}));
 // Make gas from mapped args
 register_type<power_plant>("gas", ::yadi::make_initializer<power_plant>(&gas::make_gas,
                                                                         {"make", "cylinder_count", "bore", "stroke"}));
@@ -76,15 +76,17 @@ YADI_INIT_END
 YADI_TEST(nested_example_test) {
     std::string YAML_CONFIG = R"raw(
 ---
-- - "gm"
-  - type: gas
+- make: "gm"
+  power_plant:
+    type: gas
     config:
       make: LQ4
       cylinder_count: 8
       bore: 1
       stroke: 8
-- - "tesla"
-  - type: electric
+- make: "tesla"
+  power_plant:
+    type: electric
     config:
       - japan
       - 1200
