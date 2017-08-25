@@ -34,19 +34,19 @@ class test : public factory<test> {
     YADI_INIT_END_N(NAME)                                    \
     bool NAME::run()
 
-#define YADI_ASSERT_EQ(LEFT, RIGHT)                                               \
-    {                                                                             \
-        if (LEFT != RIGHT) {                                                      \
-            std::cout << "Expected \"" << LEFT << "\" got \"" << RIGHT << "\"\n"; \
-            return false;                                                         \
-        }                                                                         \
+#define YADI_ASSERT_EQ(LEFT, RIGHT)                                                 \
+    {                                                                               \
+        if (LEFT != RIGHT) {                                                        \
+            std::cout << "Expected \"" << #LEFT << "\" got \"" << #RIGHT << "\"\n"; \
+            return false;                                                           \
+        }                                                                           \
     }
 
-#define YADI_ASSERT_NE(LEFT, RIGHT)                                                        \
-    {                                                                                      \
-        if (LEFT == RIGHT) {                                                               \
-            std::cout << "Expected \"" << LEFT << "\" not to equal \"" << RIGHT << "\"\n"; \
-            return false;                                                                  \
-        }                                                                                  \
+#define YADI_ASSERT_NE(LEFT, RIGHT)                                                          \
+    {                                                                                        \
+        if (LEFT == RIGHT) {                                                                 \
+            std::cout << "Expected \"" << #LEFT << "\" not to equal \"" << #RIGHT << "\"\n"; \
+            return false;                                                                    \
+        }                                                                                    \
     }
 #endif  // YADI_TEST_HPP

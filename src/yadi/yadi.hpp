@@ -40,10 +40,6 @@ struct is_by_value {
     static const bool value = std::is_same<base_t, ptr_type_t<base_t>>::value;
 };
 
-/**
- * A YAML based factory.
- * @tparam base_t
- */
 template <typename base_t>
 class factory {
    public:
@@ -58,7 +54,6 @@ class factory {
 
     using type_store = std::map<std::string, type_info>;
 
-   public:
     /**
      * @brief Registers initializer to type.  When create is called with type this initializer will
      * be called. Overwrites initializer if already registered (will change).
@@ -310,6 +305,26 @@ YADI_YAML_TYPE_BY_VALUE(double, double)
 #endif
 
 // ################# IMPL ################################
+template <typename T>
+struct factory_traits<std::vector<T>> {
+    using ptr_type = std::vector<T>;
+    static const bool direct_from_yaml = true;
+};
+
+template <typename T>
+class factory<std::vector<T>> {
+   public:
+    using base_type = std::vector<T>;
+    using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
+    using ptr_type = ptr_type_t<base_type>;
+
+    static ptr_type create(std::string const& /*type*/, YAML::Node const& config = {}) {
+        std::vector<T> ret;
+        from_yamls<T>(config, std::back_inserter(ret));
+        return ret;
+    }
+};
+
 template <typename base_t>
 ptr_type_t<base_t> create(std::string const& type, YAML::Node const& config) {
     return factory<base_t>::create(type, config);

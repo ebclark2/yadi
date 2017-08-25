@@ -18,16 +18,18 @@ struct power_plant {
 };
 
 struct electric : public power_plant {
-    static std::unique_ptr<power_plant> make_electric(std::string make, int watts) {
-        std::unique_ptr<power_plant> ret(new electric(make, watts));
+    static std::unique_ptr<power_plant> make_electric(std::string make, int watts, std::vector<int> numbers) {
+        std::unique_ptr<power_plant> ret(new electric(make, watts, numbers));
         return ret;
     }
-    electric(std::string make, int watts) : make(std::move(make)), watts(std::move(watts)) {}
+    electric(std::string make, int watts, std::vector<int> numbers)
+        : make(std::move(make)), watts(std::move(watts)), numbers(numbers) {}
 
     int power() const { return this->watts; }
 
     std::string make;
     int watts;
+    std::vector<int> numbers;
 };
 
 struct gas : public power_plant {
@@ -91,10 +93,15 @@ YADI_TEST(nested_example_test) {
     config:
       - japan
       - 1200
+      - - 1
+        - 2
+        - 3
+        - 4
+        - 5
 )raw";
 
-    std::vector<car> cars;
-    from_yamls<car>(YAML::Load(YAML_CONFIG), std::back_inserter(cars));
+    std::vector<car> cars = from_yaml<std::vector<car>>(YAML::Load(YAML_CONFIG));
+    // from_yamls<car>(YAML::Load(YAML_CONFIG), std::back_inserter(cars));
 
     YADI_ASSERT_EQ(2u, cars.size());
     {
@@ -112,6 +119,8 @@ YADI_TEST(nested_example_test) {
         electric const& pp = dynamic_cast<electric const&>(*c.motor);
         YADI_ASSERT_EQ("japan", pp.make);
         YADI_ASSERT_EQ(1200, pp.watts);
+        std::vector<int> expectedNumbers = {1, 2, 3, 4, 5};
+        YADI_ASSERT_EQ(expectedNumbers, pp.numbers);
     }
     return true;
 }
