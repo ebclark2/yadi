@@ -7,7 +7,7 @@
 #include <yadi/yadi.hpp>
 
 #include <iterator>
-#include <list>
+#include <vector>
 
 namespace yadi {
 
@@ -93,10 +93,26 @@ YADI_TEST(nested_example_test) {
       - 1200
 )raw";
 
-    std::list<car> cars;
+    std::vector<car> cars;
     from_yamls<car>(YAML::Load(YAML_CONFIG), std::back_inserter(cars));
 
     YADI_ASSERT_EQ(2u, cars.size());
+    {
+        car const& c = cars[0];
+        YADI_ASSERT_EQ("gm", c.make);
+        gas const& pp = dynamic_cast<gas const&>(*c.motor);
+        YADI_ASSERT_EQ("LQ4", pp.make);
+        YADI_ASSERT_EQ(8, pp.cylinder_count);
+        YADI_ASSERT_EQ(1, pp.bore);
+        YADI_ASSERT_EQ(8, pp.stroke);
+    }
+    {
+        car const& c = cars[1];
+        YADI_ASSERT_EQ("tesla", c.make);
+        electric const& pp = dynamic_cast<electric const&>(*c.motor);
+        YADI_ASSERT_EQ("japan", pp.make);
+        YADI_ASSERT_EQ(1200, pp.watts);
+    }
     return true;
 }
 
