@@ -505,13 +505,12 @@ void register_type(std::string type, yadi_info_t<base_t> yadis) {
 
 template <typename base_t>
 void register_type(std::string type, initializer_type_t<base_t> initializer) {
-    yadi_info_t<base_t> yadis = {initializer, "No help provided"};
-    factory<base_t>::register_type(type, yadis);
+    register_type<base_t>(type, {initializer, "No help provided"});
 };
 
 template <typename base_t, typename impl_t>
 void register_type(std::string type) {
-    register_type<base_t>(type, &yaml_init<base_t, impl_t>);
+    register_type<base_t>(type, {&yaml_init<base_t, impl_t>, "Expects config.  Maybe add some help..."});
 };
 
 template <typename base_t, typename impl_t>
