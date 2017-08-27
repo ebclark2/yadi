@@ -10,7 +10,7 @@ conan_basic_setup(TARGETS)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 
-set(YADI_UTIL_SOURCES src/yadi/yadi.hpp src/yadi/yadi_util.cpp src/yadi/yadi_util.hpp)
+set(YADI_UTIL_SOURCES src/yadi/yadi.hpp src/yadi/yadi_util.cpp src/yadi/yadi_util.hpp src/yadi/yadi_help.cpp src/yadi/yadi_help.hpp)
 
 add_library(yadi INTERFACE)
 target_include_directories(yadi INTERFACE src)

@@ -73,10 +73,10 @@ class factory {
     static ptr_type create(std::string const& type, YAML::Node const& config = {});
 
     /**
-     * @brief A copy of the stored types and their registered initializers and help.
+     * @brief Stored types and their registered initializers and help.
      * @return
      */
-    static type_store types();
+    static type_store const& types();
 
    private:
     static type_store& mut_types();
@@ -361,7 +361,7 @@ typename factory<base_t>::ptr_type factory<base_t>::create(std::string const& ty
 }
 
 template <typename base_t>
-typename factory<base_t>::type_store factory<base_t>::types() {
+typename factory<base_t>::type_store const& factory<base_t>::types() {
     return mut_types();
 }
 
