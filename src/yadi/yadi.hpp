@@ -47,12 +47,12 @@ class factory {
     using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
     using ptr_type = ptr_type_t<base_type>;
 
-    struct type_info {
+    struct yadi_info {
         initializer_type initializer;
         std::string help;
     };
 
-    using type_store = std::map<std::string, type_info>;
+    using type_store = std::map<std::string, yadi_info>;
 
     /**
      * @brief Registers initializer to type.  When create is called with type this initializer will
@@ -60,7 +60,7 @@ class factory {
      * @param type
      * @param initializer
      */
-    static void register_type(std::string type, initializer_type initializer);
+    static void register_type(std::string type, yadi_info yadis);
 
     /**
      * @brief Calls the initializer associated with type passing the given YAML config.
@@ -83,6 +83,10 @@ class factory {
 
 template <typename base_t>
 using initializer_type_t = typename factory<base_t>::initializer_type;
+
+// TODO Comment here
+template <typename base_t>
+using yadi_info_t = typename factory<base_t>::yadi_info;
 
 /**
  * @brief Same as factory<base_t>::create(type, config)
@@ -192,7 +196,17 @@ ptr_type_t<base_t> yaml_init(YAML::Node const& config);
 YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */);
 
 /**
- * @brief Equivalent to factory<baes_t>::register_type(type, initializer)
+ * @brief Equibalent to factory<base_t>::register_type(type, yadis)
+ * @tparam base_t
+ * @param type
+ * @param initializer
+ */
+template <typename base_t>
+void register_type(std::string type, yadi_info_t<base_t> yadis);
+
+// TODO Update comment
+/**
+ * @brief
  * @tparam base_t
  * @param type
  * @param initializer
@@ -331,8 +345,8 @@ ptr_type_t<base_t> create(std::string const& type, YAML::Node const& config) {
 }
 
 template <typename base_t>
-void factory<base_t>::register_type(std::string type, initializer_type initializer) {
-    mut_types()[type].initializer = initializer;
+void factory<base_t>::register_type(std::string type, yadi_info yadis) {
+    mut_types()[type] = yadis;
 }
 
 template <typename base_t>
@@ -485,8 +499,14 @@ ptr_type_t<base_t> no_arg_init(YAML::Node const&) {
 inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */) { return left; }
 
 template <typename base_t>
+void register_type(std::string type, yadi_info_t<base_t> yadis) {
+    factory<base_t>::register_type(type, yadis);
+};
+
+template <typename base_t>
 void register_type(std::string type, initializer_type_t<base_t> initializer) {
-    factory<base_t>::register_type(type, initializer);
+    yadi_info_t<base_t> yadis = {initializer, "No help provided"};
+    factory<base_t>::register_type(type, yadis);
 };
 
 template <typename base_t, typename impl_t>
@@ -496,7 +516,7 @@ void register_type(std::string type) {
 
 template <typename base_t, typename impl_t>
 void register_type_no_arg(std::string type) {
-    register_type<base_t>(type, &no_arg_init<base_t, impl_t>);
+    register_type<base_t>(type, {&no_arg_init<base_t, impl_t>, "No config"});
 }
 
 template <typename base_t>
