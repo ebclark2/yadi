@@ -40,6 +40,7 @@ struct is_by_value {
     static const bool value = std::is_same<base_t, ptr_type_t<base_t>>::value;
 };
 
+// TODO YADI_DECL and YADI_DEFN macros with bit to add factory type to something for help retrieval
 template <typename base_t>
 class factory {
    public:
