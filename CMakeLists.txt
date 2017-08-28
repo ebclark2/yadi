@@ -13,7 +13,7 @@ set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/yadi_help.hpp src/
 
 add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
-target_link_libraries(yadi CONAN_PKG::yaml-cpp)
+target_link_libraries(yadi CONAN_PKG::yaml-cpp CONAN_PKG::Boost)
 
 set(YADI_UTIL_SOURCES src/yadi/yadi.hpp src/yadi/yadi_util.cpp src/yadi/yadi_util.hpp test/yadi/example.cpp src/yadi/yadi.cpp)
 

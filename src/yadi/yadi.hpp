@@ -2,6 +2,7 @@
 #define YADI_FACTORY_HPP__
 
 #include <yaml-cpp/yaml.h>
+#include <boost/core/demangle.hpp>
 
 #include <functional>
 #include <map>
@@ -640,12 +641,13 @@ struct yaml_to_tuple {
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
         // TODO demangle
-        arg_types = typeid(element_type).name();
+        arg_types = boost::core::demangled_name(typeid(element_type));
         arg_types++;
         yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
     }
 };
 
+// TODO Factory name registery.  Use this before demangled name, maybe only?
 template <typename tuple_t>
 struct yaml_to_tuple<tuple_t, 0> {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
@@ -658,7 +660,7 @@ struct yaml_to_tuple<tuple_t, 0> {
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
         // TODO demangle
-        arg_types = demangle_type<element_type>();
+        arg_types = boost::core::demangled_name(typeid(element_type));  // demangle_type<element_type>();
         arg_types++;
     }
 };
