@@ -9,11 +9,13 @@ conan_basic_setup(TARGETS)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 
-add_library(yadi INTERFACE)
-target_include_directories(yadi INTERFACE src)
-target_link_libraries(yadi INTERFACE CONAN_PKG::yaml-cpp)
+set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/yadi_help.hpp src/yadi/yadi_help.cpp)
 
-set(YADI_UTIL_SOURCES src/yadi/yadi.hpp src/yadi/yadi_util.cpp src/yadi/yadi_util.hpp src/yadi/yadi_help.cpp src/yadi/yadi_help.hpp test/yadi/example.cpp)
+add_library(yadi ${YADI_SOURCES})
+target_include_directories(yadi PUBLIC src)
+target_link_libraries(yadi CONAN_PKG::yaml-cpp)
+
+set(YADI_UTIL_SOURCES src/yadi/yadi.hpp src/yadi/yadi_util.cpp src/yadi/yadi_util.hpp test/yadi/example.cpp src/yadi/yadi.cpp)
 
 add_executable(yadi_util ${YADI_UTIL_SOURCES})
 target_link_libraries(yadi_util yadi)

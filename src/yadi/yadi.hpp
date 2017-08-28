@@ -339,7 +339,7 @@ void register_aliases(YAML::Node aliases);
  * @return
  */
 template <typename base_t, typename F>
-::yadi::initializer_type_t<base_t> make_initializer(F func);
+initializer_type_t<base_t> make_initializer(F func);
 
 /**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
@@ -352,7 +352,11 @@ template <typename base_t, typename F>
  * @return
  */
 template <typename base_t, typename F>
-::yadi::initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields);
+initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields);
+
+// TODO Comment
+template <typename base_t, typename F>
+yadi_info_t<base_t> make_initializer_with_help(F func, std::vector<std::string> fields);
 
 #define YADI_INIT_BEGIN_N(NAME)           \
     namespace {                           \
@@ -364,6 +368,13 @@ template <typename base_t, typename F>
     ;                                                              \
     static_initialization_##NAME static_initialization_##NAME##__; \
     }
+
+std::string demangle(const char* name);
+
+template <typename T>
+std::string demangle_type() {
+    return demangle(typeid(T).name());
+}
 
 #define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
 #define YADI_INIT_END YADI_INIT_END_N(ANON)
@@ -512,7 +523,7 @@ T yaml_as(YAML::Node const& config) {
 template <typename T>
 yadi_info_t<T> yaml_as_with_help() {
     // TODO Improved error message
-    return {&yaml_as<T>, "Direct conversion using config.as<T>()"};
+    return {&yaml_as<T>, "Direct conversion using yaml.as<T>()"};
 }
 
 template <typename base_t, typename impl_t,
@@ -624,6 +635,15 @@ struct yaml_to_tuple {
             ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
         yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
     }
+
+    template <typename arg_type_out>
+    static void to_arg_types(arg_type_out arg_types) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
+        // TODO demangle
+        arg_types = typeid(element_type).name();
+        arg_types++;
+        yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
+    }
 };
 
 template <typename tuple_t>
@@ -632,6 +652,14 @@ struct yaml_to_tuple<tuple_t, 0> {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
         std::get<std::tuple_size<tuple_t>::value - 1>(out) =
             ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1]);
+    }
+
+    template <typename arg_type_out>
+    static void to_arg_types(arg_type_out arg_types) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
+        // TODO demangle
+        arg_types = demangle_type<element_type>();
+        arg_types++;
     }
 };
 
@@ -720,13 +748,13 @@ struct derive_base_type<T*> {
 };
 
 template <typename base_t, typename F>
-::yadi::initializer_type_t<base_t> make_initializer(F func) {
+initializer_type_t<base_t> make_initializer(F func) {
     // TODO Error checking for yaml sequence type
     return [func](YAML::Node const& yaml) { return call_from_yaml(func, yaml); };
 };
 
 template <typename base_t, typename F>
-::yadi::initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields) {
+initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields) {
     return [func, fields](YAML::Node const& yaml) {
         // Convert yaml map to sequence via ordered field list
         // TODO error checking for yaml map type
@@ -739,6 +767,24 @@ template <typename base_t, typename F>
     };
 };
 
+template <typename base_t, typename F>
+yadi_info_t<base_t> make_initializer_with_help(F func, std::vector<std::string> fields) {
+    std::vector<std::string> field_types;
+    yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
+    if (field_types.size() != fields.size()) {
+        throw std::runtime_error("Field count must match argument cound");
+    }
+    std::string help;
+    for (size_t i = 0; i < fields.size(); ++i) {
+        std::string const& field = fields[i];
+        std::string const& field_type = field_types[i];
+        if (!help.empty()) {
+            help += ", ";
+        }
+        help += field + "(" + field_type + ")";
+    }
+    return {make_initializer<base_t>(func, fields), "Expects yaml map with fields " + help};
+}
 }  // namespace yadi
 
 #endif  // YADI_FACTORY_HPP__

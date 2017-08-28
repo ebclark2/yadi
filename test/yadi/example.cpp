@@ -69,11 +69,12 @@ YADI_INIT_BEGIN
 ::yadi::yadi_help::register_factory<car>("car");
 ::yadi::yadi_help::register_factory<power_plant>("power_plant");
 // Make car from mapped args
-::yadi::register_type<car>("", ::yadi::make_initializer<car>(&car::make_car, {"make", "power_plant"}));
+::yadi::register_type<car>("", ::yadi::make_initializer_with_help<car>(&car::make_car, {"make", "power_plant"}));
 
 // Make gas from mapped args
-register_type<power_plant>("gas", ::yadi::make_initializer<power_plant>(&gas::make_gas,
-                                                                        {"make", "cylinder_count", "bore", "stroke"}));
+register_type<power_plant>("gas",
+                           ::yadi::make_initializer_with_help<power_plant>(&gas::make_gas, {"make", "cylinder_count",
+                                                                                            "bore", "stroke"}));
 // Make electric from sequenced args
 register_type<power_plant>("electric", ::yadi::make_initializer<power_plant>(&electric::make_electric));
 YADI_INIT_END
