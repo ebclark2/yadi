@@ -5,7 +5,7 @@
 #ifndef YADI_YADI_UTIL_HPP
 #define YADI_YADI_UTIL_HPP
 
-#include "yadi_help.hpp"
+#include "yadi.hpp"
 
 #include <iostream>
 
