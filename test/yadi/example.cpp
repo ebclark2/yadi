@@ -76,7 +76,7 @@ register_type<power_plant>("gas",
                            ::yadi::make_initializer_with_help<power_plant>(&gas::make_gas, {"make", "cylinder_count",
                                                                                             "bore", "stroke"}));
 // Make electric from sequenced args
-register_type<power_plant>("electric", ::yadi::make_initializer<power_plant>(&electric::make_electric));
+register_type<power_plant>("electric", ::yadi::make_initializer_with_help<power_plant>(&electric::make_electric));
 YADI_INIT_END
 
 YADI_TEST(nested_example_test) {

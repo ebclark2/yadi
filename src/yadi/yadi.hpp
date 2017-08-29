@@ -647,7 +647,7 @@ struct yaml_to_tuple {
     }
 };
 
-// TODO Factory name registery.  Use this before demangled name, maybe only?
+// TODO Factory name registery.  Use this before demangled name, maybe only
 template <typename tuple_t>
 struct yaml_to_tuple<tuple_t, 0> {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
@@ -756,6 +756,19 @@ initializer_type_t<base_t> make_initializer(F func) {
 };
 
 template <typename base_t, typename F>
+yadi_info_t<base_t> make_initializer_with_help(F func) {
+    std::vector<std::string> field_types;
+    yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
+    std::string help = "Expects yaml sequence with types:";
+    for (size_t i = 0; i < field_types.size(); ++i) {
+        std::string const& field_type = field_types[i];
+        help += "\n\t\t - ";
+        help += field_type;
+    }
+    return {make_initializer<base_t>(func), help};
+}
+
+template <typename base_t, typename F>
 initializer_type_t<base_t> make_initializer(F func, std::vector<std::string> fields) {
     return [func, fields](YAML::Node const& yaml) {
         // Convert yaml map to sequence via ordered field list
@@ -774,18 +787,16 @@ yadi_info_t<base_t> make_initializer_with_help(F func, std::vector<std::string> 
     std::vector<std::string> field_types;
     yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
     if (field_types.size() != fields.size()) {
-        throw std::runtime_error("Field count must match argument cound");
+        throw std::runtime_error("Field count must match argument count");
     }
-    std::string help;
+    std::string help = "Expects yaml map with fields:";
     for (size_t i = 0; i < fields.size(); ++i) {
         std::string const& field = fields[i];
         std::string const& field_type = field_types[i];
-        if (!help.empty()) {
-            help += ", ";
-        }
+        help += "\n\t\t";
         help += field + "(" + field_type + ")";
     }
-    return {make_initializer<base_t>(func, fields), "Expects yaml map with fields " + help};
+    return {make_initializer<base_t>(func, fields), help};
 }
 }  // namespace yadi
 
