@@ -4,8 +4,4 @@
 
 #include "yadi.hpp"
 
-namespace yadi {
-
-std::string const TYPE_BY_VALUE = "type_by_value";
-
-}  // namespace yadi
+namespace yadi {}  // namespace yadi
