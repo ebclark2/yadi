@@ -9,7 +9,7 @@ conan_basic_setup(TARGETS)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 
-set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp)
+set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp src/yadi/details/help.cpp src/yadi/details/help.hpp)
 
 add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
