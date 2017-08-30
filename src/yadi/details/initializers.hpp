@@ -35,6 +35,18 @@ ptr_type_t<BT> yaml_init(YAML::Node const& config);
 template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&);
 
+template <typename BT, typename F>
+initializer_type_t<BT> make_initializer(F func);
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_initializer_with_help(F func);
+
+template <typename BT, typename F>
+initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields);
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields);
+
 // ################### IMPL ######################
 
 template <typename T>
@@ -108,6 +120,176 @@ template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&) {
     return no_arg_init_helper<BT, IT>::init();
 };
+
+template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
+struct yaml_to_tuple {
+    static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
+        std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
+            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
+        yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
+    }
+
+    template <typename arg_type_out>
+    static void to_arg_types(arg_type_out arg_types) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
+        arg_types = demangle_type<element_type>();
+        arg_types++;
+        yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
+    }
+};
+
+// TODO Factory name registery.  Use this before demangled name, maybe only
+template <typename tuple_t>
+struct yaml_to_tuple<tuple_t, 0> {
+    static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
+        std::get<std::tuple_size<tuple_t>::value - 1>(out) =
+            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1]);
+    }
+
+    template <typename arg_type_out>
+    static void to_arg_types(arg_type_out arg_types) {
+        using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
+        // TODO demangle
+        arg_types = boost::core::demangled_name(typeid(element_type));  // demangle_type<element_type>();
+        arg_types++;
+    }
+};
+
+template <typename T>
+struct function_traits;
+
+template <typename R, typename... Args>
+struct function_traits<R (*)(Args...)> {
+    using result_type = R;
+    using params_type = std::tuple<bare_t<Args>...>;
+    using function_type = std::function<R(Args...)>;
+    using index_sequence = std::index_sequence_for<Args...>;
+};
+
+template <typename R, typename... Args>
+struct function_traits<std::function<R(Args...)>> {
+    using result_type = R;
+    using params_type = std::tuple<bare_t<Args>...>;
+    using function_type = std::function<R(Args...)>;
+    using index_sequence = std::index_sequence_for<Args...>;
+};
+
+template <typename T>
+using function_traits_params_type = typename function_traits<T>::params_type;
+
+template <typename T>
+using function_traits_result_type = typename function_traits<T>::result_type;
+
+template <typename T>
+using function_traits_function_type = typename function_traits<T>::function_type;
+
+template <typename T>
+using function_traits_index_sequence = typename function_traits<T>::index_sequence;
+
+template <typename T>
+struct function_call_via_yaml {
+    using result_type = function_traits_result_type<T>;
+    using params_type = function_traits_params_type<T>;
+    using function_type = function_traits_function_type<T>;
+    using index_sequence = function_traits_index_sequence<T>;
+
+    static result_type call(function_type func, YAML::Node const& yaml);
+
+   private:
+    function_call_via_yaml(function_type func, params_type* params) : func(std::move(func)), params(params) {}
+
+    template <std::size_t... I>
+    result_type call_func(std::index_sequence<I...>) {
+        return func(std::get<I>(*params)...);
+    }
+
+    result_type delayed_dispatch() { return call_func(index_sequence{}); }
+
+    function_type func;
+    params_type* params;
+};
+
+template <typename T>
+typename function_call_via_yaml<T>::result_type function_call_via_yaml<T>::call(function_type func,
+                                                                                YAML::Node const& yaml) {
+    // Use std::apply in c++17
+    params_type params;
+    yaml_to_tuple<params_type>::to_tuple(params, yaml);
+    function_call_via_yaml<T> f{func, &params};
+    return f.delayed_dispatch();
+}
+
+template <typename F>
+function_traits_result_type<F> call_from_yaml(F const& func, YAML::Node const& yaml) {
+    return function_call_via_yaml<F>::call(func, yaml);
+}
+
+template <typename T>
+struct derive_base_type<std::shared_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<std::unique_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<T*> {
+    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
+};
+
+template <typename BT, typename F>
+initializer_type_t<BT> make_initializer(F func) {
+    // TODO Error checking for yaml sequence type
+    return [func](YAML::Node const& yaml) { return call_from_yaml(func, yaml); };
+}
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_initializer_with_help(F func) {
+    std::vector<std::string> field_types;
+    yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
+    std::string help = "Expects yaml sequence with types:";
+    for (size_t i = 0; i < field_types.size(); ++i) {
+        std::string const& field_type = field_types[i];
+        help += "\n\t\t - ";
+        help += field_type;
+    }
+    return {make_initializer<BT>(func), help};
+}
+
+template <typename BT, typename F>
+initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields) {
+    return [func, fields](YAML::Node const& yaml) {
+        // Convert yaml map to sequence via ordered field list
+        // TODO error checking for yaml map type
+        YAML::Node sequence;
+        for (std::string const& field : fields) {
+            // TODO error checking for field
+            sequence.push_back(yaml[field]);
+        }
+        return call_from_yaml(func, sequence);
+    };
+}
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields) {
+    std::vector<std::string> field_types;
+    yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
+    if (field_types.size() != fields.size()) {
+        throw std::runtime_error("Field count must match argument count");
+    }
+    std::string help = "Expects yaml map with fields:";
+    for (size_t i = 0; i < fields.size(); ++i) {
+        std::string const& field = fields[i];
+        std::string const& field_type = field_types[i];
+        help += "\n\t\t";
+        help += field + "(" + field_type + ")";
+    }
+    return {make_initializer<BT>(func, fields), help};
+}
 
 }  // namespace yadi
 
