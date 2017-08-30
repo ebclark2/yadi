@@ -6,12 +6,13 @@
 #define YADI_CREATE_UTILS_HPP
 
 #include "factory.hpp"
+#include "type_utils.hpp"
 
 #include <yaml-cpp/yaml.h>
 
 namespace yadi {
 
-extern std::string const TYPE_BY_VALUE;
+std::string const& type_by_value_key();
 
 /**
  * @brief Same as factory<BT>::create(type, config)
@@ -44,6 +45,15 @@ ptr_type_t<BT> from_yaml(YAML::Node const& factory_config);
 template <typename BT, typename OI>
 void from_yamls(YAML::Node const& factory_configs, OI out);
 
+/**
+ * @brief Populate out from factory config.  The factory type is derived from ptr_type.
+ * @tparam PT pointer type
+ * @param out
+ * @param factory_config
+ */
+template <typename PT>
+void parse(PT& out, YAML::Node const& factory_config);
+
 // ################# IMPL #####################
 template <typename BT>
 ptr_type_t<BT> create(std::string const& type, YAML::Node const& config) {
@@ -53,7 +63,7 @@ ptr_type_t<BT> create(std::string const& type, YAML::Node const& config) {
 template <typename BT>
 ptr_type_t<BT> from_yaml(YAML::Node const& factory_config) {
     if (factory_traits<BT>::direct_from_yaml) {
-        return factory<BT>::create(TYPE_BY_VALUE, factory_config);
+        return factory<BT>::create(type_by_value_key(), factory_config);
     }
 
     if (!factory_config.IsDefined()) {
@@ -104,6 +114,12 @@ void from_yamls(YAML::Node const& factory_configs, output_iterator out) {
         ++out;
     }
 }
+
+template <typename ptr_type>
+void parse(ptr_type& out, YAML::Node const& factory_config) {
+    out = from_yaml<typename derive_base_type<ptr_type>::base_type>(factory_config);
+}
+
 }  // namespace yadi
 
 #endif  // YADI_CREATE_UTILS_HPP

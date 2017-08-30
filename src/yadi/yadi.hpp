@@ -18,54 +18,6 @@
 
 namespace yadi {
 
-template <typename T>
-using bare_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-
-/**
- * If lest is same as right then provide type_type as type.
- * @tparam L left
- * @tparam R right
- * @tparam RT result type
- */
-template <typename L, typename R, typename RT, typename = typename std::enable_if<std::is_same<L, R>::value>::type>
-struct if_same_then {
-    using type = RT;
-};
-
-template <typename L, typename R, typename RT>
-using is_same_then_t = typename if_same_then<L, R, RT>::type;
-
-/**
- * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
- * @tparam T
- */
-template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
-struct derive_base_type_by_value {
-    using base_type = T;
-};
-
-/**
- * For type T, provide the factory base type that creates T. For example, for T std::unique_ptr<int>, int would
- * be the base type.
- * @tparam T
- */
-template <typename T>
-struct derive_base_type {
-    using base_type = typename derive_base_type_by_value<T>::base_type;
-};
-
-template <typename T>
-using derive_base_type_t = typename derive_base_type<T>::base_type;
-
-/**
- * @brief Populate out from factory config.  The factory type is derived from ptr_type.
- * @tparam PT pointer type
- * @param out
- * @param factory_config
- */
-template <typename PT>
-void parse(PT& out, YAML::Node const& factory_config);
-
 /**
  * @brief Returns config.as<T>().  Signature matches factory initializer.
  * @tparam T
@@ -219,34 +171,30 @@ yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fiel
 #define YADI_INIT_END YADI_INIT_END_N(ANON)
 
 /// Expose types yaml supports directly
-#define YADI_YAML_TYPE_BY_VALUE(TYPE, INIT_NAME)                           \
-    template <>                                                            \
-    struct factory_traits<TYPE> {                                          \
-        using ptr_type = TYPE;                                             \
-        static const bool direct_from_yaml = true;                         \
-    };                                                                     \
-                                                                           \
-    YADI_INIT_BEGIN_N(INIT_NAME)                                           \
-    ::yadi::register_type<TYPE>(TYPE_BY_VALUE, yaml_as_with_help<TYPE>()); \
-    ::yadi::register_factory<TYPE>(#TYPE);                                 \
+#define YADI_YAML_TYPE_BY_VALUE_DECL(TYPE, INIT_NAME) \
+    template <>                                       \
+    struct factory_traits<TYPE> {                     \
+        using ptr_type = TYPE;                        \
+        static const bool direct_from_yaml = true;    \
+    };
+
+#define YADI_YAML_TYPE_BY_VALUE_DEFN(TYPE, INIT_NAME)                                            \
+    YADI_INIT_BEGIN_N(INIT_NAME)                                                                 \
+    ::yadi::register_type<TYPE>(::yadi::type_by_value_key(), ::yadi::yaml_as_with_help<TYPE>()); \
+    ::yadi::register_factory<TYPE>(#TYPE);                                                       \
     YADI_INIT_END_N(INIT_NAME)
 
 #ifndef YADI_NO_STD_STRING
-YADI_YAML_TYPE_BY_VALUE(std::string, string)
+YADI_YAML_TYPE_BY_VALUE_DECL(std::string, string)
 #endif
 #ifndef YADI_NO_STD_INT
-YADI_YAML_TYPE_BY_VALUE(int, int)
+YADI_YAML_TYPE_BY_VALUE_DECL(int, int)
 #endif
 #ifndef YADI_NO_STD_DOUBLE
-YADI_YAML_TYPE_BY_VALUE(double, double)
+YADI_YAML_TYPE_BY_VALUE_DECL(double, double)
 #endif
 
 // ################# IMPL ################################
-template <typename ptr_type>
-void parse(ptr_type& out, YAML::Node const& factory_config) {
-    out = from_yaml<typename derive_base_type<ptr_type>::base_type>(factory_config);
-}
-
 template <typename T>
 T yaml_as(YAML::Node const& config) {
     // TODO Improved error message

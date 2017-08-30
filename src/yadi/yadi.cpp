@@ -4,4 +4,14 @@
 
 #include "yadi.hpp"
 
-namespace yadi {}  // namespace yadi
+#include <string>
+
+#ifndef YADI_NO_STD_STRING
+YADI_YAML_TYPE_BY_VALUE_DEFN(std::string, string)
+#endif
+#ifndef YADI_NO_STD_INT
+YADI_YAML_TYPE_BY_VALUE_DEFN(int, int)
+#endif
+#ifndef YADI_NO_STD_DOUBLE
+YADI_YAML_TYPE_BY_VALUE_DEFN(double, double)
+#endif

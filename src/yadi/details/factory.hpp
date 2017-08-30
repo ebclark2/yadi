@@ -5,10 +5,18 @@
 #ifndef YADI_FACTORY_HPP
 #define YADI_FACTORY_HPP
 
+#define YADI_DEBUG
+
+#include "demangle.hpp"
+
+#include <yaml-cpp/yaml.h>
+
 #include <memory>
 #include <string>
 
-#include <yaml-cpp/yaml.h>
+#ifdef YADI_DEBUG
+#include <iostream>
+#endif
 
 namespace yadi {
 
@@ -90,6 +98,9 @@ using yadi_info_t = typename factory<BT>::yadi_info;
 
 template <typename BT>
 void factory<BT>::register_type(std::string type, yadi_info yadis) {
+#ifdef YADI_DEBUG
+    std::cerr << "Registering \"" + type + "\" to \"" + demangle_type<BT>() + "\" factory\n";
+#endif
     mut_types()[type] = yadis;
 }
 
@@ -97,7 +108,7 @@ template <typename BT>
 typename factory<BT>::ptr_type factory<BT>::create(std::string const& type, YAML::Node const& config) {
     typename type_store::const_iterator type_iter = mut_types().find(type);
     if (type_iter == mut_types().end()) {
-        throw std::runtime_error(type + " not found");
+        throw std::runtime_error("\"" + type + "\" not found in \"" + demangle_type<BT>() + "\" factory");
     }
 
     return type_iter->second.initializer(config);

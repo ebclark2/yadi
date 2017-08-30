@@ -5,11 +5,21 @@ project(yadi)
 set (CMAKE_CXX_STANDARD 14)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
+conan_check_compiler()
+#conan_output_dirs_setup()
+conan_set_find_library_paths()
+message(STATUS "Conan: Using cmake targets configuration")
+conan_define_targets()
+conan_set_rpath()
+conan_set_vs_runtime()
+conan_set_libcxx()
+conan_set_find_paths()
+
+set(BUILD_SHARED_LIBS ON)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 
-set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp src/yadi/details/help.cpp src/yadi/details/help.hpp src/yadi/details/initializers.hpp src/yadi/details/factory.hpp src/yadi/details/factory_specializations.hpp src/yadi/details/create_utils.hpp src/yadi/details/create_utils.cpp)
+set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp src/yadi/details/help.cpp src/yadi/details/help.hpp src/yadi/details/initializers.hpp src/yadi/details/factory.hpp src/yadi/details/factory_specializations.hpp src/yadi/details/create_utils.hpp src/yadi/details/create_utils.cpp src/yadi/details/type_utils.hpp)
 
 add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
@@ -20,7 +30,7 @@ set(YADI_UTIL_SOURCES util/yadi/yadi_util.cpp util/yadi/yadi_util.hpp test/yadi/
 add_executable(yadi_util ${YADI_UTIL_SOURCES})
 target_link_libraries(yadi_util yadi)
 
-set(TEST_SOURCES test/yadi/shared_ptr_test.cpp test/yadi/unique_ptr_test.cpp test/yadi/raw_ptr_test.cpp test/yadi/main.cpp test/yadi/test.hpp test/yadi/yaml_test.cpp test/yadi/alias_test.cpp test/yadi/by_value_test.cpp test/yadi/example.cpp test/yadi/yaml_bindings_test.cpp)
+set(TEST_SOURCES test/yadi/shared_ptr_test.cpp test/yadi/unique_ptr_test.cpp test/yadi/raw_ptr_test.cpp test/yadi/main.cpp test/yadi/test.hpp test/yadi/yaml_test.cpp test/yadi/alias_test.cpp test/yadi/by_value_test.cpp test/yadi/example.cpp test/yadi/yaml_bindings_test.cpp test/yadi/parse_test.cpp)
 
 enable_testing()
 
