@@ -94,45 +94,6 @@ void register_aliases(YAML::Node aliases);
 template <typename BT>
 static void register_factory(std::string name);
 
-/**
- * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
- * passed as a YAML factory config to the factory of the argument type.  The results will be passed in to function
- * func.
- * @tparam BT
- * @tparam F
- * @param func
- * @return
- */
-template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func);
-
-/**
- * @brief Makes yadi info with generated help for F
- * @tparam BT base type
- * @tparam F Function type
- * @param func Function to find yaml to
- * @return Generated yadi info
- */
-template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func);
-
-/**
- * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
- * in the order the fields are provided.  Once the sequence is created it's treated the behavior is the same as
- * make_initializer(F).
- * @tparam BT
- * @tparam F
- * @param func
- * @param fields
- * @return
- */
-template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields);
-
-// TODO Comment
-template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields);
-
 #define YADI_INIT_BEGIN_N(NAME)           \
     namespace {                           \
     struct static_initialization_##NAME { \
