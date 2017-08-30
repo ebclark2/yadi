@@ -32,18 +32,23 @@ yadi_info_t<T> yaml_as_with_help();
 template <typename BT, typename IT>
 ptr_type_t<BT> yaml_init(YAML::Node const& config);
 
+// TODO Comment
 template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&);
 
+// TODO Comment
 template <typename BT, typename F>
 initializer_type_t<BT> make_initializer(F func);
 
+// TODO Comment
 template <typename BT, typename F>
 yadi_info_t<BT> make_initializer_with_help(F func);
 
+// TODO Comment
 template <typename BT, typename F>
 initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields);
 
+// TODO Comment
 template <typename BT, typename F>
 yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields);
 
