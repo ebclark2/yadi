@@ -342,6 +342,16 @@ template <typename BT, typename F>
 initializer_type_t<BT> make_initializer(F func);
 
 /**
+ * @brief Makes yadi info with generated help for F
+ * @tparam BT base type
+ * @tparam F Function type
+ * @param func Function to find yaml to
+ * @return Generated yadi info
+ */
+template <typename BT, typename F>
+yadi_info_t<BT> make_initializer_with_help(F func);
+
+/**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
  * in the order the fields are provided.  Once the sequence is created it's treated the behavior is the same as
  * make_initializer(F).
