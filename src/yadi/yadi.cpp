@@ -12,6 +12,8 @@
 
 namespace yadi {
 
+std::string const TYPE_BY_VALUE = "type_by_value";
+
 #ifdef __GNUG__
 
 std::string demangle(const char* name) {

@@ -13,6 +13,8 @@
 
 namespace yadi {
 
+extern std::string const TYPE_BY_VALUE;
+
 template <typename T>
 using bare_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
@@ -390,16 +392,16 @@ std::string demangle_type() {
 #define YADI_INIT_END YADI_INIT_END_N(ANON)
 
 /// Expose types yaml supports directly
-#define YADI_YAML_TYPE_BY_VALUE(TYPE, INIT_NAME)                \
-    template <>                                                 \
-    struct factory_traits<TYPE> {                               \
-        using ptr_type = TYPE;                                  \
-        static const bool direct_from_yaml = true;              \
-    };                                                          \
-                                                                \
-    YADI_INIT_BEGIN_N(INIT_NAME)                                \
-    ::yadi::register_type<TYPE>("", yaml_as_with_help<TYPE>()); \
-    ::yadi::yadi_help::register_factory<TYPE>(#TYPE);           \
+#define YADI_YAML_TYPE_BY_VALUE(TYPE, INIT_NAME)                           \
+    template <>                                                            \
+    struct factory_traits<TYPE> {                                          \
+        using ptr_type = TYPE;                                             \
+        static const bool direct_from_yaml = true;                         \
+    };                                                                     \
+                                                                           \
+    YADI_INIT_BEGIN_N(INIT_NAME)                                           \
+    ::yadi::register_type<TYPE>(TYPE_BY_VALUE, yaml_as_with_help<TYPE>()); \
+    ::yadi::yadi_help::register_factory<TYPE>(#TYPE);                      \
     YADI_INIT_END_N(INIT_NAME)
 
 #ifndef YADI_NO_STD_STRING
@@ -467,7 +469,7 @@ typename factory<BT>::type_store& factory<BT>::mut_types() {
 template <typename BT>
 ptr_type_t<BT> from_yaml(YAML::Node const& factory_config) {
     if (factory_traits<BT>::direct_from_yaml) {
-        return factory<BT>::create("", factory_config);
+        return factory<BT>::create(TYPE_BY_VALUE, factory_config);
     }
 
     if (!factory_config.IsDefined()) {
