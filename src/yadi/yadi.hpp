@@ -1,8 +1,9 @@
 #ifndef YADI_FACTORY_HPP__
 #define YADI_FACTORY_HPP__
 
+#include "details/demangle.hpp"
+
 #include <yaml-cpp/yaml.h>
-#include <boost/core/demangle.hpp>
 
 #include <functional>
 #include <map>
@@ -381,13 +382,6 @@ yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fiel
     static_initialization_##NAME static_initialization_##NAME##__; \
     }
 
-std::string demangle(const char* name);
-
-template <typename T>
-std::string demangle_type() {
-    return demangle(typeid(T).name());
-}
-
 #define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
 #define YADI_INIT_END YADI_INIT_END_N(ANON)
 
@@ -651,8 +645,7 @@ struct yaml_to_tuple {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        // TODO demangle
-        arg_types = boost::core::demangled_name(typeid(element_type));
+        arg_types = demangle_type<element_type>();
         arg_types++;
         yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
     }
