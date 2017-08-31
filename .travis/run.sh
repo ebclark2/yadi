@@ -3,12 +3,10 @@
 set -e
 set -x
 
-if [[ "$(uname -s)" == 'Darwin' ]]; then
-    if which pyenv > /dev/null; then
-        eval "$(pyenv init -)"
-    fi
-    pyenv activate conan
+if which pyenv > /dev/null; then
+    eval "$(pyenv init -)"
 fi
+pyenv activate conan
 
 mkdir build
 cd build && conan install .. --build && cmake .. && make && ctest
