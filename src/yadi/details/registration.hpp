@@ -10,7 +10,6 @@
 #include "initializers.hpp"
 
 namespace yadi {
-// TODO complete function
 // TODO change argument names
 /**
  * If both types are maps then they are merged with left taking priority.  If right is not defined or is null then left.
