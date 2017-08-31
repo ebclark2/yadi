@@ -89,17 +89,17 @@ static void register_factory(std::string name = demangle_type<BT>());
 template <typename BT>
 void register_type(std::string type, yadi_info_t<BT> yadis) {
     factory<BT>::register_type(type, yadis);
-};
+}
 
 template <typename BT>
 void register_type(std::string type, initializer_type_t<BT> initializer) {
     register_type<BT>(type, {initializer, "No help provided"});
-};
+}
 
 template <typename BT, typename IT>
 void register_type(std::string type) {
     register_type<BT>(type, {&yaml_init<BT, IT>, "Expects config.  Maybe add some help..."});
-};
+}
 
 template <typename BT, typename IT>
 void register_type_no_arg(std::string type) {

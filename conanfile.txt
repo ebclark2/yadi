@@ -1,6 +1,5 @@
 [requires]
-yaml-cpp/0.5.3@moonforged/stable
-zlib/1.2.8@conan/stable
+yaml-cpp/master@ebclark2/testing
 
 [generators]
 cmake

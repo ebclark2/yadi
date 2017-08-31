@@ -37,7 +37,7 @@
 /// Expose types yaml supports directly
 #define YADI_YAML_TYPE_BY_VALUE_DECL(TYPE, INIT_NAME) \
     template <>                                       \
-    struct ::yadi::factory_traits<TYPE> {             \
+    struct yadi::factory_traits<TYPE> {               \
         using ptr_type = TYPE;                        \
         static const bool direct_from_yaml = true;    \
     };                                                \

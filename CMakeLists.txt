@@ -23,7 +23,7 @@ set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.c
 
 add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
-target_link_libraries(yadi CONAN_PKG::yaml-cpp CONAN_PKG::Boost)
+target_link_libraries(yadi CONAN_PKG::yaml-cpp)
 
 set(YADI_INSPECTOR_SOURCES inspector/yadi/inspector.cpp inspector/yadi/inspector.hpp)
 

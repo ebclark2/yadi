@@ -8,6 +8,7 @@
 #include "demangle.hpp"
 
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <typeindex>

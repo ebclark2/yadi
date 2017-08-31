@@ -121,7 +121,7 @@ struct yaml_init_helper<BT, IT, true> {
 template <typename BT, typename IT>
 ptr_type_t<BT> yaml_init(YAML::Node const& config) {
     return yaml_init_helper<BT, IT>::init(config);
-};
+}
 
 template <typename BT, typename IT,
           typename = typename std::enable_if<is_by_value<BT>::value && std::is_same<BT, IT>::value>::type>
@@ -151,7 +151,7 @@ struct no_arg_init_helper<BT, IT, true> {
 template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&) {
     return no_arg_init_helper<BT, IT>::init();
-};
+}
 
 template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
 struct yaml_to_tuple {
