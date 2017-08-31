@@ -5,8 +5,6 @@
 #ifndef YADI_FACTORY_HPP
 #define YADI_FACTORY_HPP
 
-#define YADI_DEBUG
-
 #include "demangle.hpp"
 
 #include <yaml-cpp/yaml.h>
