@@ -34,15 +34,6 @@ struct factory_traits {
 template <typename BT>
 using ptr_type_t = typename factory_traits<BT>::ptr_type;
 
-/**
- * @brief Determine is factory returns by value
- * @tparam BT
- */
-template <typename BT>
-struct is_by_value {
-    static const bool value = std::is_same<BT, ptr_type_t<BT>>::value;
-};
-
 // TODO YADI_DECL and YADI_DEFN macros with bit to add factory type to something for help retrieval
 template <typename BT>
 struct factory {

@@ -5,6 +5,10 @@
 #ifndef YADI_TYPE_UTILS_HPP
 #define YADI_TYPE_UTILS_HPP
 
+#include "factory.hpp"
+
+#include <type_traits>
+
 namespace yadi {
 
 template <typename T>
@@ -23,6 +27,15 @@ struct if_same_then {
 
 template <typename L, typename R, typename RT>
 using is_same_then_t = typename if_same_then<L, R, RT>::type;
+
+/**
+ * @brief Determine is factory returns by value
+ * @tparam BT
+ */
+template <typename BT>
+struct is_by_value {
+    static const bool value = std::is_same<BT, ptr_type_t<BT>>::value;
+};
 
 /**
  * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.

@@ -19,7 +19,7 @@ set(BUILD_SHARED_LIBS ON)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 
-set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp src/yadi/details/help.cpp src/yadi/details/help.hpp src/yadi/details/initializers.hpp src/yadi/details/factory.hpp src/yadi/details/factory_specializations.hpp src/yadi/details/create_utils.hpp src/yadi/details/create_utils.cpp src/yadi/details/type_utils.hpp src/yadi/details/registration.hpp src/yadi/details/registration.cpp)
+set(YADI_SOURCES src/yadi/yadi.hpp src/yadi/yadi.cpp src/yadi/details/demangle.cpp src/yadi/details/demangle.hpp src/yadi/details/help.cpp src/yadi/details/help.hpp src/yadi/details/initializers.hpp src/yadi/details/factory.hpp src/yadi/details/factory_specializations.hpp src/yadi/details/create_utils.hpp src/yadi/details/create_utils.cpp src/yadi/details/type_utils.hpp src/yadi/details/registration.hpp src/yadi/details/registration.cpp src/yadi/details/factory.cpp src/yadi/details/factory_specializations.cpp src/yadi/details/initializers.cpp src/yadi/details/type_utils.cpp)
 
 add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
