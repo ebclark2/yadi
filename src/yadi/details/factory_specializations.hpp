@@ -8,6 +8,8 @@
 #include "create_utils.hpp"
 #include "factory.hpp"
 
+#include <vector>
+
 namespace yadi {
 
 template <typename T>

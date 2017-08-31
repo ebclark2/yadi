@@ -9,12 +9,46 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <functional>
+#include <map>
 #include <memory>
 #include <string>
+#include <type_traits>
 
 #ifdef YADI_DEBUG
 #include <iostream>
 #endif
+
+// TODO Find a better home for these macros
+#define YADI_INIT_BEGIN_N(NAME)           \
+    namespace {                           \
+    struct static_initialization_##NAME { \
+        static_initialization_##NAME() {
+#define YADI_INIT_END_N(NAME)                                      \
+    }                                                              \
+    }                                                              \
+    ;                                                              \
+    static_initialization_##NAME static_initialization_##NAME##__; \
+    }
+
+#define YADI_INIT_BEGIN YADI_INIT_BEGIN_N(ANON)
+#define YADI_INIT_END YADI_INIT_END_N(ANON)
+
+/// Expose types yaml supports directly
+#define YADI_YAML_TYPE_BY_VALUE_DECL(TYPE, INIT_NAME) \
+    template <>                                       \
+    struct ::yadi::factory_traits<TYPE> {             \
+        using ptr_type = TYPE;                        \
+        static const bool direct_from_yaml = true;    \
+    };                                                \
+    extern template struct ::yadi::factory<TYPE>;
+
+#define YADI_YAML_TYPE_BY_VALUE_DEFN(TYPE, INIT_NAME)                                            \
+    template struct ::yadi::factory<TYPE>;                                                       \
+    YADI_INIT_BEGIN_N(INIT_NAME)                                                                 \
+    ::yadi::register_type<TYPE>(::yadi::type_by_value_key(), ::yadi::yaml_as_with_help<TYPE>()); \
+    ::yadi::register_factory<TYPE>(#TYPE);                                                       \
+    YADI_INIT_END_N(INIT_NAME)
 
 namespace yadi {
 
