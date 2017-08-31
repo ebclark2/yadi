@@ -25,7 +25,7 @@ add_library(yadi ${YADI_SOURCES})
 target_include_directories(yadi PUBLIC src)
 target_link_libraries(yadi CONAN_PKG::yaml-cpp CONAN_PKG::Boost)
 
-set(YADI_UTIL_SOURCES util/yadi/yadi_util.cpp util/yadi/yadi_util.hpp test/yadi/example.cpp)
+set(YADI_UTIL_SOURCES inspector/yadi/yadi_util.cpp inspector/yadi/yadi_util.hpp test/yadi/example.cpp)
 
 add_executable(yadi_util ${YADI_UTIL_SOURCES})
 target_link_libraries(yadi_util yadi)
