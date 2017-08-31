@@ -47,8 +47,7 @@ struct is_by_value {
 
 // TODO YADI_DECL and YADI_DEFN macros with bit to add factory type to something for help retrieval
 template <typename BT>
-class factory {
-   public:
+struct factory {
     using base_type = BT;
     using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
     using ptr_type = ptr_type_t<base_type>;

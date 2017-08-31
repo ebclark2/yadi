@@ -38,9 +38,11 @@
     struct ::yadi::factory_traits<TYPE> {             \
         using ptr_type = TYPE;                        \
         static const bool direct_from_yaml = true;    \
-    };
+    };                                                \
+    extern template struct ::yadi::factory<TYPE>;
 
 #define YADI_YAML_TYPE_BY_VALUE_DEFN(TYPE, INIT_NAME)                                            \
+    template struct ::yadi::factory<TYPE>;                                                       \
     YADI_INIT_BEGIN_N(INIT_NAME)                                                                 \
     ::yadi::register_type<TYPE>(::yadi::type_by_value_key(), ::yadi::yaml_as_with_help<TYPE>()); \
     ::yadi::register_factory<TYPE>(#TYPE);                                                       \
