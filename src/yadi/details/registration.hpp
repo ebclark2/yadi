@@ -12,8 +12,8 @@ namespace yadi {
 // TODO complete function
 // TODO change argument names
 /**
- * If both types are maps then they are merged.  If right is not defined then left is used.
- * Otherwise, error.
+ * If both types are maps then they are merged with left taking priority.  If right is defined but not left
+ * then right is used.  If left is defined but not right, left is used.  Otherwise, error.
  * @param left
  * @return
  */
@@ -86,7 +86,27 @@ static void register_factory(std::string name = demangle_type<BT>());
 
 // ############################ IMPL ##########################
 
-inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& /* right */) { return left; }
+inline YAML::Node merge_yaml(YAML::Node const& left, YAML::Node const& right) {
+    static std::string const YAML_TYPE_NAMES[] = {"Undefined", "Null", "Scalar", "Sequence", "Map"};
+
+    if (!right.IsDefined()) {
+        return left;
+    }
+    if (!left.IsDefined()) {
+        return right;
+    }
+
+    if (left.IsMap() && right.IsMap()) {
+        YAML::Node ret = YAML::Clone(right);
+        for (auto map_iter : left) {
+            ret.force_insert(YAML::Clone(map_iter.first), YAML::Clone(map_iter.second));
+        }
+        return ret;
+    }
+
+    throw std::runtime_error("Unable to merge YAML types " + YAML_TYPE_NAMES[left.Type()] + " and " +
+                             YAML_TYPE_NAMES[right.Type()]);
+}
 
 template <typename BT>
 void register_type(std::string type, yadi_info_t<BT> yadis) {
