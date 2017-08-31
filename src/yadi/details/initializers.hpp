@@ -5,8 +5,10 @@
 #ifndef YADI_INITIALIZERS_HPP
 #define YADI_INITIALIZERS_HPP
 
+#include "create_utils.hpp"
 #include "factory.hpp"
 #include "help.hpp"
+#include "type_utils.hpp"
 
 namespace yadi {
 
