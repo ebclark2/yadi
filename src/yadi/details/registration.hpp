@@ -129,7 +129,7 @@ void register_aliases(YAML::Node aliases) {
 
 template <typename BT>
 static void register_factory(std::string name) {
-    yadi_help::register_factory(name, factory<BT>::types());
+    yadi_help::register_factory<BT>(name, factory<BT>::types());
 }
 
 }  // namespace yadi

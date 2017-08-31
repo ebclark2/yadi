@@ -15,7 +15,7 @@ conan_set_vs_runtime()
 conan_set_libcxx()
 conan_set_find_paths()
 
-set(BUILD_SHARED_LIBS OFF)
+set(BUILD_SHARED_LIBS ON)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 

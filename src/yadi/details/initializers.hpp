@@ -6,6 +6,8 @@
 #define YADI_INITIALIZERS_HPP
 
 #include "factory.hpp"
+#include "help.hpp"
+
 namespace yadi {
 
 /**
@@ -161,7 +163,7 @@ struct yaml_to_tuple {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        arg_types = demangle_type<element_type>();
+        arg_types = yadi_help::getName<derive_base_type_t<element_type>>();  // demangle_type<element_type>();
         arg_types++;
         yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
     }
@@ -179,8 +181,7 @@ struct yaml_to_tuple<tuple_t, 0> {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
-        // TODO demangle
-        arg_types = boost::core::demangled_name(typeid(element_type));  // demangle_type<element_type>();
+        arg_types = yadi_help::getName<derive_base_type_t<element_type>>();  // demangle_type<element_type>();
         arg_types++;
     }
 };

@@ -5,9 +5,12 @@
 #ifndef YADI_HELP_HPP
 #define YADI_HELP_HPP
 
+#include "demangle.hpp"
+
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <typeindex>
 #include <vector>
 
 namespace yadi {
@@ -67,16 +70,36 @@ struct yadi_help_fetcher {
 
 struct yadi_help {
     using help_store = std::map<std::string, yadi_help_fetcher>;
+    using name_store = std::map<std::type_index, std::string>;
 
-    template <typename TS>
+    template <typename BT, typename TS>
     static void register_factory(std::string name, TS const& types) {
         mut_helps()[name] = types;
+        mut_names()[std::type_index(typeid(BT))] = name;
+    }
+
+    template <typename BT>
+    static bool hasName() {
+        auto const& name_iter = names().find(std::type_index(typeid(BT)));
+        return name_iter != names().end();
+    }
+
+    template <typename BT>
+    static std::string getName() {
+        auto const& name_iter = names().find(std::type_index(typeid(BT)));
+        if (name_iter != names().end()) {
+            return name_iter->second;
+        }
+
+        return demangle_type<BT>();
     }
 
     static help_store const& helps();
+    static name_store const& names();
 
    private:
     static help_store& mut_helps();
+    static name_store& mut_names();
 };
 
 }  // namespace yadi
