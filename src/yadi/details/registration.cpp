@@ -7,10 +7,10 @@
 YAML::Node yadi::merge_yaml(YAML::Node const& left, YAML::Node const& right) {
     static std::string const YAML_TYPE_NAMES[] = {"Undefined", "Null", "Scalar", "Sequence", "Map"};
 
-    if (!right.IsDefined()) {
+    if (!right.IsDefined() || right.IsNull()) {
         return left;
     }
-    if (!left.IsDefined()) {
+    if (!left.IsDefined() || left.IsNull()) {
         return right;
     }
 

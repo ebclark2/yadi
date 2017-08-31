@@ -13,8 +13,8 @@ namespace yadi {
 // TODO complete function
 // TODO change argument names
 /**
- * If both types are maps then they are merged with left taking priority.  If right is defined but not left
- * then right is used.  If left is defined but not right, left is used.  Otherwise, error.
+ * If both types are maps then they are merged with left taking priority.  If right is not defined or is null then left.
+ * If left is not defined or is null then right.  Otherwise, error.
  * @param left
  * @return
  */
