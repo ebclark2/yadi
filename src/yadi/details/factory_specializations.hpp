@@ -27,7 +27,7 @@ class factory<std::vector<T>> {
 
     static ptr_type create(std::string const& /*type*/, YAML::Node const& config = {}) {
         std::vector<T> ret;
-        from_yamls<T>(config, std::back_inserter(ret));
+        from_yamls<derive_base_type_t<T>>(config, std::back_inserter(ret));
         return ret;
     }
 };
