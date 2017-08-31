@@ -171,7 +171,6 @@ struct yaml_to_tuple {
     }
 };
 
-// TODO Factory name registery.  Use this before demangled name, maybe only
 template <typename tuple_t>
 struct yaml_to_tuple<tuple_t, 0> {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {

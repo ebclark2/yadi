@@ -6,6 +6,7 @@
 #define YADI_DEMANGLE_HPP
 
 #include <string>
+#include <typeinfo>
 
 namespace yadi {
 
