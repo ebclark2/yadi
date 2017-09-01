@@ -27,6 +27,14 @@ class factory<std::vector<T>> {
 
     // TODO Should config default value be removed?
     // TODO Should this be opened up for creating aliases?
+    // TODO Should this just be a specialization of yadi::create?
+    // TODO Should the yaml binding initializer just call from_yamls?
+    // TODO Should some other create helper thing be created so we don't have to specialize factory to these
+    // shinanigans?
+    // TODO Perhaps we should check to see if a factory is used for said type and if not check to see if there is a
+    // create helper impl?
+    // TODO Some sort of yaml binding helper must be made.  This specialization is bad.
+    // TODO First we need to be able to indicate a factory has been explicitly used for some type
     static ptr_type create(std::string const& /*type*/, YAML::Node const& config = {}) {
         std::vector<T> ret;
         from_yamls<derive_base_type_t<T>>(config, std::back_inserter(ret));
