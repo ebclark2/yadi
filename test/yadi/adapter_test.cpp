@@ -9,19 +9,6 @@
 
 namespace yadi {
 
-template <typename FT, typename OT = ptr_type_t<derive_base_type_t<FT>>>
-struct adapter;
-
-template <typename FT>
-struct adapter<FT, ptr_type_t<derive_base_type_t<FT>>> {
-    using factory_type = derive_base_type_t<FT>;
-    using output_type = ptr_type_t<derive_base_type_t<FT>>;
-
-    static output_type create(std::string const& type, YAML::Node const& config = {}) {
-        return factory<factory_type>::create(type, config);
-    }
-};
-
 template <typename ET>
 struct adapter<std::list<ET>, std::list<ET>> {
     using output_type = std::list<ET>;
