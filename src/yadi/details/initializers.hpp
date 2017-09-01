@@ -256,21 +256,6 @@ function_traits_result_type<F> call_from_yaml(F const& func, YAML::Node const& y
     return function_call_via_yaml<F>::call(func, yaml);
 }
 
-template <typename T>
-struct derive_base_type<std::shared_ptr<T>> {
-    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
-};
-
-template <typename T>
-struct derive_base_type<std::unique_ptr<T>> {
-    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
-};
-
-template <typename T>
-struct derive_base_type<T*> {
-    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
-};
-
 template <typename BT, typename F>
 initializer_type_t<BT> make_initializer(F func) {
     // TODO Error checking for yaml sequence type

@@ -38,7 +38,7 @@ add_executable(yadi_inspector_main ${YADI_INSPECTOR_MAIN_SOURCES})
 target_link_libraries(yadi_inspector_main yadi_inspector)
 
 
-set(TEST_SOURCES test/yadi/shared_ptr_test.cpp test/yadi/unique_ptr_test.cpp test/yadi/raw_ptr_test.cpp test/yadi/main.cpp test/yadi/test.hpp test/yadi/yaml_test.cpp test/yadi/alias_test.cpp test/yadi/by_value_test.cpp test/yadi/example.cpp test/yadi/yaml_bindings_test.cpp test/yadi/parse_test.cpp test/yadi/inspector_test.cpp)
+set(TEST_SOURCES test/yadi/shared_ptr_test.cpp test/yadi/unique_ptr_test.cpp test/yadi/raw_ptr_test.cpp test/yadi/main.cpp test/yadi/test.hpp test/yadi/yaml_test.cpp test/yadi/alias_test.cpp test/yadi/by_value_test.cpp test/yadi/example.cpp test/yadi/yaml_bindings_test.cpp test/yadi/parse_test.cpp test/yadi/inspector_test.cpp test/yadi/adapter_test.cpp)
 
 enable_testing()
 

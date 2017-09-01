@@ -41,8 +41,11 @@ struct is_by_value {
  * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
  * @tparam T
  */
-template <typename T, typename = typename std::enable_if<is_by_value<T>::value>::type>
-struct derive_base_type_by_value {
+template <typename T, typename E = std::enable_if_t<is_by_value<T>::value>>
+struct derive_base_type_by_value;
+
+template <typename T>
+struct derive_base_type_by_value<T, std::enable_if_t<is_by_value<T>::value>> {
     using base_type = T;
 };
 
@@ -53,7 +56,22 @@ struct derive_base_type_by_value {
  */
 template <typename T>
 struct derive_base_type {
-    using base_type = typename derive_base_type_by_value<T>::base_type;
+    using base_type = T;
+};
+
+template <typename T>
+struct derive_base_type<std::shared_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::shared_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<std::unique_ptr<T>> {
+    using base_type = is_same_then_t<ptr_type_t<T>, std::unique_ptr<T>, T>;
+};
+
+template <typename T>
+struct derive_base_type<T*> {
+    using base_type = is_same_then_t<ptr_type_t<T>, T*, T>;
 };
 
 template <typename T>
