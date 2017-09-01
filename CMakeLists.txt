@@ -16,6 +16,7 @@ conan_set_libcxx()
 conan_set_find_paths()
 
 set(BUILD_SHARED_LIBS ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_definitions(-W -Wall -Wextra -pedantic)
 

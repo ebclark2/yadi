@@ -25,6 +25,8 @@ class factory<std::vector<T>> {
     using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
     using ptr_type = ptr_type_t<base_type>;
 
+    // TODO Should config default value be removed?
+    // TODO Should this be opened up for creating aliases?
     static ptr_type create(std::string const& /*type*/, YAML::Node const& config = {}) {
         std::vector<T> ret;
         from_yamls<derive_base_type_t<T>>(config, std::back_inserter(ret));

@@ -3,3 +3,7 @@ yaml-cpp/master@ebclark2/testing
 
 [generators]
 cmake
+
+[options]
+yaml-cpp:fPIC=True
+
