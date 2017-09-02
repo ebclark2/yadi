@@ -21,7 +21,7 @@ YADI_TEST(yaml_argument_test) {
 }
 
 YADI_TEST(from_yaml_string) {
-    auto ret = from_yaml<YAML::Node>(YAML::Load("yaml"));
+    auto ret = from_yaml_base<YAML::Node>(YAML::Load("yaml"));
     return ret.get();
 }
 
@@ -30,7 +30,7 @@ YADI_TEST(from_yaml_map) {
 type: "yaml"
 config: "Hello World!"
 )raw";
-    ptr_type_t<YAML::Node> ymlPtr = from_yaml<YAML::Node>(YAML::Load(yaml_factory_config));
+    ptr_type_t<YAML::Node> ymlPtr = from_yaml_base<YAML::Node>(YAML::Load(yaml_factory_config));
     if (!ymlPtr) {
         return false;
     }
@@ -47,7 +47,7 @@ YADI_TEST(from_yaml_sequence) {
 )raw";
 
     std::vector<ptr_type_t<YAML::Node>> yamls;
-    from_yamls<YAML::Node>(YAML::Load(yaml_factory_config), std::back_inserter(yamls));
+    from_yamls_base<YAML::Node>(YAML::Load(yaml_factory_config), std::back_inserter(yamls));
     YADI_ASSERT_EQ(2u, yamls.size());
     YADI_ASSERT_EQ("type1", yamls.at(0)->as<std::string>());
     YADI_ASSERT_EQ("type2", yamls.at(1)->as<std::string>());

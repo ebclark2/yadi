@@ -158,7 +158,7 @@ struct yaml_to_tuple {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
         std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
-            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
+            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
         yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
     }
 
@@ -176,7 +176,7 @@ struct yaml_to_tuple<tuple_t, 0> {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
         std::get<std::tuple_size<tuple_t>::value - 1>(out) =
-            ::yadi::from_yaml<derive_base_type_t<element_type>>(yaml[std::tuple_size<tuple_t>::value - 1]);
+            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1]);
     }
 
     template <typename arg_type_out>

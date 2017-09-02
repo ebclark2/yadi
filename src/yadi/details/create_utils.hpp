@@ -33,7 +33,13 @@ OT create(std::string const& type, YAML::Node const& config = {});
  * @return
  */
 template <typename OT>
-derive_output_type_t<OT> from_yaml(YAML::Node const& factory_config);
+OT from_yaml(YAML::Node const& factory_config);
+
+// TODO COMMENT
+template <typename BT>
+ptr_type_t<BT> from_yaml_base(YAML::Node const& config = {}) {
+    return from_yaml<ptr_type_t<BT>>(config);
+}
 
 /**
  * @brief Populate output iterator from sequence of factory configs (anything from_yaml accepts).
@@ -44,6 +50,11 @@ derive_output_type_t<OT> from_yaml(YAML::Node const& factory_config);
  */
 template <typename OT, typename OI>
 void from_yamls(YAML::Node const& factory_configs, OI out);
+
+template <typename BT, typename OI>
+void from_yamls_base(YAML::Node const& factory_configs, OI out) {
+    from_yamls<ptr_type_t<BT>>(factory_configs, out);
+};
 
 /**
  * @brief Populate out from factory config.  The factory type is derived from ptr_type.
@@ -64,10 +75,10 @@ OT create(std::string const& type, YAML::Node const& config) {
 }
 
 template <typename OT>
-derive_output_type_t<OT> from_yaml(YAML::Node const& factory_config) {
+OT from_yaml(YAML::Node const& factory_config) {
     using BT = derive_base_type_t<OT>;
-    using DOT = derive_output_type_t<OT>;
-    if (factory_traits<BT>::direct_from_yaml) {
+    using DOT = OT;  // derive_output_type_t<OT>;
+    if (adapter<OT, OT>::direct_from_yaml) {
         return adapter<BT, DOT>::create(type_by_value_key(), factory_config);
     }
 
@@ -129,6 +140,7 @@ template <typename FT>
 struct adapter<FT, ptr_type_t<derive_base_type_t<FT>>> {
     using base_type = derive_base_type_t<FT>;
     using output_type = ptr_type_t<derive_base_type_t<FT>>;
+    static bool const direct_from_yaml = factory_traits<base_type>::direct_from_yaml;
 
     static output_type create(std::string const& type, YAML::Node const& config = {}) {
         return factory<base_type>::create(type, config);
