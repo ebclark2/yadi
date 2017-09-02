@@ -21,8 +21,8 @@ std::string const& type_by_value_key();
  * @param config
  * @return
  */
-template <typename BT>
-ptr_type_t<BT> create(std::string const& type, YAML::Node const& config = {});
+template <typename OT>
+OT create(std::string const& type, YAML::Node const& config = {});
 
 /**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
@@ -32,8 +32,8 @@ ptr_type_t<BT> create(std::string const& type, YAML::Node const& config = {});
  * @param factory_config
  * @return
  */
-template <typename BT>
-ptr_type_t<BT> from_yaml(YAML::Node const& factory_config);
+template <typename OT>
+derive_output_type_t<OT> from_yaml(YAML::Node const& factory_config);
 
 /**
  * @brief Populate output iterator from sequence of factory configs (anything from_yaml accepts).
@@ -42,31 +42,33 @@ ptr_type_t<BT> from_yaml(YAML::Node const& factory_config);
  * @param factory_configs
  * @param out
  */
-template <typename BT, typename OI>
+template <typename OT, typename OI>
 void from_yamls(YAML::Node const& factory_configs, OI out);
 
 /**
  * @brief Populate out from factory config.  The factory type is derived from ptr_type.
- * @tparam PT pointer type
+ * @tparam OT output type
  * @param out
  * @param factory_config
  */
-template <typename PT>
-void parse(PT& out, YAML::Node const& factory_config);
+template <typename OT>
+void parse(OT& out, YAML::Node const& factory_config);
 
 template <typename FT, typename OT = ptr_type_t<derive_base_type_t<FT>>>
 struct adapter;
 
 // ################# IMPL #####################
-template <typename BT>
-ptr_type_t<BT> create(std::string const& type, YAML::Node const& config) {
-    return factory<BT>::create(type, config);
+template <typename OT>
+OT create(std::string const& type, YAML::Node const& config) {
+    return adapter<OT>::create(type, config);
 }
 
-template <typename BT>
-ptr_type_t<BT> from_yaml(YAML::Node const& factory_config) {
+template <typename OT>
+derive_output_type_t<OT> from_yaml(YAML::Node const& factory_config) {
+    using BT = derive_base_type_t<OT>;
+    using DOT = derive_output_type_t<OT>;
     if (factory_traits<BT>::direct_from_yaml) {
-        return factory<BT>::create(type_by_value_key(), factory_config);
+        return adapter<BT, DOT>::create(type_by_value_key(), factory_config);
     }
 
     if (!factory_config.IsDefined()) {
@@ -79,7 +81,7 @@ ptr_type_t<BT> from_yaml(YAML::Node const& factory_config) {
             throw std::runtime_error("Factory config scalar not valid");
         }
 
-        return factory<BT>::create(type);
+        return adapter<BT, DOT>::create(type);
     }
 
     if (factory_config.IsMap()) {
@@ -93,43 +95,43 @@ ptr_type_t<BT> from_yaml(YAML::Node const& factory_config) {
         }
 
         YAML::Node configNode = factory_config["config"];
-        return factory<BT>::create(type, configNode);
+        return adapter<BT, DOT>::create(type, configNode);
     }
 
     throw std::runtime_error("Factory config not valid, YAML must be scalar string or map");
 }
 
-template <typename BT, typename OI>
+template <typename OT, typename OI>
 void from_yamls(YAML::Node const& factory_configs, OI out) {
     if (!factory_configs.IsDefined()) {
         throw std::runtime_error("From YAML factory configs not defined");
     }
     // If it's not a sequence then parse single
     if (!factory_configs.IsSequence()) {
-        *out = from_yaml<BT>(factory_configs);
+        *out = from_yaml<OT>(factory_configs);
         ++out;
         return;
     }
 
     // A sequence!
     for (YAML::Node const& entry : factory_configs) {
-        *out = from_yaml<BT>(entry);
+        *out = from_yaml<OT>(entry);
         ++out;
     }
 }
 
-template <typename PT>
-void parse(PT& out, YAML::Node const& factory_config) {
-    out = from_yaml<derive_base_type_t<PT>>(factory_config);
+template <typename OT>
+void parse(OT& out, YAML::Node const& factory_config) {
+    out = from_yaml<OT>(factory_config);
 }
 
 template <typename FT>
 struct adapter<FT, ptr_type_t<derive_base_type_t<FT>>> {
-    using factory_type = derive_base_type_t<FT>;
+    using base_type = derive_base_type_t<FT>;
     using output_type = ptr_type_t<derive_base_type_t<FT>>;
 
     static output_type create(std::string const& type, YAML::Node const& config = {}) {
-        return factory<factory_type>::create(type, config);
+        return factory<base_type>::create(type, config);
     }
 };
 
