@@ -13,9 +13,9 @@
 
 namespace yadi {
 
-template <typename ET>
-struct adapter<std::list<ET>, std::list<ET>> {
-    using output_type = std::list<ET>;
+template <typename LT, typename ET>
+struct list_adapter {
+    using output_type = LT;
     static bool const direct_from_yaml = true;
 
     static output_type create(std::string const&, YAML::Node const& config = {}) {
@@ -26,16 +26,10 @@ struct adapter<std::list<ET>, std::list<ET>> {
 };
 
 template <typename ET>
-struct adapter<std::vector<ET>, std::vector<ET>> {
-    using output_type = std::vector<ET>;
-    static bool const direct_from_yaml = true;
+struct adapter<std::list<ET>, std::list<ET>> : public list_adapter<std::list<ET>, ET> {};
 
-    static output_type create(std::string const&, YAML::Node const& config = {}) {
-        output_type out;
-        from_yamls<ET>(config, std::back_inserter(out));
-        return out;
-    }
-};
+template <typename ET>
+struct adapter<std::vector<ET>, std::vector<ET>> : public list_adapter<std::vector<ET>, ET> {};
 
 //
 //    template <typename T>
