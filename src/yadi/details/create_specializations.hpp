@@ -15,7 +15,7 @@
 namespace yadi {
 
 template <typename LT, typename ET>
-struct list_adapter {
+struct back_inserter_adapter {
     using output_type = LT;
     static bool const direct_from_yaml = true;
 
@@ -27,7 +27,7 @@ struct list_adapter {
 };
 
 template <typename ST, typename ET>
-struct set_adapter {
+struct inserter_adapter {
     using output_type = ST;
     static bool const direct_from_yaml = true;
 
@@ -39,13 +39,13 @@ struct set_adapter {
 };
 
 template <typename ET>
-struct adapter<std::list<ET>, std::list<ET>> : public list_adapter<std::list<ET>, ET> {};
+struct adapter<std::list<ET>, std::list<ET>> : public back_inserter_adapter<std::list<ET>, ET> {};
 
 template <typename ET>
-struct adapter<std::vector<ET>, std::vector<ET>> : public list_adapter<std::vector<ET>, ET> {};
+struct adapter<std::vector<ET>, std::vector<ET>> : public back_inserter_adapter<std::vector<ET>, ET> {};
 
 template <typename ET>
-struct adapter<std::set<ET>, std::set<ET>> : public set_adapter<std::set<ET>, ET> {};
+struct adapter<std::set<ET>, std::set<ET>> : public inserter_adapter<std::set<ET>, ET> {};
 //
 //    template <typename T>
 // struct factory_traits<std::vector<T>> {
