@@ -33,13 +33,14 @@ struct electric : public power_plant {
 };
 
 struct gas : public power_plant {
-    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, int bore, int stroke) {
-        std::unique_ptr<power_plant> ret(new gas(make, cylinder_count, bore, stroke));
+    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, int bore, int stroke,
+                                                 std::set<std::string> vendors) {
+        std::unique_ptr<power_plant> ret(new gas(make, cylinder_count, bore, stroke, vendors));
         return ret;
     }
 
-    gas(std::string make, int cylinder_count, int bore, int stroke)
-        : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke) {}
+    gas(std::string make, int cylinder_count, int bore, int stroke, std::set<std::string> vendors)
+        : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {}
 
     int power() const { return this->bore * this->stroke * this->cylinder_count; }
 
@@ -47,6 +48,7 @@ struct gas : public power_plant {
     int cylinder_count;
     int bore;
     int stroke;
+    std::set<std::string> vendors;
 };
 
 struct car {
@@ -73,9 +75,9 @@ YADI_INIT_BEGIN
                            ::yadi::make_initializer_with_help<car>(&car::make_car, {"make", "power_plant"}));
 
 // Make gas from mapped args
-register_type<power_plant>("gas",
-                           ::yadi::make_initializer_with_help<power_plant>(&gas::make_gas, {"make", "cylinder_count",
-                                                                                            "bore", "stroke"}));
+register_type<power_plant>("gas", ::yadi::make_initializer_with_help<power_plant>(&gas::make_gas,
+                                                                                  {"make", "cylinder_count", "bore",
+                                                                                   "stroke", "vendors"}));
 // Make electric from sequenced args
 register_type<power_plant>("electric", ::yadi::make_initializer_with_help<power_plant>(&electric::make_electric));
 YADI_INIT_END
@@ -91,6 +93,10 @@ YADI_TEST(nested_example_test) {
       cylinder_count: 8
       bore: 1
       stroke: 8
+      vendors:
+        - Currie
+        - Synergy
+        - Some other vendor
 - make: "tesla"
   power_plant:
     type: electric
@@ -116,6 +122,7 @@ YADI_TEST(nested_example_test) {
         YADI_ASSERT_EQ(8, pp.cylinder_count);
         YADI_ASSERT_EQ(1, pp.bore);
         YADI_ASSERT_EQ(8, pp.stroke);
+        YADI_ASSERT_EQ(3, pp.vendors.size());
     }
     {
         car const& c = cars[1];

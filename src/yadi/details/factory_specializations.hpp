@@ -8,6 +8,7 @@
 #include "create_utils.hpp"
 #include "factory.hpp"
 
+#include <iterator>
 #include <list>
 #include <vector>
 
@@ -25,12 +26,26 @@ struct list_adapter {
     }
 };
 
+template <typename ST, typename ET>
+struct set_adapter {
+    using output_type = ST;
+    static bool const direct_from_yaml = true;
+
+    static output_type create(std::string const&, YAML::Node const& config = {}) {
+        output_type out;
+        from_yamls<ET>(config, std::inserter(out, out.end()));
+        return out;
+    }
+};
+
 template <typename ET>
 struct adapter<std::list<ET>, std::list<ET>> : public list_adapter<std::list<ET>, ET> {};
 
 template <typename ET>
 struct adapter<std::vector<ET>, std::vector<ET>> : public list_adapter<std::vector<ET>, ET> {};
 
+template <typename ET>
+struct adapter<std::set<ET>, std::set<ET>> : public set_adapter<std::set<ET>, ET> {};
 //
 //    template <typename T>
 // struct factory_traits<std::vector<T>> {

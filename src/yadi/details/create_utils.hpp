@@ -66,7 +66,18 @@ template <typename OT>
 void parse(OT& out, YAML::Node const& factory_config);
 
 template <typename FT, typename OT = ptr_type_t<derive_base_type_t<FT>>>
-struct adapter;
+struct adapter {
+    using base_type = derive_base_type_t<FT>;
+    using output_type = OT;
+
+    // TODO add some function to show factory return type
+    static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,
+                  "Unable to convert factory return type to desired output type in ");
+
+    static output_type create(std::string const& type, YAML::Node const& config = {}) {
+        return factory<base_type>::create(type, config);
+    }
+};
 
 // ################# IMPL #####################
 template <typename OT>

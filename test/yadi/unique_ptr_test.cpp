@@ -16,7 +16,8 @@ YADI_INIT_END
 
 YADI_TEST(unique_ptr_create) {
     std::unique_ptr<my_unique_type> p = my_unique_type::create("unique");
-    return p.get();
+    std::shared_ptr<my_unique_type> shared_p = ::yadi::create<std::shared_ptr<my_unique_type>>("unique");
+    return p.get() && shared_p.get();
 }
 
 YADI_TEST(unique_ptr_parse) {
