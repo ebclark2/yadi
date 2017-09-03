@@ -1,6 +1,4 @@
 # YADI
-Yet another dependency injection library!  Or, maybe yadi ain't dependency inject, just some config tool?  Could be yet another dumb idea.
-
 YADI aims to provide non-intrusive dependency injection via human readable YAML config with generated help information.  
 
 Example help information, see test/yadi/example.cpp
