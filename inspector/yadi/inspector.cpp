@@ -10,9 +10,9 @@ void yadi::print_factory_help(std::ostream& out) {
     yadi_help::help_store helps = yadi_help::helps();
     for (auto const& entry : helps) {
         out << entry.first << '\n';
-        std::vector<std::string> types = entry.second.getTypes();
+        std::vector<std::string> types = entry.second.get_types();
         for (std::string const& type : types) {
-            out << "\t\"" << type << "\" -> " << entry.second.getHelp(type) << '\n';
+            out << "\t\"" << type << "\" -> " << entry.second.get_help(type) << '\n';
         }
     }
 }

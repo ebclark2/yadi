@@ -16,6 +16,7 @@ namespace yadi {
 
 template <typename LT, typename ET>
 struct back_inserter_adapter {
+    using base_type = derive_base_type_t<ET>;
     using output_type = LT;
     static bool const direct_from_yaml = true;
 
@@ -24,10 +25,16 @@ struct back_inserter_adapter {
         from_yamls<ET>(config, std::back_inserter(out));
         return out;
     }
+
+    static std::string get_name() {
+        using namespace std::string_literals;
+        return "list<"s + adapter<ET>::get_name() + ">";
+    }
 };
 
 template <typename ST, typename ET>
 struct inserter_adapter {
+    using base_type = derive_base_type_t<ET>;
     using output_type = ST;
     static bool const direct_from_yaml = true;
 
@@ -35,6 +42,11 @@ struct inserter_adapter {
         output_type out;
         from_yamls<ET>(config, std::inserter(out, out.end()));
         return out;
+    }
+
+    static std::string get_name() {
+        using namespace std::string_literals;
+        return "set<"s + adapter<ET>::get_name() + ">";
     }
 };
 

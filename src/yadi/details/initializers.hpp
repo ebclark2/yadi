@@ -90,7 +90,7 @@ T yaml_as(YAML::Node const& config) {
 template <typename T>
 yadi_info_t<T> yaml_as_with_help() {
     // TODO Improved error message
-    return {&yaml_as<T>, "Direct conversion using yaml.as<" + yadi_help::getName<T>() + ">()"};
+    return {&yaml_as<T>, "Direct conversion using yaml.as<" + adapter<T>::get_name() + ">()"};
 }
 
 template <typename BT, typename IT,
@@ -165,7 +165,7 @@ struct yaml_to_tuple {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        arg_types = yadi_help::getName<derive_base_type_t<element_type>>();  // demangle_type<element_type>();
+        arg_types = adapter<element_type>::get_name();  // demangle_type<element_type>();
         arg_types++;
         yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
     }
@@ -182,7 +182,7 @@ struct yaml_to_tuple<tuple_t, 0> {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
-        arg_types = yadi_help::getName<derive_base_type_t<element_type>>();  // demangle_type<element_type>();
+        arg_types = adapter<element_type>::get_name();  // demangle_type<element_type>();
         arg_types++;
     }
 };

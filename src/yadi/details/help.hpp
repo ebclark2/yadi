@@ -62,8 +62,8 @@ struct yadi_help_fetcher {
 
     yadi_help_fetcher& operator=(yadi_help_fetcher const& other);
 
-    inline std::string getHelp(std::string const& type) const { return this->impl->getHelp(type); }
-    inline std::vector<std::string> getTypes() const { return this->impl->getTypes(); }
+    inline std::string get_help(std::string const& type) const { return this->impl->getHelp(type); }
+    inline std::vector<std::string> get_types() const { return this->impl->getTypes(); }
 
    private:
     std::unique_ptr<concept> impl;
@@ -80,13 +80,13 @@ struct yadi_help {
     }
 
     template <typename BT>
-    static bool hasName() {
+    static bool has_name() {
         auto const& name_iter = names().find(std::type_index(typeid(BT)));
         return name_iter != names().end();
     }
 
     template <typename BT>
-    static std::string getName() {
+    static std::string get_name() {
         auto const& name_iter = names().find(std::type_index(typeid(BT)));
         if (name_iter != names().end()) {
             return name_iter->second;

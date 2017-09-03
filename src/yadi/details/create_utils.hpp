@@ -6,6 +6,7 @@
 #define YADI_CREATE_UTILS_HPP
 
 #include "factory.hpp"
+#include "help.hpp"
 #include "type_utils.hpp"
 
 #include <yaml-cpp/yaml.h>
@@ -104,6 +105,8 @@ struct adapter {
     static output_type create(std::string const& type, YAML::Node const& config = {}) {
         return factory<base_type>::create(type, config);
     }
+
+    static std::string get_name() { return yadi_help::get_name<base_type>(); }
 };
 
 // ################# IMPL #####################
@@ -183,6 +186,8 @@ struct adapter<FT, ptr_type_t<derive_base_type_t<FT>>> {
     static output_type create(std::string const& type, YAML::Node const& config = {}) {
         return factory<base_type>::create(type, config);
     }
+
+    static std::string get_name() { return yadi_help::get_name<base_type>(); }
 };
 
 }  // namespace yadi
