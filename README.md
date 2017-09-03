@@ -3,7 +3,7 @@ Yet another dependency injection library!  Or, maybe yadi ain't dependency injec
 
 YADI aims to provide non-intrusive dependency injection via human readable YAML config with generated help information.  
 
-Example help information
+Example help information, see test/yadi/example.cpp
 
 ```text
 double
