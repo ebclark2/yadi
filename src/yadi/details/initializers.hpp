@@ -5,6 +5,7 @@
 #ifndef YADI_INITIALIZERS_HPP
 #define YADI_INITIALIZERS_HPP
 
+#include "create_specializations.hpp"
 #include "create_utils.hpp"
 #include "factory.hpp"
 #include "help.hpp"
@@ -165,7 +166,7 @@ struct yaml_to_tuple {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        arg_types = adapter<element_type>::get_name();  // demangle_type<element_type>();
+        arg_types = adapter<element_type, element_type>::get_name();
         arg_types++;
         yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
     }
@@ -182,7 +183,7 @@ struct yaml_to_tuple<tuple_t, 0> {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
-        arg_types = adapter<element_type>::get_name();  // demangle_type<element_type>();
+        arg_types = adapter<element_type, element_type>::get_name();
         arg_types++;
     }
 };
