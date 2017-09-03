@@ -4,7 +4,8 @@ Yet another dependency injection library!  Or, maybe yadi ain't dependency injec
 YADI aims to provide non-intrusive dependency injection via human readable YAML config with generated help information.  
 
 Example help information
-```
+
+```text
 double
 	"type_by_value" -> Direct conversion using yaml.as<double>()
 int
@@ -25,12 +26,41 @@ yadi::power_plant
 		cylinder_count(int)
 		bore(int)
 		stroke(int)
-		vendors(std::__1::set<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >)```  
+		vendors(std::__1::set<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >)
+```
+Example configuration
+```yaml
+
+---
+- make: "gm"
+  power_plant:
+    type: gas
+    config:
+      make: LQ4
+      cylinder_count: 8
+      bore: 1
+      stroke: 8
+      vendors:
+        - Currie
+        - Synergy
+        - Some other vendor
+- make: "tesla"
+  power_plant:
+    type: electric
+    config:
+      - japan
+      - 1200
+      - - 1
+        - 2
+        - 3
+        - 4
+        - 5
+```
 
 ### Build requirements
  - c++14
  - conan.io, see http://conan.io
- - edsidea conan remote, `conan remote add <REMOTE> https://api.bintray.com/conan/edsidea/edsidea` where <REMOTE> is your name for this remote
+ - edsidea conan remote, `conan remote add <REMOTE> https://api.bintray.com/conan/edsidea/edsidea` where `<REMOTE>` is your name for this remote
  - cmake 3.2
 
 ### Building from repository
