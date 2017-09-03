@@ -28,14 +28,22 @@ OT create(std::string const& type, YAML::Node const& config = {});
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
- * used as such.
+ * used as such, unless the base type indicates it should be created directly from yaml.  In this case
+ * factory_config is used as the config passed to the adapter.
+ * @tparam OT The desired output type.  The factory base type will be derived from this using
+ * derive_base_type_t<OT>.
  * @param factory_config
  * @return
  */
 template <typename OT>
 OT from_yaml(YAML::Node const& factory_config);
 
-// TODO COMMENT
+/**
+ * @brief Equivalent to from_yaml<ptr_type_t<base_type>>(config)
+ * @tparam BT The factory baes type
+ * @param config
+ * @return
+ */
 template <typename BT>
 ptr_type_t<BT> from_yaml_base(YAML::Node const& config = {}) {
     return from_yaml<ptr_type_t<BT>>(config);
@@ -51,6 +59,13 @@ ptr_type_t<BT> from_yaml_base(YAML::Node const& config = {}) {
 template <typename OT, typename OI>
 void from_yamls(YAML::Node const& factory_configs, OI out);
 
+/**
+ * @brief Equivalent to from_yamls<ptr_type_t<base_type>>(factory_configs, out);
+ * @tparam BT base type
+ * @tparam OI output iterator
+ * @param factory_configs
+ * @param out
+ */
 template <typename BT, typename OI>
 void from_yamls_base(YAML::Node const& factory_configs, OI out) {
     from_yamls<ptr_type_t<BT>>(factory_configs, out);
@@ -65,15 +80,27 @@ void from_yamls_base(YAML::Node const& factory_configs, OI out) {
 template <typename OT>
 void parse(OT& out, YAML::Node const& factory_config);
 
+/**
+ * @brief Provides a layer above factory<BT>::create.  This allows types such as templated containers to
+ * be created without registering initializers for each element type.
+ * @tparam FT The type the base type will be derived from via derived_base_type_t<FT>.
+ * @tparam OT The desired output type.
+ */
 template <typename FT, typename OT = ptr_type_t<derive_base_type_t<FT>>>
 struct adapter {
     using base_type = derive_base_type_t<FT>;
     using output_type = OT;
 
-    // TODO add some function to show factory return type
+    // TODO add some function to show factory return type in error message
     static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,
                   "Unable to convert factory return type to desired output type in ");
 
+    /**
+     * @brief The default is to forward to factory<base_type>::create(type, config);
+     * @param type
+     * @param config
+     * @return
+     */
     static output_type create(std::string const& type, YAML::Node const& config = {}) {
         return factory<base_type>::create(type, config);
     }
