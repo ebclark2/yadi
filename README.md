@@ -20,13 +20,13 @@ yadi::power_plant
 	"electric" -> Expects yaml sequence with types:
 		 - std::string
 		 - int
-		 - std::__1::vector<int, std::__1::allocator<int> >
+		 - list<int>
 	"gas" -> Expects yaml map with fields:
 		make(std::string)
 		cylinder_count(int)
 		bore(int)
 		stroke(int)
-		vendors(std::__1::set<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >)
+		vendors(set<std::string>)
 ```
 Example configuration
 ```yaml
