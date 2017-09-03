@@ -101,7 +101,7 @@ YADI_TEST(nested_example_test) {
   power_plant:
     type: electric
     config:
-      - japan
+      - USA
       - 1200
       - - 1
         - 2
@@ -128,7 +128,7 @@ YADI_TEST(nested_example_test) {
         car const& c = cars[1];
         YADI_ASSERT_EQ("tesla", c.make);
         electric const& pp = dynamic_cast<electric const&>(*c.motor);
-        YADI_ASSERT_EQ("japan", pp.make);
+        YADI_ASSERT_EQ("USA", pp.make);
         YADI_ASSERT_EQ(1200, pp.watts);
         std::vector<int> expectedNumbers = {1, 2, 3, 4, 5};
         YADI_ASSERT_EQ(expectedNumbers, pp.numbers);

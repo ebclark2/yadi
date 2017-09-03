@@ -48,7 +48,7 @@ Example configuration
   power_plant:
     type: electric
     config:
-      - japan
+      - USA
       - 1200
       - - 1
         - 2
