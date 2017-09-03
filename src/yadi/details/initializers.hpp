@@ -90,7 +90,7 @@ T yaml_as(YAML::Node const& config) {
 template <typename T>
 yadi_info_t<T> yaml_as_with_help() {
     // TODO Improved error message
-    return {&yaml_as<T>, "Direct conversion using yaml.as<" + demangle_type<T>() + ">()"};
+    return {&yaml_as<T>, "Direct conversion using yaml.as<" + yadi_help::getName<T>() + ">()"};
 }
 
 template <typename BT, typename IT,

@@ -10,7 +10,7 @@ double
 int
 	"type_by_value" -> Direct conversion using yaml.as<int>()
 std::string
-	"type_by_value" -> Direct conversion using yaml.as<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >>()
+	"type_by_value" -> Direct conversion using yaml.as<std::string>()
 yadi::car
 	"type_by_value" -> Expects yaml map with fields:
 		make(std::string)
@@ -25,8 +25,7 @@ yadi::power_plant
 		cylinder_count(int)
 		bore(int)
 		stroke(int)
-		vendors(std::__1::set<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >)
-```  
+		vendors(std::__1::set<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >)```  
 
 ### Build requirements
  - c++14

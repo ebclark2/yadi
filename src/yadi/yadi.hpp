@@ -1,13 +1,13 @@
 #ifndef YADI_FACTORY_HPP__
 #define YADI_FACTORY_HPP__
 
+#include "details/create_specializations.hpp"
 #include "details/create_utils.hpp"
 #include "details/demangle.hpp"
 #include "details/factory.hpp"
 #include "details/help.hpp"
 #include "details/initializers.hpp"
 #include "details/registration.hpp"
-#include "yadi/details/create_specializations.hpp"
 
 #ifndef YADI_NO_STD_STRING
 YADI_YAML_TYPE_BY_VALUE_DECL(std::string, string)
