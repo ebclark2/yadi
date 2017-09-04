@@ -9,7 +9,7 @@ class YadiConan(ConanFile):
     description = "<Description of Yadi here>"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
-    requires = "yaml-cpp/master@ebclark2/testing"
+    requires = "yaml-cpp/master@ebclark2/stable"
     options = {"shared": [True, False]}
     default_options = "shared=True", "yaml-cpp:fPIC=True"
     sources = "."
