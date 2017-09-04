@@ -1,4 +1,4 @@
-# YADI
+# YADI [![Build Status](https://travis-ci.org/ebclark2/yadi.svg?branch=master)]
 YADI aims to provide non-intrusive dependency injection via human readable YAML config with generated help information.  
 
 Example help information, see test/yadi/example.cpp
