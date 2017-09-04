@@ -5,6 +5,8 @@ env:
      - CONAN_USERNAME: "ebclark2"
      - CONAN_LOGIN_USERNAME: "ebclark2"
      - CONAN_CHANNEL: "testing"
+     - CONAN_UPLOAD: "https://api.bintray.com/conan/edsidea/edsidea"
+     - CONAN_REMOTES: "https://api.bintray.com/conan/edsidea/edsidea"
      
 linux: &linux
    os: linux

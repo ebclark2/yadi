@@ -10,5 +10,4 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv activate conan
 fi
 
-conan remote add edsbin https://api.bintray.com/conan/edsidea/edsidea
 python build.py
