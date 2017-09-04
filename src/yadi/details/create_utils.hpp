@@ -70,7 +70,7 @@ void from_yamls(YAML::Node const& factory_configs, OI out);
 template <typename BT, typename OI>
 void from_yamls_base(YAML::Node const& factory_configs, OI out) {
     from_yamls<ptr_type_t<BT>>(factory_configs, out);
-};
+}
 
 /**
  * @brief Populate out from factory config.  The factory type is derived from ptr_type.
