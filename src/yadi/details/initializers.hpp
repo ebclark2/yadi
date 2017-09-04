@@ -302,7 +302,7 @@ yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fiel
         std::string const& field = fields[i];
         std::string const& field_type = field_types[i];
         help += "\n\t\t";
-        help += field + "(" + field_type + ")";
+        help += field + ": " + field_type;
     }
     return {make_initializer<BT>(func, fields), help};
 }

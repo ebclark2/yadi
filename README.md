@@ -12,19 +12,19 @@ std::string
 	"type_by_value" -> Direct conversion using yaml.as<std::string>()
 yadi::car
 	"type_by_value" -> Expects yaml map with fields:
-		make(std::string)
-		power_plant(yadi::power_plant)
+		make: std::string
+		power_plant: yadi::power_plant
 yadi::power_plant
 	"electric" -> Expects yaml sequence with types:
 		 - std::string
 		 - int
 		 - list<int>
 	"gas" -> Expects yaml map with fields:
-		make(std::string)
-		cylinder_count(int)
-		bore(int)
-		stroke(int)
-		vendors(set<std::string>)
+		make: std::string
+		cylinder_count: int
+		bore: int
+		stroke: int
+		vendors: set<std::string>
 ```
 Example configuration
 ```yaml
