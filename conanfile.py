@@ -10,15 +10,16 @@ class YadiConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
     requires = "yaml-cpp/master@ebclark2/stable"
+    build_requires = "cmake_installer/1.0@conan/stable"
     options = {"shared": [True, False]}
-    default_options = "shared=True", "yaml-cpp:fPIC=True"
-    sources = "."
+    default_options = "shared=True", "yaml-cpp:fPIC=True", "cmake_installer:version=3.9.0"
+    no_copy_source=True
     exports_sources = "*"
 
     def build(self):
         cmake = CMake(self)
-        self.run('cmake %s %s' % (self.sources, cmake.command_line))
-        self.run("cmake --build . %s" % cmake.build_config)
+        cmake.configure()
+        cmake.build()
 
     def package(self):
         self.copy("*.hpp", dst="include", src="%s/src" % self.source_folder)
