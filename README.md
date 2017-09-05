@@ -69,7 +69,8 @@ Example configuration
 
 ### Definitions
  - base type: The type a factory instantiates.  factory<foo> would have a base type of foo.
- - output type: The return type of a create function.  By default the factory<foo> output type would be std::unique_ptr<foo>, but other types may be requested.
+ - ptr type: The type created by a factory.  The default pointer type is std::unique_ptr<base_type>.  Returning by value is possible but implies no inheritance is used.  This name is poor and will change soon.
+ - output type: The return type of a create function.  By default the base types pointer type is used, but other types may be requested.  Anything output type that's true for std::is_convertible<output_type, base_type> is allowed and adapters may facilitate other conversions. 
  - initializer: A function capable of instantiaing the base type of a factory.
  - adapter: A layer on top of factory<foo>::create to allow types such as templated containers to be created without having to register initializers for each element type.
  - type: A string identifying an initializer.
