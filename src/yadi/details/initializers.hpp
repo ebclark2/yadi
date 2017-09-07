@@ -360,6 +360,7 @@ initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& in
     using Cache = std::map<std::string, std::weak_ptr<BT>>;
     Cache cache;
     auto caching_initializer = [cache, initializing_initializer](YAML::Node const& config) mutable -> ptr_type_t<BT> {
+        // TODO Apply formatting to yaml_key
         std::string yaml_key = YAML::Dump(config);
         typename Cache::iterator cache_it = cache.find(yaml_key);
         if (cache_it != cache.end()) {
