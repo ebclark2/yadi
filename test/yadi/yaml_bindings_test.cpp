@@ -7,7 +7,7 @@
 double sum(double a1, double a2, int a3, double a4) { return a1 + a2 + a3 + a4; }
 
 struct Foo {
-    static double sum(double const a1, double const& a2, int& a3, double a4) { return a1 + a2 + a3 + a4; }
+    static double sum(double const a1, double const& a2, int&& a3, double a4) { return a1 + a2 + a3 + a4; }
 };
 
 YADI_TEST(yaml_bindings_test) {

@@ -248,7 +248,9 @@ struct function_call_via_yaml {
 
     template <std::size_t... I>
     result_type call_func(std::index_sequence<I...>) {
-        return func(std::get<I>(*params)...);
+        //        return func(static_cast<typename std::tuple_element<I, params_type>::type
+        //        &&>(std::get<I>(*params))...);
+        return func(std::move(std::get<I>(*params))...);
     }
 
     result_type delayed_dispatch() { return call_func(index_sequence{}); }

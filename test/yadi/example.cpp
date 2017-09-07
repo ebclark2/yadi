@@ -54,10 +54,10 @@ struct gas : public power_plant {
 };
 
 struct car {
-    static car make_car(std::string make, std::unique_ptr<power_plant>& motor) {
+    static car make_car(std::string make, std::unique_ptr<power_plant>&& motor) {
         return car{std::move(make), std::move(motor)};
     }
-    car(std::string make, std::unique_ptr<power_plant> motor) : make(std::move(make)) { this->motor.swap(motor); }
+    car(std::string make, std::unique_ptr<power_plant>&& motor) : make(std::move(make)), motor(std::move(motor)) {}
 
     std::string make;
     std::unique_ptr<power_plant> motor;
