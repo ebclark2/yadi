@@ -74,11 +74,19 @@ yadi_info_t<BT> make_initializer_with_help(F func);
  * @return
  */
 template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields);
+initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields);
 
 // TODO Comment
 template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields);
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields);
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_map_initializer_with_help(F func,
+                                               std::vector<std::pair<std::string, std::string>> fields_with_help);
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
+                                               std::vector<std::string> fields_help);
 
 // ################### IMPL ######################
 
@@ -277,7 +285,7 @@ yadi_info_t<BT> make_initializer_with_help(F func) {
 }
 
 template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields) {
+initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields) {
     return [func, fields](YAML::Node const& yaml) {
         // Convert yaml map to sequence via ordered field list
         // TODO error checking for yaml map type
@@ -291,7 +299,26 @@ initializer_type_t<BT> make_initializer(F func, std::vector<std::string> fields)
 }
 
 template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fields) {
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields) {
+    return make_map_initializer_with_help<BT>(func, fields, {});
+}
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_map_initializer_with_help(F func,
+                                               std::vector<std::pair<std::string, std::string>> fields_with_help) {
+    std::vector<std::string> fields;
+    std::vector<std::string> fields_help;
+    for (auto const& field_with_help : fields_with_help) {
+        fields.push_back(field_with_help.first);
+        fields_help.push_back(field_with_help.second);
+    }
+
+    return make_map_initializer_with_help<BT>(func, fields, fields_help);
+}
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
+                                               std::vector<std::string> fields_help) {
     std::vector<std::string> field_types;
     yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
     if (field_types.size() != fields.size()) {
@@ -299,12 +326,19 @@ yadi_info_t<BT> make_initializer_with_help(F func, std::vector<std::string> fiel
     }
     std::string help = "Expects yaml map with fields:";
     for (size_t i = 0; i < fields.size(); ++i) {
-        std::string const& field = fields[i];
         std::string const& field_type = field_types[i];
+        std::string const& field = fields[i];
+        std::string field_help;
+        if (fields_help.size() > i) {
+            field_help = fields_help[i];
+        }
         help += "\n\t\t";
         help += field + ": " + field_type;
+        if (!field_help.empty()) {
+            help += ", " + field_help;
+        }
     }
-    return {make_initializer<BT>(func, fields), help};
+    return {make_map_initializer<BT>(func, fields), help};
 }
 
 }  // namespace yadi

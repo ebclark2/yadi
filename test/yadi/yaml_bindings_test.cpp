@@ -54,7 +54,7 @@ a3: 3
 a2: 2.5
 a4: 4.5
 )raw";
-    ::yadi::register_type<double>("mapped_sum", ::yadi::make_initializer<double>(&sum, {"a1", "a2", "a3", "a4"}));
+    ::yadi::register_type<double>("mapped_sum", ::yadi::make_map_initializer<double>(&sum, {"a1", "a2", "a3", "a4"}));
     YADI_ASSERT_EQ(11.5, ::yadi::create<double>("mapped_sum", YAML::Load(YAML)));
 
     return true;
