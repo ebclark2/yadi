@@ -15,7 +15,8 @@ YADI_YAML_TYPE_BY_VALUE_DECL(std::string, string)
 #ifndef YADI_NO_STD_STRING
 YADI_YAML_TYPE_BY_VALUE_DECL(int, int)
 #endif  // YADI_NO_STD_STRING
-#ifndef YADI_NO_STD_DOUBLE
+#ifndef YADI_NO_STD_FLOAT
+YADI_YAML_TYPE_BY_VALUE_DECL(float, float)
 YADI_YAML_TYPE_BY_VALUE_DECL(double, double)
 #endif  // YADI_NO_STD_DOUBLE
 

@@ -6,26 +6,27 @@ Example help information, see test/yadi/example.cpp
 ```text
 double
 	"type_by_value" -> Direct conversion using yaml.as<double>()
+float
+	"type_by_value" -> Direct conversion using yaml.as<float>()
 int
 	"type_by_value" -> Direct conversion using yaml.as<int>()
 std::string
 	"type_by_value" -> Direct conversion using yaml.as<std::string>()
 yadi::car
 	"type_by_value" -> Expects yaml map with fields:
-		make: std::string
-		power_plant: yadi::power_plant
+		make: std::string, The make of the car!
+		power_plant: yadi::power_plant, What makes the car go!
 yadi::power_plant
 	"electric" -> Expects yaml sequence with types:
-		 - std::string
-		 - int
-		 - list<int>
+		 - std::string, Origin of motor
+		 - int, Watts
+		 - list<int>, Random numbers for testing?
 	"gas" -> Expects yaml map with fields:
-		make: std::string
-		cylinder_count: int
-		bore: int
-		stroke: int
-		vendors: set<std::string>
-```
+		make: std::string, Engine make
+		cylinder_count: int, The number of cylinders
+		bore: float, Cylidner bore in inches
+		stroke: float, Cylinder stroke in inches
+		vendors: set<std::string>, Vendors providing parts for engine```
 Example configuration
 ```yaml
 
@@ -36,8 +37,8 @@ Example configuration
     config:
       make: LQ4
       cylinder_count: 8
-      bore: 1
-      stroke: 8
+      bore: 3.72
+      stroke: 3.44
       vendors:
         - Currie
         - Synergy

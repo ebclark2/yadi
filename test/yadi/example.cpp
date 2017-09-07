@@ -35,21 +35,21 @@ struct electric : public power_plant {
 };
 
 struct gas : public power_plant {
-    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, int bore, int stroke,
+    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, float bore, float stroke,
                                                  std::set<std::string> vendors) {
         std::unique_ptr<power_plant> ret(new gas(make, cylinder_count, bore, stroke, vendors));
         return ret;
     }
 
-    gas(std::string make, int cylinder_count, int bore, int stroke, std::set<std::string> vendors)
+    gas(std::string make, int cylinder_count, float bore, float stroke, std::set<std::string> vendors)
         : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {}
 
     int power() const { return this->bore * this->stroke * this->cylinder_count; }
 
     std::string make;
     int cylinder_count;
-    int bore;
-    int stroke;
+    float bore;
+    float stroke;
     std::set<std::string> vendors;
 };
 
@@ -79,11 +79,18 @@ YADI_INIT_BEGIN
                                                 std::make_pair("power_plant"s, "What makes the car go!"s)}));
 
 // Make gas from mapped args
-register_type<power_plant>("gas", ::yadi::make_map_initializer_with_help<power_plant>(&gas::make_gas,
-                                                                                      {"make", "cylinder_count", "bore",
-                                                                                       "stroke", "vendors"}));
+register_type<power_plant>("gas",
+                           ::yadi::make_map_initializer_with_help<power_plant>(
+                               &gas::make_gas, {std::make_pair("make", "Engine make"),
+                                                std::make_pair("cylinder_count", "The number of cylinders"),
+                                                std::make_pair("bore", "Cylidner bore in inches"),
+                                                std::make_pair("stroke", "Cylinder stroke in inches"),
+                                                std::make_pair("vendors", "Vendors providing parts for engine")}));
 // Make electric from sequenced args
-register_type<power_plant>("electric", ::yadi::make_initializer_with_help<power_plant>(&electric::make_electric));
+register_type<power_plant>("electric",
+                           ::yadi::make_sequence_initializer_with_help<power_plant>(&electric::make_electric,
+                                                                                    {"Origin of motor", "Watts",
+                                                                                     "Random numbers for testing?"}));
 YADI_INIT_END
 
 YADI_TEST(nested_example_test) {
@@ -95,8 +102,8 @@ YADI_TEST(nested_example_test) {
     config:
       make: LQ4
       cylinder_count: 8
-      bore: 1
-      stroke: 8
+      bore: 3.72
+      stroke: 3.44
       vendors:
         - Currie
         - Synergy
@@ -124,8 +131,8 @@ YADI_TEST(nested_example_test) {
         gas const& pp = dynamic_cast<gas const&>(*c.motor);
         YADI_ASSERT_EQ("LQ4", pp.make);
         YADI_ASSERT_EQ(8, pp.cylinder_count);
-        YADI_ASSERT_EQ(1, pp.bore);
-        YADI_ASSERT_EQ(8, pp.stroke);
+        YADI_ASSERT_EQ(3.72, pp.bore);
+        YADI_ASSERT_EQ(3.44, pp.stroke);
         YADI_ASSERT_EQ(3, pp.vendors.size());
     }
     {

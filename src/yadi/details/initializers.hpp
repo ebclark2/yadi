@@ -51,7 +51,7 @@ ptr_type_t<BT> no_arg_init(YAML::Node const&);
  * @return
  */
 template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func);
+initializer_type_t<BT> make_sequence_initializer(F func);
 
 /**
  * @brief Makes yadi info with generated help for F
@@ -61,7 +61,7 @@ initializer_type_t<BT> make_initializer(F func);
  * @return Generated yadi info
  */
 template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func);
+yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::string> helps = {});
 
 /**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
@@ -266,13 +266,13 @@ function_traits_result_type<F> call_from_yaml(F const& func, YAML::Node const& y
 }
 
 template <typename BT, typename F>
-initializer_type_t<BT> make_initializer(F func) {
+initializer_type_t<BT> make_sequence_initializer(F func) {
     // TODO Error checking for yaml sequence type
     return [func](YAML::Node const& yaml) { return call_from_yaml(func, yaml); };
 }
 
 template <typename BT, typename F>
-yadi_info_t<BT> make_initializer_with_help(F func) {
+yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::string> helps) {
     std::vector<std::string> field_types;
     yaml_to_tuple<function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
     std::string help = "Expects yaml sequence with types:";
@@ -280,8 +280,11 @@ yadi_info_t<BT> make_initializer_with_help(F func) {
         std::string const& field_type = field_types[i];
         help += "\n\t\t - ";
         help += field_type;
+        if (helps.size() > i) {
+            help += ", " + helps[i];
+        }
     }
-    return {make_initializer<BT>(func), help};
+    return {make_sequence_initializer<BT>(func), help};
 }
 
 template <typename BT, typename F>

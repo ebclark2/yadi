@@ -39,7 +39,7 @@ YADI_TEST(yaml_bindings_test) {
 
     {
         // create initializer type the factory will use...
-        ::yadi::register_type<double>("sum_of_4", ::yadi::make_initializer<double>(&sum));
+        ::yadi::register_type<double>("sum_of_4", ::yadi::make_sequence_initializer<double>(&sum));
         YADI_ASSERT_EQ(11.5, ::yadi::create<double>("sum_of_4", YAML::Load(YAML)));
     }
 
