@@ -18,6 +18,6 @@ YADI_YAML_TYPE_BY_VALUE_DECL(int, int)
 #ifndef YADI_NO_STD_FLOAT
 YADI_YAML_TYPE_BY_VALUE_DECL(float, float)
 YADI_YAML_TYPE_BY_VALUE_DECL(double, double)
-#endif  // YADI_NO_STD_DOUBLE
+#endif  // YADI_NO_STD_FLOAT
 
 #endif  // YADI_FACTORY_HPP__
