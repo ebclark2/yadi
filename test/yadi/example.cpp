@@ -131,8 +131,8 @@ YADI_TEST(nested_example_test) {
         gas const& pp = dynamic_cast<gas const&>(*c.motor);
         YADI_ASSERT_EQ("LQ4", pp.make);
         YADI_ASSERT_EQ(8, pp.cylinder_count);
-        YADI_ASSERT_EQ(3.72, pp.bore);
-        YADI_ASSERT_EQ(3.44, pp.stroke);
+        YADI_ASSERT_EQ(372, (int)(pp.bore * 100.0f));
+        YADI_ASSERT_EQ(344, (int)(pp.stroke * 100.0f));
         YADI_ASSERT_EQ(3, pp.vendors.size());
     }
     {

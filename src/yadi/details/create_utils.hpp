@@ -16,16 +16,6 @@ namespace yadi {
 std::string const& type_by_value_key();
 
 /**
- * @brief Same as factory<BT>::create(type, config)
- * @tparam BT
- * @param type
- * @param config
- * @return
- */
-template <typename OT>
-OT create(std::string const& type, YAML::Node const& config = {});
-
-/**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
@@ -109,10 +99,20 @@ struct adapter {
     static std::string get_name() { return yadi_help::get_name<base_type>(); }
 };
 
+/**
+ * @brief Same as adapter<FT>::create(type, config);
+ * @tparam FT Type used to derive factory
+ * @param type
+ * @param config
+ * @return
+ */
+template <typename FT>
+typename adapter<FT>::output_type create(std::string const& type, YAML::Node const& config = {});
+
 // ################# IMPL #####################
-template <typename OT>
-OT create(std::string const& type, YAML::Node const& config) {
-    return adapter<OT>::create(type, config);
+template <typename FT>
+typename adapter<FT>::output_type create(std::string const& type, YAML::Node const& config) {
+    return adapter<FT>::create(type, config);
 }
 
 template <typename OT>

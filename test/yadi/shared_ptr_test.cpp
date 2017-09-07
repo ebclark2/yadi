@@ -18,6 +18,11 @@ struct my_shared_type_1 : public my_shared_type {};
 
 YADI_INIT_BEGIN
 register_type_no_arg<my_shared_type, my_shared_type_1>("my_type_1");
+register_type<my_shared_type>("cached_type",
+                              make_caching_initializer<my_shared_type>(&no_arg_init<my_shared_type, my_shared_type_1>));
+register_type<my_shared_type>("cached_type_with_help",
+                              make_caching_initializer<my_shared_type>({&no_arg_init<my_shared_type, my_shared_type_1>,
+                                                                        "No config"}));
 YADI_INIT_END
 
 YADI_TEST(shared_ptr_create) {
@@ -31,4 +36,19 @@ YADI_TEST(shared_ptr_parse) {
     return p.get();
 }
 
+YADI_TEST(cache_test) {
+    std::shared_ptr<my_shared_type> p1 = ::yadi::create<my_shared_type>("cached_type");
+    std::shared_ptr<my_shared_type> p2 = ::yadi::create<my_shared_type>("cached_type");
+    YADI_ASSERT_EQ(p1, p2);
+
+    return true;
+}
+
+YADI_TEST(cache_with_help_test) {
+    std::shared_ptr<my_shared_type> p1 = ::yadi::create<my_shared_type>("cached_type_with_help");
+    std::shared_ptr<my_shared_type> p2 = ::yadi::create<my_shared_type>("cached_type_with_help");
+    YADI_ASSERT_EQ(p1, p2);
+
+    return true;
+}
 }  // namespace yadi

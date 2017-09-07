@@ -88,6 +88,13 @@ template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
                                                std::vector<std::string> fields_help);
 
+// TODO thread safe
+template <typename BT>
+initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& initializing_initializer);
+
+template <typename BT>
+yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
+
 // ################### IMPL ######################
 
 template <typename T>
@@ -342,6 +349,38 @@ yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> 
         }
     }
     return {make_map_initializer<BT>(func, fields), help};
+}
+
+// TODO thread safe
+template <typename BT>
+initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& initializing_initializer) {
+    static_assert(std::is_same<ptr_type_t<BT>, std::shared_ptr<BT>>::value,
+                  "ptr_type for BT must be shared_ptr to use caching initializer");
+
+    using Cache = std::map<std::string, std::weak_ptr<BT>>;
+    Cache cache;
+    auto caching_initializer = [cache, initializing_initializer](YAML::Node const& config) mutable -> ptr_type_t<BT> {
+        std::string yaml_key = YAML::Dump(config);
+        typename Cache::iterator cache_it = cache.find(yaml_key);
+        if (cache_it != cache.end()) {
+            ptr_type_t<BT> instance = cache_it->second.lock();
+            if (instance) {
+                return instance;
+            }
+        }
+
+        ptr_type_t<BT> new_instance = initializing_initializer(config);
+        cache[yaml_key] = new_instance;
+        return new_instance;
+    };
+
+    return caching_initializer;
+}
+
+template <typename BT>
+yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi) {
+    yi.initializer = make_caching_initializer<BT>(yi.initializer);
+    return yi;
 }
 
 }  // namespace yadi
