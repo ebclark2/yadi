@@ -26,7 +26,8 @@ yadi::power_plant
 		cylinder_count: int, The number of cylinders
 		bore: float, Cylidner bore in inches
 		stroke: float, Cylinder stroke in inches
-		vendors: set<std::string>, Vendors providing parts for engine```
+		vendors: set<std::string>, Vendors providing parts for engine
+```
 Example configuration
 ```yaml
 
