@@ -2,6 +2,7 @@ doc
 .idea
 cmake-build-*
 build
+*.pyc
 
 # Prerequisites
 *.d

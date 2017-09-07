@@ -9,6 +9,8 @@
 #include <iterator>
 #include <vector>
 
+using namespace std::string_literals;
+
 namespace yadi {
 
 struct power_plant {
@@ -72,7 +74,9 @@ YADI_INIT_BEGIN
 ::yadi::register_factory<power_plant>();
 // Make car from mapped args
 ::yadi::register_type<car>(::yadi::type_by_value_key(),
-                           ::yadi::make_map_initializer_with_help<car>(&car::make_car, {"make", "power_plant"}));
+                           ::yadi::make_map_initializer_with_help<car>(
+                               &car::make_car, {std::make_pair("make"s, "The make of the car!"s),
+                                                std::make_pair("power_plant"s, "What makes the car go!"s)}));
 
 // Make gas from mapped args
 register_type<power_plant>("gas", ::yadi::make_map_initializer_with_help<power_plant>(&gas::make_gas,
