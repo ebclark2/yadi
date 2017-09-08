@@ -28,7 +28,11 @@ T yaml_as(YAML::Node const& config);
 
 // TODO comment
 template <typename T>
-yadi_info_t<T> yaml_as_with_help();
+initializer_type_t<T> make_yaml_as_initializer();
+
+// TODO comment
+template <typename T>
+yadi_info_t<T> make_yaml_as_initializer_with_help();
 
 /**
  * @brief Constructs IT via a constructor that accepts YAML and returns as pointer to BT,
@@ -51,7 +55,8 @@ template <typename BT, typename IT>
 ptr_type_t<BT> init_no_arg(YAML::Node const&);
 
 /**
- * @brief Construct IT via contructor with the given arguments.  Arguments are moved to constructor.
+ * @brief Construct IT via contructor with the given arguments.  This is intended to be used with a yaml binding
+ * initializer such as make_sequence_initializer(&ctr<BT, IT, MyCtrArgs...>, ...).
  * @tparam BT Base type.
  * @tparam IT Implementation type.
  * @tparam ARGS Argument types of constructor.
@@ -59,7 +64,7 @@ ptr_type_t<BT> init_no_arg(YAML::Node const&);
  * @return ptr_type_t<BT> via constructor of IT.
  */
 template <typename BT, typename IT, typename... ARGS>
-ptr_type_t<BT> init_ctr(ARGS... args);
+ptr_type_t<BT> ctr(ARGS... args);
 
 /**
  * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
@@ -159,10 +164,11 @@ struct no_arg_init_helper<BT, IT, true> {
 };
 
 template <typename BT, typename IT, bool = meta::is_by_value<BT>::value>
-struct ctr_init_helper;
+struct ctr_helper;
 
 template <typename BT, typename IT>
-struct ctr_init_helper<BT, IT, true> {
+struct ctr_helper<BT, IT, true> {
+    static_assert(std::is_same<BT, IT>::value, "Implementation type must match base type for types returned by value");
     template <typename... ARGS>
     static ptr_type_t<BT> init(ARGS... args) {
         IT instance(std::move(args)...);
@@ -171,7 +177,7 @@ struct ctr_init_helper<BT, IT, true> {
 };
 
 template <typename BT, typename IT>
-struct ctr_init_helper<BT, IT, false> {
+struct ctr_helper<BT, IT, false> {
     template <typename... ARGS>
     static ptr_type_t<BT> init(ARGS... args) {
         ptr_type_t<BT> instance(new IT(std::move(args)...));
@@ -292,7 +298,12 @@ T yaml_as(YAML::Node const& config) {
 }
 
 template <typename T>
-yadi_info_t<T> yaml_as_with_help() {
+initializer_type_t<T> make_yaml_as_initializer() {
+    return &yaml_as<T>;
+}
+
+template <typename T>
+yadi_info_t<T> make_yaml_as_initializer_with_help() {
     // TODO Improved error message
     return {&yaml_as<T>, "Direct conversion using yaml.as<" + adapter<T>::get_name() + ">()"};
 }
@@ -308,8 +319,8 @@ ptr_type_t<BT> init_no_arg(YAML::Node const&) {
 }
 
 template <typename BT, typename IT, typename... ARGS>
-ptr_type_t<BT> init_ctr(ARGS... args) {
-    return details::ctr_init_helper<BT, IT>::init(std::move(args)...);
+ptr_type_t<BT> ctr(ARGS... args) {
+    return details::ctr_helper<BT, IT>::init(std::move(args)...);
 }
 
 template <typename BT, typename F>
