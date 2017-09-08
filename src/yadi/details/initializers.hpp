@@ -37,9 +37,25 @@ yadi_info_t<T> yaml_as_with_help();
 template <typename BT, typename IT>
 ptr_type_t<BT> yaml_init(YAML::Node const& config);
 
-// TODO Comment
+/**
+ * @brief Call no argument constructor.
+ * @tparam BT Base type.
+ * @tparam IT Implementation type.
+ * @return The pointer type of base type.
+ */
 template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&);
+
+/**
+ * @brief Construct IT via contructor with the given arguments.  Arguments are moved to constructor.
+ * @tparam BT Base type.
+ * @tparam IT Implementation type.
+ * @tparam ARGS Argument types of constructor.
+ * @param args Arguments for constructor.
+ * @return ptr_type_t<BT> via constructor of IT.
+ */
+template <typename BT, typename IT, typename... ARGS>
+ptr_type_t<BT> ctr_init(ARGS... args);
 
 /**
  * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
@@ -167,6 +183,32 @@ struct no_arg_init_helper<BT, IT, true> {
 template <typename BT, typename IT>
 ptr_type_t<BT> no_arg_init(YAML::Node const&) {
     return no_arg_init_helper<BT, IT>::init();
+}
+
+template <typename BT, typename IT, bool = is_by_value<BT>::value>
+struct ctr_init_helper;
+
+template <typename BT, typename IT>
+struct ctr_init_helper<BT, IT, true> {
+    template <typename... ARGS>
+    static ptr_type_t<BT> init(ARGS... args) {
+        IT instance(std::move(args)...);
+        return instance;
+    }
+};
+
+template <typename BT, typename IT>
+struct ctr_init_helper<BT, IT, false> {
+    template <typename... ARGS>
+    static ptr_type_t<BT> init(ARGS... args) {
+        ptr_type_t<BT> instance(new IT(std::move(args)...));
+        return instance;
+    }
+};
+
+template <typename BT, typename IT, typename... ARGS>
+ptr_type_t<BT> ctr_init(ARGS... args) {
+    return ctr_init_helper<BT, IT>::init(std::move(args)...);
 }
 
 template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
