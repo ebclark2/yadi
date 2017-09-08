@@ -24,6 +24,44 @@ namespace yadi {
 std::string const& type_by_value_key();
 
 /**
+ * @brief Provides a layer above factory<BT>::create.  This allows types such as templated containers to
+ * be created without registering initializers for each element type.
+ * @tparam FT The type the base type will be derived from via derived_base_type_t<FT>.
+ * @tparam OT The desired output type.
+ */
+template <typename FT, typename OT = ptr_type_t<meta::derive_base_type_t<FT>>>
+struct adapter {
+    using base_type = meta::derive_base_type_t<FT>;
+    using output_type = OT;
+
+    // TODO add some function to show factory return type in error message
+    static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,
+                  "Unable to convert factory return type to desired output type in ");
+
+    /**
+     * @brief The default is to forward to factory<base_type>::create(type, config);
+     * @param type
+     * @param config
+     * @return
+     */
+    static output_type create(std::string const& type, YAML::Node const& config = {}) {
+        return factory<base_type>::create(type, config);
+    }
+
+    static std::string get_name() { return yadi_help::get_name<base_type>(); }
+};
+
+/**
+ * @brief Same as adapter<FT>::create(type, config);
+ * @tparam FT Type used to derive factory
+ * @param type
+ * @param config
+ * @return
+ */
+template <typename FT>
+typename adapter<FT>::output_type create(std::string const& type, YAML::Node const& config = {});
+
+/**
  * @brief Pulls type and config from YAML.  This function is especially usefil when loading
  * nested types from YAML configuration.  If factory_config is a scalar string it will be used
  * as type.  If factory_config is a map then "type" and "config" keys will be pulled from it and
@@ -78,44 +116,6 @@ void from_yamls_base(YAML::Node const& factory_configs, OI out) {
  */
 template <typename OT>
 void parse(OT& out, YAML::Node const& factory_config);
-
-/**
- * @brief Provides a layer above factory<BT>::create.  This allows types such as templated containers to
- * be created without registering initializers for each element type.
- * @tparam FT The type the base type will be derived from via derived_base_type_t<FT>.
- * @tparam OT The desired output type.
- */
-template <typename FT, typename OT = ptr_type_t<meta::derive_base_type_t<FT>>>
-struct adapter {
-    using base_type = meta::derive_base_type_t<FT>;
-    using output_type = OT;
-
-    // TODO add some function to show factory return type in error message
-    static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,
-                  "Unable to convert factory return type to desired output type in ");
-
-    /**
-     * @brief The default is to forward to factory<base_type>::create(type, config);
-     * @param type
-     * @param config
-     * @return
-     */
-    static output_type create(std::string const& type, YAML::Node const& config = {}) {
-        return factory<base_type>::create(type, config);
-    }
-
-    static std::string get_name() { return yadi_help::get_name<base_type>(); }
-};
-
-/**
- * @brief Same as adapter<FT>::create(type, config);
- * @tparam FT Type used to derive factory
- * @param type
- * @param config
- * @return
- */
-template <typename FT>
-typename adapter<FT>::output_type create(std::string const& type, YAML::Node const& config = {});
 
 // ################# IMPL #####################
 template <typename FT>

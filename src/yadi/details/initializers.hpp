@@ -144,10 +144,10 @@ struct init_yaml_helper<BT, IT, true> {
 };
 
 template <typename BT, typename IT, bool by_value = meta::is_by_value<BT>::value>
-struct no_arg_init_helper;
+struct init_no_arg_helper;
 
 template <typename BT, typename IT>
-struct no_arg_init_helper<BT, IT, false> {
+struct init_no_arg_helper<BT, IT, false> {
     static ptr_type_t<BT> init() {
         ptr_type_t<BT> ret(new IT);
         return ret;
@@ -155,7 +155,7 @@ struct no_arg_init_helper<BT, IT, false> {
 };
 
 template <typename BT, typename IT>
-struct no_arg_init_helper<BT, IT, true> {
+struct init_no_arg_helper<BT, IT, true> {
     static_assert(std::is_same<BT, IT>::value, "Implementation type must match base type for types returned by value");
     static ptr_type_t<BT> init() {
         IT ret;
@@ -315,7 +315,7 @@ ptr_type_t<BT> init_yaml(YAML::Node const& config) {
 
 template <typename BT, typename IT>
 ptr_type_t<BT> init_no_arg(YAML::Node const&) {
-    return details::no_arg_init_helper<BT, IT>::init();
+    return details::init_no_arg_helper<BT, IT>::init();
 }
 
 template <typename BT, typename IT, typename... ARGS>
