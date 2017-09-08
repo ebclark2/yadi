@@ -18,43 +18,6 @@
 namespace yadi {
 
 /**
- * @brief Returns config.as<T>().  Signature matches factory initializer.
- * @tparam T
- * @param config
- * @return
- */
-template <typename T>
-T yaml_as(YAML::Node const& config);
-
-// TODO comment
-template <typename T>
-initializer_type_t<T> make_yaml_as_initializer();
-
-// TODO comment
-template <typename T>
-yadi_info_t<T> make_yaml_as_initializer_with_help();
-
-/**
- * @brief Constructs IT via a constructor that accepts YAML and returns as pointer to BT,
- * ptr_type_t<BT>.
- * @tparam BT Use to determine pointer type.
- * @tparam IT Implementation type.  Type to construct
- * @param config Argument to constructor.
- * @return The constructed type as ptr_type_t<BT>
- */
-template <typename BT, typename IT>
-ptr_type_t<BT> init_yaml(YAML::Node const& config);
-
-/**
- * @brief Call no argument constructor.
- * @tparam BT Base type.
- * @tparam IT Implementation type.
- * @return The pointer type of base type.
- */
-template <typename BT, typename IT>
-ptr_type_t<BT> init_no_arg(YAML::Node const&);
-
-/**
  * @brief Construct IT via contructor with the given arguments.  This is intended to be used with a yaml binding
  * initializer such as make_sequence_initializer(&ctr<BT, IT, MyCtrArgs...>, ...).
  * @tparam BT Base type.
@@ -67,26 +30,40 @@ template <typename BT, typename IT, typename... ARGS>
 ptr_type_t<BT> ctr(ARGS... args);
 
 /**
- * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
- * passed as a YAML factory config to the factory of the argument type.  The results will be passed in to function
- * func.
- * @tparam BT
- * @tparam F
- * @param func
+ * @brief Returns config.as<T>().  Signature matches factory initializer.
+ * @tparam T
+ * @param config
  * @return
  */
-template <typename BT, typename F>
-initializer_type_t<BT> make_sequence_initializer(F func);
+template <typename T>
+T yaml_as(YAML::Node const& config);
 
 /**
- * @brief Makes yadi info with generated help for F
- * @tparam BT base type
- * @tparam F Function type
- * @param func Function to find yaml to
- * @return Generated yadi info
+ * @brief Call no argument constructor.
+ * @tparam BT Base type.
+ * @tparam IT Implementation type.
+ * @return The pointer type of base type.
  */
-template <typename BT, typename F>
-yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::string> helps = {});
+template <typename BT, typename IT>
+ptr_type_t<BT> init_no_arg(YAML::Node const&);
+
+/**
+ * @brief Constructs IT via a constructor that accepts YAML and returns as pointer to BT,
+ * ptr_type_t<BT>.
+ * @tparam BT Use to determine pointer type.
+ * @tparam IT Implementation type.  Type to construct
+ * @param config Argument to constructor.
+ * @return The constructed type as ptr_type_t<BT>
+ */
+template <typename BT, typename IT>
+ptr_type_t<BT> init_yaml(YAML::Node const& config);
+
+// TODO thread safe
+template <typename BT>
+initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& initializing_initializer);
+
+template <typename BT>
+yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
 
 /**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
@@ -113,12 +90,35 @@ template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
                                                std::vector<std::string> fields_help);
 
-// TODO thread safe
-template <typename BT>
-initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& initializing_initializer);
+/**
+ * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
+ * passed as a YAML factory config to the factory of the argument type.  The results will be passed in to function
+ * func.
+ * @tparam BT
+ * @tparam F
+ * @param func
+ * @return
+ */
+template <typename BT, typename F>
+initializer_type_t<BT> make_sequence_initializer(F func);
 
-template <typename BT>
-yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
+/**
+ * @brief Makes yadi info with generated help for F
+ * @tparam BT base type
+ * @tparam F Function type
+ * @param func Function to find yaml to
+ * @return Generated yadi info
+ */
+template <typename BT, typename F>
+yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::string> helps = {});
+
+// TODO comment
+template <typename T>
+initializer_type_t<T> make_yaml_as_initializer();
+
+// TODO comment
+template <typename T>
+yadi_info_t<T> make_yaml_as_initializer_with_help();
 
 // ################### IMPL ######################
 
