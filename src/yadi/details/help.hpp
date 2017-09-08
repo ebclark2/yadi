@@ -14,12 +14,18 @@
 #include <typeindex>
 #include <vector>
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
 namespace yadi {
-
+namespace details {
 struct yadi_help_fetcher {
     struct concept {
         virtual std::string getHelp(std::string const& type) const = 0;
+
         virtual std::vector<std::string> getTypes() const = 0;
+
         virtual std::unique_ptr<concept> clone() const = 0;
     };
 
@@ -63,14 +69,16 @@ struct yadi_help_fetcher {
     yadi_help_fetcher& operator=(yadi_help_fetcher const& other);
 
     inline std::string get_help(std::string const& type) const { return this->impl->getHelp(type); }
+
     inline std::vector<std::string> get_types() const { return this->impl->getTypes(); }
 
    private:
     std::unique_ptr<concept> impl;
 };
+}  // namespace details
 
 struct yadi_help {
-    using help_store = std::map<std::string, yadi_help_fetcher>;
+    using help_store = std::map<std::string, details::yadi_help_fetcher>;
     using name_store = std::map<std::type_index, std::string>;
 
     template <typename BT, typename TS>

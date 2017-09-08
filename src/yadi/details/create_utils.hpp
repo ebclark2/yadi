@@ -11,8 +11,16 @@
 
 #include <yaml-cpp/yaml.h>
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
 namespace yadi {
 
+/**
+ * @brief Returns the key used for initializers creating by value directly from yaml.
+ * @return The key.
+ */
 std::string const& type_by_value_key();
 
 /**
@@ -77,9 +85,9 @@ void parse(OT& out, YAML::Node const& factory_config);
  * @tparam FT The type the base type will be derived from via derived_base_type_t<FT>.
  * @tparam OT The desired output type.
  */
-template <typename FT, typename OT = ptr_type_t<derive_base_type_t<FT>>>
+template <typename FT, typename OT = ptr_type_t<meta::derive_base_type_t<FT>>>
 struct adapter {
-    using base_type = derive_base_type_t<FT>;
+    using base_type = meta::derive_base_type_t<FT>;
     using output_type = OT;
 
     // TODO add some function to show factory return type in error message
@@ -117,7 +125,7 @@ typename adapter<FT>::output_type create(std::string const& type, YAML::Node con
 
 template <typename OT>
 OT from_yaml(YAML::Node const& factory_config) {
-    using BT = derive_base_type_t<OT>;
+    using BT = meta::derive_base_type_t<OT>;
     using DOT = OT;  // derive_output_type_t<OT>;
     if (adapter<OT, OT>::direct_from_yaml) {
         return adapter<BT, DOT>::create(type_by_value_key(), factory_config);
@@ -176,19 +184,6 @@ template <typename OT>
 void parse(OT& out, YAML::Node const& factory_config) {
     out = from_yaml<OT>(factory_config);
 }
-
-template <typename FT>
-struct adapter<FT, ptr_type_t<derive_base_type_t<FT>>> {
-    using base_type = derive_base_type_t<FT>;
-    using output_type = ptr_type_t<derive_base_type_t<FT>>;
-    static bool const direct_from_yaml = factory_traits<base_type>::direct_from_yaml;
-
-    static output_type create(std::string const& type, YAML::Node const& config = {}) {
-        return factory<base_type>::create(type, config);
-    }
-
-    static std::string get_name() { return yadi_help::get_name<base_type>(); }
-};
 
 }  // namespace yadi
 

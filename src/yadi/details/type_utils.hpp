@@ -9,8 +9,12 @@
 
 #include <type_traits>
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
 namespace yadi {
-
+namespace meta {
 template <typename T>
 using bare_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
@@ -39,18 +43,6 @@ struct is_by_value {
 };
 
 /**
- * @brief Helper to derive_base_type specialization by value.  Adds check to verify factory is actually by value.
- * @tparam T
- */
-template <typename T, typename E = std::enable_if_t<is_by_value<T>::value>>
-struct derive_base_type_by_value;
-
-template <typename T>
-struct derive_base_type_by_value<T, std::enable_if_t<is_by_value<T>::value>> {
-    using base_type = T;
-};
-
-/**
  * For type T, provide the factory base type that creates T. For example, for T std::unique_ptr<int>, int would
  * be the base type.
  * @tparam T
@@ -60,6 +52,10 @@ struct derive_base_type {
     using base_type = bare_t<T>;
 };
 
+template <typename T>
+using derive_base_type_t = typename derive_base_type<T>::base_type;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename T>
 struct derive_base_type<std::shared_ptr<T>> {
     using base_type = bare_t<T>;  // if_convertible_then_t<ptr_type_t<T>, std::shared_ptr<T>, bare_t<T>>;
@@ -74,9 +70,8 @@ template <typename T>
 struct derive_base_type<T*> {
     using base_type = bare_t<T>;  // if_convertible_then_t<ptr_type_t<T>, T*, bare_t<T>>;
 };
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-template <typename T>
-using derive_base_type_t = typename derive_base_type<T>::base_type;
-
+}  // namespace meta
 }  // namespace yadi
 #endif  // YADI_TYPE_UTILS_HPP

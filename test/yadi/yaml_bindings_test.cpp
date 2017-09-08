@@ -20,20 +20,20 @@ YADI_TEST(yaml_bindings_test) {
 )raw";
     using ctr_sig = std::function<double(double, double, int, double)>;
 
-    ::yadi::function_traits_params_type<ctr_sig> test;
-    ::yadi::yaml_to_tuple<decltype(test)>::to_tuple(test, YAML::Load(YAML));
+    ::yadi::details::function_traits_params_type<ctr_sig> test;
+    ::yadi::details::yaml_to_tuple<decltype(test)>::to_tuple(test, YAML::Load(YAML));
     YADI_ASSERT_EQ(std::get<0>(test), 1.5);
     YADI_ASSERT_EQ(std::get<1>(test), 2.5);
     YADI_ASSERT_EQ(std::get<2>(test), 3);
     YADI_ASSERT_EQ(std::get<3>(test), 4.5);
 
     {
-        double result = ::yadi::call_from_yaml(&sum, YAML::Load(YAML));
+        double result = ::yadi::details::call_from_yaml(&sum, YAML::Load(YAML));
         YADI_ASSERT_EQ(11.5, result);
     }
 
     {
-        double result = ::yadi::call_from_yaml(&Foo::sum, YAML::Load(YAML));
+        double result = ::yadi::details::call_from_yaml(&Foo::sum, YAML::Load(YAML));
         YADI_ASSERT_EQ(11.5, result);
     }
 

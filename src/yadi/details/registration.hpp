@@ -9,6 +9,10 @@
 #include "help.hpp"
 #include "initializers.hpp"
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
 namespace yadi {
 // TODO change argument names
 /**

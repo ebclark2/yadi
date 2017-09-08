@@ -9,6 +9,11 @@
 #include "details/initializers.hpp"
 #include "details/registration.hpp"
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
+namespace yadi {}
 #ifndef YADI_NO_STD_STRING
 YADI_YAML_TYPE_BY_VALUE_DECL(std::string, string)
 #endif  // YADI_NO_STD_STRING

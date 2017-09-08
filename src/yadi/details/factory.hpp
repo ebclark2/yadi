@@ -52,6 +52,10 @@
     ::yadi::register_type<TYPE>(::yadi::type_by_value_key(), ::yadi::yaml_as_with_help<TYPE>()); \
     YADI_INIT_END_N(INIT_NAME)
 
+/**
+ * @namespace yadi
+ * @brief YADI
+ */
 namespace yadi {
 
 /**
