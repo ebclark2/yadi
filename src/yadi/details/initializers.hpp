@@ -39,7 +39,7 @@ yadi_info_t<T> yaml_as_with_help();
  * @return The constructed type as ptr_type_t<BT>
  */
 template <typename BT, typename IT>
-ptr_type_t<BT> yaml_init(YAML::Node const& config);
+ptr_type_t<BT> init_yaml(YAML::Node const& config);
 
 /**
  * @brief Call no argument constructor.
@@ -48,7 +48,7 @@ ptr_type_t<BT> yaml_init(YAML::Node const& config);
  * @return The pointer type of base type.
  */
 template <typename BT, typename IT>
-ptr_type_t<BT> no_arg_init(YAML::Node const&);
+ptr_type_t<BT> init_no_arg(YAML::Node const&);
 
 /**
  * @brief Construct IT via contructor with the given arguments.  Arguments are moved to constructor.
@@ -59,7 +59,7 @@ ptr_type_t<BT> no_arg_init(YAML::Node const&);
  * @return ptr_type_t<BT> via constructor of IT.
  */
 template <typename BT, typename IT, typename... ARGS>
-ptr_type_t<BT> ctr_init(ARGS... args);
+ptr_type_t<BT> init_ctr(ARGS... args);
 
 /**
  * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
@@ -118,20 +118,11 @@ yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
 // ################### IMPL ######################
 
 namespace details {
-template <typename BT, typename IT,
-          typename = typename std::enable_if<meta::is_by_value<BT>::value && std::is_same<BT, IT>::value>::type>
-struct yaml_init_value {
-    static ptr_type_t<BT> init(YAML::Node const& config) {
-        BT ret(config);
-        return ret;
-    }
-};
-
 template <typename BT, typename IT, bool by_value = meta::is_by_value<BT>::value>
-struct yaml_init_helper {};
+struct init_yaml_helper;
 
 template <typename BT, typename IT>
-struct yaml_init_helper<BT, IT, false> {
+struct init_yaml_helper<BT, IT, false> {
     static ptr_type_t<BT> init(YAML::Node const& config) {
         ptr_type_t<BT> ret(new IT(config));
         return ret;
@@ -139,21 +130,16 @@ struct yaml_init_helper<BT, IT, false> {
 };
 
 template <typename BT, typename IT>
-struct yaml_init_helper<BT, IT, true> {
-    static ptr_type_t<BT> init(YAML::Node const& config) { return yaml_init_value<BT, IT>::init(config); }
-};
-
-template <typename BT, typename IT,
-          typename = typename std::enable_if<meta::is_by_value<BT>::value && std::is_same<BT, IT>::value>::type>
-struct no_arg_init_value {
-    static ptr_type_t<BT> init() {
-        BT ret;
+struct init_yaml_helper<BT, IT, true> {
+    static_assert(std::is_same<BT, IT>::value, "Implementation type must match base type for types returned by value");
+    static ptr_type_t<BT> init(YAML::Node const& config) {
+        IT ret(config);
         return ret;
     }
 };
 
 template <typename BT, typename IT, bool by_value = meta::is_by_value<BT>::value>
-struct no_arg_init_helper {};
+struct no_arg_init_helper;
 
 template <typename BT, typename IT>
 struct no_arg_init_helper<BT, IT, false> {
@@ -165,7 +151,11 @@ struct no_arg_init_helper<BT, IT, false> {
 
 template <typename BT, typename IT>
 struct no_arg_init_helper<BT, IT, true> {
-    static ptr_type_t<BT> init() { return no_arg_init_value<BT, IT>::init(); }
+    static_assert(std::is_same<BT, IT>::value, "Implementation type must match base type for types returned by value");
+    static ptr_type_t<BT> init() {
+        IT ret;
+        return ret;
+    }
 };
 
 template <typename BT, typename IT, bool = meta::is_by_value<BT>::value>
@@ -308,17 +298,17 @@ yadi_info_t<T> yaml_as_with_help() {
 }
 
 template <typename BT, typename IT>
-ptr_type_t<BT> yaml_init(YAML::Node const& config) {
-    return details::yaml_init_helper<BT, IT>::init(config);
+ptr_type_t<BT> init_yaml(YAML::Node const& config) {
+    return details::init_yaml_helper<BT, IT>::init(config);
 }
 
 template <typename BT, typename IT>
-ptr_type_t<BT> no_arg_init(YAML::Node const&) {
+ptr_type_t<BT> init_no_arg(YAML::Node const&) {
     return details::no_arg_init_helper<BT, IT>::init();
 }
 
 template <typename BT, typename IT, typename... ARGS>
-ptr_type_t<BT> ctr_init(ARGS... args) {
+ptr_type_t<BT> init_ctr(ARGS... args) {
     return details::ctr_init_helper<BT, IT>::init(std::move(args)...);
 }
 

@@ -62,7 +62,7 @@ YADI_INIT_BEGIN
 // Make car from mapped args
 ::yadi::register_type<car>(
     ::yadi::type_by_value_key(),
-    ::yadi::make_map_initializer_with_help<car>(&ctr_init<car, car, std::string, std::unique_ptr<power_plant>>,
+    ::yadi::make_map_initializer_with_help<car>(&init_ctr<car, car, std::string, std::unique_ptr<power_plant>>,
                                                 {std::make_pair("make"s, "The make of the car!"s),
                                                  std::make_pair("power_plant"s, "What makes the car go!"s)}));
 
@@ -70,13 +70,13 @@ YADI_INIT_BEGIN
 register_type<power_plant>(
     "gas",
     ::yadi::make_map_initializer_with_help<power_plant>(
-        &ctr_init<power_plant, gas, std::string, int, float, float, std::set<std::string>>,
+        &init_ctr<power_plant, gas, std::string, int, float, float, std::set<std::string>>,
         {std::make_pair("make", "Engine make"), std::make_pair("cylinder_count", "The number of cylinders"),
          std::make_pair("bore", "Cylidner bore in inches"), std::make_pair("stroke", "Cylinder stroke in inches"),
          std::make_pair("vendors", "Vendors providing parts for engine")}));
 // Make electric from sequenced args
 register_type<power_plant>("electric", ::yadi::make_sequence_initializer_with_help<power_plant>(
-                                           &ctr_init<power_plant, electric, std::string, int, std::vector<int>>,
+                                           &init_ctr<power_plant, electric, std::string, int, std::vector<int>>,
                                            {"Origin of motor", "Watts", "Random numbers for testing?"}));
 YADI_INIT_END
 

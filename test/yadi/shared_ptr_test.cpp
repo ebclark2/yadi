@@ -19,9 +19,9 @@ struct my_shared_type_1 : public my_shared_type {};
 YADI_INIT_BEGIN
 register_type_no_arg<my_shared_type, my_shared_type_1>("my_type_1");
 register_type<my_shared_type>("cached_type",
-                              make_caching_initializer<my_shared_type>(&no_arg_init<my_shared_type, my_shared_type_1>));
+                              make_caching_initializer<my_shared_type>(&init_no_arg<my_shared_type, my_shared_type_1>));
 register_type<my_shared_type>("cached_type_with_help",
-                              make_caching_initializer<my_shared_type>({&no_arg_init<my_shared_type, my_shared_type_1>,
+                              make_caching_initializer<my_shared_type>({&init_no_arg<my_shared_type, my_shared_type_1>,
                                                                         "No config"}));
 YADI_INIT_END
 

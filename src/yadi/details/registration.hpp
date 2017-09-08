@@ -102,12 +102,12 @@ void register_type(std::string type, initializer_type_t<BT> initializer) {
 
 template <typename BT, typename IT>
 void register_type(std::string type) {
-    register_type<BT>(type, {&yaml_init<BT, IT>, "Expects config.  Maybe add some help..."});
+    register_type<BT>(type, {&init_yaml<BT, IT>, "Expects config.  Maybe add some help..."});
 }
 
 template <typename BT, typename IT>
 void register_type_no_arg(std::string type) {
-    register_type<BT>(type, {&no_arg_init<BT, IT>, "No config"});
+    register_type<BT>(type, {&init_no_arg<BT, IT>, "No config"});
 }
 
 template <typename BT>
