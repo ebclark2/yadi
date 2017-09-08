@@ -57,7 +57,7 @@ Example configuration
         - 5
 ```
 Example classes
-```
+```cpp
 struct power_plant {
     virtual ~power_plant() {}
 
