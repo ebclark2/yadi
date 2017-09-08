@@ -31,12 +31,6 @@ struct electric : public power_plant {
 };
 
 struct gas : public power_plant {
-    static std::unique_ptr<power_plant> make_gas(std::string make, int cylinder_count, float bore, float stroke,
-                                                 std::set<std::string> vendors) {
-        std::unique_ptr<power_plant> ret(new gas(make, cylinder_count, bore, stroke, vendors));
-        return ret;
-    }
-
     gas(std::string make, int cylinder_count, float bore, float stroke, std::set<std::string> vendors)
         : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {}
 

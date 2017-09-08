@@ -56,7 +56,45 @@ Example configuration
         - 4
         - 5
 ```
+Example classes
+```
+struct power_plant {
+    virtual ~power_plant() {}
 
+    virtual int power() const = 0;
+};
+
+struct electric : public power_plant {
+    electric(std::string make, int watts, std::vector<int> numbers)
+        : make(std::move(make)), watts(std::move(watts)), numbers(numbers) {}
+
+    int power() const { return this->watts; }
+
+    std::string make;
+    int watts;
+    std::vector<int> numbers;
+};
+
+struct gas : public power_plant {
+    gas(std::string make, int cylinder_count, float bore, float stroke, std::set<std::string> vendors)
+        : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {}
+
+    int power() const { return this->bore * this->stroke * this->cylinder_count; }
+
+    std::string make;
+    int cylinder_count;
+    float bore;
+    float stroke;
+    std::set<std::string> vendors;
+};
+
+struct car {
+    car(std::string make, std::unique_ptr<power_plant>&& motor) : make(std::move(make)), motor(std::move(motor)) {}
+
+    std::string make;
+    std::unique_ptr<power_plant> motor;
+};
+```
 ### Build requirements
  - c++14
  - conan.io, see http://conan.io
