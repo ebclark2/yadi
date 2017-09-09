@@ -103,7 +103,7 @@ struct car {
 ### Building from repository
  - mkdir build
  - cd build
- - conan install .. (`conan install .. --build yaml-cpp` perhaps)
+ - conan install .. --build missing
  - conan build ..
  - ctest
 
