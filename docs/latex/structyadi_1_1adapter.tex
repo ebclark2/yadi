@@ -1,0 +1,72 @@
+\hypertarget{structyadi_1_1adapter}{}\section{yadi\+:\+:adapter$<$ FT, OT $>$ Struct Template Reference}
+\label{structyadi_1_1adapter}\index{yadi\+::adapter$<$ F\+T, O\+T $>$@{yadi\+::adapter$<$ F\+T, O\+T $>$}}
+
+
+Provides a layer above \hyperlink{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}{factory$<$\+B\+T$>$\+::create}. This allows types such as templated containers to be created without registering initializers for each element type.  
+
+
+
+
+{\ttfamily \#include $<$create\+\_\+utils.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structyadi_1_1adapter_af5b708e972d0f537961e64072f0e4098}\label{structyadi_1_1adapter_af5b708e972d0f537961e64072f0e4098}} 
+using {\bfseries base\+\_\+type} = meta\+::derive\+\_\+base\+\_\+type\+\_\+t$<$ FT $>$
+\item 
+\mbox{\Hypertarget{structyadi_1_1adapter_a3744c90afa9835b2e1e5583aea176cc0}\label{structyadi_1_1adapter_a3744c90afa9835b2e1e5583aea176cc0}} 
+using {\bfseries output\+\_\+type} = OT
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static output\+\_\+type \hyperlink{structyadi_1_1adapter_aaa3da42043e4278ad2d499f60e446602}{create} (std\+::string const \&type, Y\+A\+M\+L\+::\+Node const \&config=\{\})
+\begin{DoxyCompactList}\small\item\em The default is to forward to factory$<$base\+\_\+type$>$\+::create(type, config);. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structyadi_1_1adapter_a60a058b10b97dbaf116080f2a2f510fd}\label{structyadi_1_1adapter_a60a058b10b97dbaf116080f2a2f510fd}} 
+static std\+::string {\bfseries get\+\_\+name} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename FT, typename OT = ptr\+\_\+type\+\_\+t$<$meta\+::derive\+\_\+base\+\_\+type\+\_\+t$<$\+F\+T$>$$>$$>$\newline
+struct yadi\+::adapter$<$ F\+T, O\+T $>$}
+
+Provides a layer above \hyperlink{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}{factory$<$\+B\+T$>$\+::create}. This allows types such as templated containers to be created without registering initializers for each element type. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em FT} & The type the base type will be derived from via derived\+\_\+base\+\_\+type\+\_\+t$<$\+F\+T$>$. \\
+\hline
+{\em OT} & The desired output type. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structyadi_1_1adapter_aaa3da42043e4278ad2d499f60e446602}\label{structyadi_1_1adapter_aaa3da42043e4278ad2d499f60e446602}} 
+\index{yadi\+::adapter@{yadi\+::adapter}!create@{create}}
+\index{create@{create}!yadi\+::adapter@{yadi\+::adapter}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily template$<$typename FT, typename OT = ptr\+\_\+type\+\_\+t$<$meta\+::derive\+\_\+base\+\_\+type\+\_\+t$<$\+F\+T$>$$>$$>$ \\
+static output\+\_\+type \hyperlink{structyadi_1_1adapter}{yadi\+::adapter}$<$ FT, OT $>$\+::create (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{type,  }\item[{Y\+A\+M\+L\+::\+Node const \&}]{config = {\ttfamily \{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+The default is to forward to factory$<$base\+\_\+type$>$\+::create(type, config);. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/yadi/details/create\+\_\+utils.\+hpp\end{DoxyCompactItemize}

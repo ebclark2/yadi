@@ -1,0 +1,97 @@
+\hypertarget{structyadi_1_1factory}{}\section{yadi\+:\+:factory$<$ BT $>$ Struct Template Reference}
+\label{structyadi_1_1factory}\index{yadi\+::factory$<$ B\+T $>$@{yadi\+::factory$<$ B\+T $>$}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structyadi_1_1factory_1_1yadi__info}{yadi\+\_\+info}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structyadi_1_1factory_aa53aaa7d106c458d492e767d39c93369}\label{structyadi_1_1factory_aa53aaa7d106c458d492e767d39c93369}} 
+using {\bfseries base\+\_\+type} = BT
+\item 
+\mbox{\Hypertarget{structyadi_1_1factory_abda283c5fcd47651b797b8f2dd29a122}\label{structyadi_1_1factory_abda283c5fcd47651b797b8f2dd29a122}} 
+using {\bfseries initializer\+\_\+type} = std\+::function$<$ \hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ base\+\_\+type $>$(Y\+A\+M\+L\+::\+Node)$>$
+\item 
+\mbox{\Hypertarget{structyadi_1_1factory_a6e477a43b3072583702cc388e8028b47}\label{structyadi_1_1factory_a6e477a43b3072583702cc388e8028b47}} 
+using {\bfseries ptr\+\_\+type} = \hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ base\+\_\+type $>$
+\item 
+\mbox{\Hypertarget{structyadi_1_1factory_a4d95d91a535e999a61357303812130b2}\label{structyadi_1_1factory_a4d95d91a535e999a61357303812130b2}} 
+using {\bfseries type\+\_\+store} = std\+::map$<$ std\+::string, \hyperlink{structyadi_1_1factory_1_1yadi__info}{yadi\+\_\+info} $>$
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{structyadi_1_1factory_a512c17ea9ca1bde8dec81c22b08e5278}{register\+\_\+type} (std\+::string type, \hyperlink{structyadi_1_1factory_1_1yadi__info}{yadi\+\_\+info} yadis)
+\begin{DoxyCompactList}\small\item\em Registers initializer to type. When create is called with type this initializer will be called. Overwrites initializer if already registered (will change). \end{DoxyCompactList}\item 
+static ptr\+\_\+type \hyperlink{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}{create} (std\+::string const \&type, Y\+A\+M\+L\+::\+Node const \&config=\{\})
+\begin{DoxyCompactList}\small\item\em Calls the initializer associated with type passing the given Y\+A\+ML config. \end{DoxyCompactList}\item 
+static type\+\_\+store const  \& \hyperlink{structyadi_1_1factory_aa167d70b963561d24c8a32f680d7e8c0}{types} ()
+\begin{DoxyCompactList}\small\item\em Stored types and their registered initializers and help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}\label{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}} 
+\index{yadi\+::factory@{yadi\+::factory}!create@{create}}
+\index{create@{create}!yadi\+::factory@{yadi\+::factory}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+\hyperlink{structyadi_1_1factory}{factory}$<$ BT $>$\+::ptr\+\_\+type \hyperlink{structyadi_1_1factory}{yadi\+::factory}$<$ BT $>$\+::create (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{type,  }\item[{Y\+A\+M\+L\+::\+Node const \&}]{config = {\ttfamily \{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calls the initializer associated with type passing the given Y\+A\+ML config. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result of the registered initializer 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & if no initializer is registered for type \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{structyadi_1_1factory_a512c17ea9ca1bde8dec81c22b08e5278}\label{structyadi_1_1factory_a512c17ea9ca1bde8dec81c22b08e5278}} 
+\index{yadi\+::factory@{yadi\+::factory}!register\+\_\+type@{register\+\_\+type}}
+\index{register\+\_\+type@{register\+\_\+type}!yadi\+::factory@{yadi\+::factory}}
+\subsubsection{\texorpdfstring{register\+\_\+type()}{register\_type()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+void \hyperlink{structyadi_1_1factory}{yadi\+::factory}$<$ BT $>$\+::register\+\_\+type (\begin{DoxyParamCaption}\item[{std\+::string}]{type,  }\item[{\hyperlink{structyadi_1_1factory_1_1yadi__info}{yadi\+\_\+info}}]{yadis }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Registers initializer to type. When create is called with type this initializer will be called. Overwrites initializer if already registered (will change). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em initializer} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structyadi_1_1factory_aa167d70b963561d24c8a32f680d7e8c0}\label{structyadi_1_1factory_aa167d70b963561d24c8a32f680d7e8c0}} 
+\index{yadi\+::factory@{yadi\+::factory}!types@{types}}
+\index{types@{types}!yadi\+::factory@{yadi\+::factory}}
+\subsubsection{\texorpdfstring{types()}{types()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+\hyperlink{structyadi_1_1factory}{factory}$<$ BT $>$\+::type\+\_\+store const  \& \hyperlink{structyadi_1_1factory}{yadi\+::factory}$<$ BT $>$\+::types (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Stored types and their registered initializers and help. 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/yadi/details/factory.\+hpp\end{DoxyCompactItemize}

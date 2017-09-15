@@ -1,0 +1,595 @@
+\hypertarget{namespaceyadi}{}\section{yadi Namespace Reference}
+\label{namespaceyadi}\index{yadi@{yadi}}
+
+
+Y\+A\+DI.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structyadi_1_1adapter}{adapter}
+\begin{DoxyCompactList}\small\item\em Provides a layer above \hyperlink{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}{factory$<$\+B\+T$>$\+::create}. This allows types such as templated containers to be created without registering initializers for each element type. \end{DoxyCompactList}\item 
+struct \hyperlink{structyadi_1_1factory}{factory}
+\item 
+struct \hyperlink{structyadi_1_1factory__traits}{factory\+\_\+traits}
+\begin{DoxyCompactList}\small\item\em Factory traits that can be changed for BT. \end{DoxyCompactList}\item 
+struct \hyperlink{structyadi_1_1yadi__help}{yadi\+\_\+help}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}\label{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}} 
+{\footnotesize template$<$typename BT $>$ }\\using \hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t} = typename \hyperlink{structyadi_1_1factory__traits}{factory\+\_\+traits}$<$ BT $>$\+::ptr\+\_\+type
+\begin{DoxyCompactList}\small\item\em The type of pointer the BT factory creates. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceyadi_a79c8750f81d4b3525cc09362afe610ea}\label{namespaceyadi_a79c8750f81d4b3525cc09362afe610ea}} 
+{\footnotesize template$<$typename BT $>$ }\\using {\bfseries initializer\+\_\+type\+\_\+t} = typename \hyperlink{structyadi_1_1factory}{factory}$<$ BT $>$\+::initializer\+\_\+type
+\item 
+\mbox{\Hypertarget{namespaceyadi_adf71f730b2dddbbcb78db9a00dbdbed9}\label{namespaceyadi_adf71f730b2dddbbcb78db9a00dbdbed9}} 
+{\footnotesize template$<$typename BT $>$ }\\using {\bfseries yadi\+\_\+info\+\_\+t} = typename \hyperlink{structyadi_1_1factory}{factory}$<$ BT $>$\+::yadi\+\_\+info
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string const  \& \hyperlink{namespaceyadi_a0058efe8131ffa9184aa772e88c8f160}{type\+\_\+by\+\_\+value\+\_\+key} ()
+\begin{DoxyCompactList}\small\item\em Returns the key used for initializers creating by value directly from yaml. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename FT $>$ }\\\hyperlink{structyadi_1_1adapter}{adapter}$<$ FT $>$\+::output\+\_\+type \hyperlink{namespaceyadi_ac39d8f532bdf81e833cb117160a6440a}{create} (std\+::string const \&type, Y\+A\+M\+L\+::\+Node const \&config=\{\})
+\begin{DoxyCompactList}\small\item\em Same as adapter$<$\+F\+T$>$\+::create(type, config);. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename OT $>$ }\\OT \hyperlink{namespaceyadi_a85138aa0433192beaf4d0e67dd50cb23}{from\+\_\+yaml} (Y\+A\+M\+L\+::\+Node const \&factory\+\_\+config)
+\begin{DoxyCompactList}\small\item\em Pulls type and config from Y\+A\+ML. This function is especially usefil when loading nested types from Y\+A\+ML configuration. If factory\+\_\+config is a scalar string it will be used as type. If factory\+\_\+config is a map then \char`\"{}type\char`\"{} and \char`\"{}config\char`\"{} keys will be pulled from it and used as such, unless the base type indicates it should be created directly from yaml. In this case factory\+\_\+config is used as the config passed to the adapter. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ \hyperlink{namespaceyadi_a829744f635593fef1c05b0f9b01a8aa2}{from\+\_\+yaml\+\_\+base} (Y\+A\+M\+L\+::\+Node const \&config=\{\})
+\begin{DoxyCompactList}\small\item\em Equivalent to from\+\_\+yaml$<$ptr\+\_\+type\+\_\+t$<$base\+\_\+type$>$$>$(config) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename OT , typename OI $>$ }\\void \hyperlink{namespaceyadi_a5c72b55cccde908a9828431855e3b5e5}{from\+\_\+yamls} (Y\+A\+M\+L\+::\+Node const \&factory\+\_\+configs, OI out)
+\begin{DoxyCompactList}\small\item\em Populate output iterator from sequence of factory configs (anything from\+\_\+yaml accepts). \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename OI $>$ }\\void \hyperlink{namespaceyadi_a425268f5a35df74d449b5e1f44f39c22}{from\+\_\+yamls\+\_\+base} (Y\+A\+M\+L\+::\+Node const \&factory\+\_\+configs, OI out)
+\begin{DoxyCompactList}\small\item\em Equivalent to from\+\_\+yamls$<$ptr\+\_\+type\+\_\+t$<$base\+\_\+type$>$$>$(factory\+\_\+configs, out);. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename OT $>$ }\\void \hyperlink{namespaceyadi_ace9d761848d60ab00f257fdd9f5f2f21}{parse} (OT \&out, Y\+A\+M\+L\+::\+Node const \&factory\+\_\+config)
+\begin{DoxyCompactList}\small\item\em Populate out from factory config. The factory type is derived from ptr\+\_\+type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceyadi_af44c4b60a83f69f69789b994c8ebb0db}\label{namespaceyadi_af44c4b60a83f69f69789b994c8ebb0db}} 
+std\+::string {\bfseries demangle} (const char $\ast$name)
+\item 
+\mbox{\Hypertarget{namespaceyadi_a87df417ee34c190388417a55612ca14f}\label{namespaceyadi_a87df417ee34c190388417a55612ca14f}} 
+{\footnotesize template$<$typename T $>$ }\\std\+::string {\bfseries demangle\+\_\+type} ()
+\item 
+{\footnotesize template$<$typename BT , typename IT , typename... A\+R\+GS$>$ }\\\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ \hyperlink{namespaceyadi_a82056df230021b8fc8be27978644629d}{ctr} (A\+R\+G\+S... args)
+\begin{DoxyCompactList}\small\item\em Construct IT via contructor with the given arguments. This is intended to be used with a yaml binding initializer such as make\+\_\+sequence\+\_\+initializer(\&\hyperlink{namespaceyadi_a82056df230021b8fc8be27978644629d}{ctr$<$\+B\+T, I\+T, My\+Ctr\+Args...$>$}, ...). \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{namespaceyadi_a8552ed4e9350993901558fb0db1e0906}{yaml\+\_\+as} (Y\+A\+M\+L\+::\+Node const \&config)
+\begin{DoxyCompactList}\small\item\em Returns config.\+as$<$\+T$>$(). Signature matches factory initializer. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename IT $>$ }\\\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ \hyperlink{namespaceyadi_a29e6a880477f8ed0163fbfc66aa6e5ba}{init\+\_\+no\+\_\+arg} (Y\+A\+M\+L\+::\+Node const \&)
+\begin{DoxyCompactList}\small\item\em Call no argument constructor. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename IT $>$ }\\\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ \hyperlink{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}{init\+\_\+yaml} (Y\+A\+M\+L\+::\+Node const \&config)
+\begin{DoxyCompactList}\small\item\em Constructs IT via a constructor that accepts Y\+A\+ML and returns as pointer to BT, ptr\+\_\+type\+\_\+t$<$\+B\+T$>$. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}\label{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}} 
+{\footnotesize template$<$typename BT $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+caching\+\_\+initializer} (initializer\+\_\+type\+\_\+t$<$ BT $>$ const \&initializing\+\_\+initializer)
+\item 
+\mbox{\Hypertarget{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}\label{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}} 
+{\footnotesize template$<$typename BT $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+caching\+\_\+initializer} (yadi\+\_\+info\+\_\+t$<$ BT $>$ yi)
+\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer} (F func, std\+::vector$<$ std\+::string $>$ fields)
+\begin{DoxyCompactList}\small\item\em Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as make\+\_\+initializer(\+F). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}\label{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}} 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields)
+\item 
+\mbox{\Hypertarget{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}\label{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}} 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::pair$<$ std\+::string, std\+::string $>$$>$ fields\+\_\+with\+\_\+help)
+\item 
+\mbox{\Hypertarget{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}\label{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}} 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields, std\+::vector$<$ std\+::string $>$ fields\+\_\+help)
+\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}{make\+\_\+sequence\+\_\+initializer} (F func)
+\begin{DoxyCompactList}\small\item\em Creates factory initializer that expects a Y\+A\+ML sequence. The elements of the sequence will be passed as a Y\+A\+ML factory config to the factory of the argument type. The results will be passed in to function func. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ helps=\{\})
+\begin{DoxyCompactList}\small\item\em Makes yadi info with generated help for F. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceyadi_ad014ac420b07a0194cbee5da4fb534b1}\label{namespaceyadi_ad014ac420b07a0194cbee5da4fb534b1}} 
+{\footnotesize template$<$typename T $>$ }\\initializer\+\_\+type\+\_\+t$<$ T $>$ {\bfseries make\+\_\+yaml\+\_\+as\+\_\+initializer} ()
+\item 
+\mbox{\Hypertarget{namespaceyadi_adea1220ea992e73b916e1bc953498928}\label{namespaceyadi_adea1220ea992e73b916e1bc953498928}} 
+{\footnotesize template$<$typename T $>$ }\\yadi\+\_\+info\+\_\+t$<$ T $>$ {\bfseries make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help} ()
+\item 
+Y\+A\+M\+L\+::\+Node \hyperlink{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}{merge\+\_\+yaml} (Y\+A\+M\+L\+::\+Node const \&left, Y\+A\+M\+L\+::\+Node const \&)
+\item 
+{\footnotesize template$<$typename BT $>$ }\\void \hyperlink{namespaceyadi_a848729993f692098bf175774503b80ee}{register\+\_\+type} (std\+::string type, yadi\+\_\+info\+\_\+t$<$ BT $>$ yadis)
+\begin{DoxyCompactList}\small\item\em Equibalent to factory$<$\+B\+T$>$\+::register\+\_\+type(type, yadis) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\void \hyperlink{namespaceyadi_acb78deb2170c9d148eee9194f632b03c}{register\+\_\+type} (std\+::string type, initializer\+\_\+type\+\_\+t$<$ BT $>$ initializer)
+\item 
+{\footnotesize template$<$typename BT , typename IT $>$ }\\void \hyperlink{namespaceyadi_a5041a043acc0144113854035fb8beb2a}{register\+\_\+type} (std\+::string type)
+\begin{DoxyCompactList}\small\item\em Registers type using yaml\+\_\+init function as initializer. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename IT $>$ }\\void \hyperlink{namespaceyadi_ad2b26848cc9dc3459c264cc734308204}{register\+\_\+type\+\_\+no\+\_\+arg} (std\+::string type)
+\begin{DoxyCompactList}\small\item\em Registers type to initializer that will construct IT using default constructor. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\void \hyperlink{namespaceyadi_a5f8e048a8bef5792a7c5b3aae435999d}{register\+\_\+alias} (std\+::string alias, std\+::string type, Y\+A\+M\+L\+::\+Node config)
+\begin{DoxyCompactList}\small\item\em Registers alias to type and config pair. When create is called for alias the passed in and registered configs are merged and the initializer registered to type is called with the result. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\void \hyperlink{namespaceyadi_a0879baf3dca6ee9a7d4387bfca43f8dd}{register\+\_\+aliases} (Y\+A\+M\+L\+::\+Node aliases)
+\begin{DoxyCompactList}\small\item\em Loads aliases from a Y\+A\+ML file. The file should be a map of the format... alias\+: type\+: actual\+Type config\+: ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Y\+A\+DI. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceyadi_ac39d8f532bdf81e833cb117160a6440a}\label{namespaceyadi_ac39d8f532bdf81e833cb117160a6440a}} 
+\index{yadi@{yadi}!create@{create}}
+\index{create@{create}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily template$<$typename FT $>$ \\
+\hyperlink{structyadi_1_1adapter}{adapter}$<$ FT $>$\+::output\+\_\+type yadi\+::create (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{type,  }\item[{Y\+A\+M\+L\+::\+Node const \&}]{config = {\ttfamily \{\}} }\end{DoxyParamCaption})}
+
+
+
+Same as adapter$<$\+F\+T$>$\+::create(type, config);. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em FT} & Type used to derive factory \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a82056df230021b8fc8be27978644629d}\label{namespaceyadi_a82056df230021b8fc8be27978644629d}} 
+\index{yadi@{yadi}!ctr@{ctr}}
+\index{ctr@{ctr}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{ctr()}{ctr()}}
+{\footnotesize\ttfamily template$<$typename BT , typename IT , typename... A\+R\+GS$>$ \\
+\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ yadi\+::ctr (\begin{DoxyParamCaption}\item[{A\+R\+G\+S...}]{args }\end{DoxyParamCaption})}
+
+
+
+Construct IT via contructor with the given arguments. This is intended to be used with a yaml binding initializer such as make\+\_\+sequence\+\_\+initializer(\&\hyperlink{namespaceyadi_a82056df230021b8fc8be27978644629d}{ctr$<$\+B\+T, I\+T, My\+Ctr\+Args...$>$}, ...). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & Base type. \\
+\hline
+{\em IT} & Implementation type. \\
+\hline
+{\em A\+R\+GS} & Argument types of constructor. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em args} & Arguments for constructor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ptr\+\_\+type\+\_\+t$<$\+B\+T$>$ via constructor of IT. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a85138aa0433192beaf4d0e67dd50cb23}\label{namespaceyadi_a85138aa0433192beaf4d0e67dd50cb23}} 
+\index{yadi@{yadi}!from\+\_\+yaml@{from\+\_\+yaml}}
+\index{from\+\_\+yaml@{from\+\_\+yaml}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{from\+\_\+yaml()}{from\_yaml()}}
+{\footnotesize\ttfamily template$<$typename OT $>$ \\
+OT yadi\+::from\+\_\+yaml (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{factory\+\_\+config }\end{DoxyParamCaption})}
+
+
+
+Pulls type and config from Y\+A\+ML. This function is especially usefil when loading nested types from Y\+A\+ML configuration. If factory\+\_\+config is a scalar string it will be used as type. If factory\+\_\+config is a map then \char`\"{}type\char`\"{} and \char`\"{}config\char`\"{} keys will be pulled from it and used as such, unless the base type indicates it should be created directly from yaml. In this case factory\+\_\+config is used as the config passed to the adapter. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em OT} & The desired output type. The factory base type will be derived from this using derive\+\_\+base\+\_\+type\+\_\+t$<$\+O\+T$>$. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em factory\+\_\+config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a829744f635593fef1c05b0f9b01a8aa2}\label{namespaceyadi_a829744f635593fef1c05b0f9b01a8aa2}} 
+\index{yadi@{yadi}!from\+\_\+yaml\+\_\+base@{from\+\_\+yaml\+\_\+base}}
+\index{from\+\_\+yaml\+\_\+base@{from\+\_\+yaml\+\_\+base}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{from\+\_\+yaml\+\_\+base()}{from\_yaml\_base()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$BT$>$ yadi\+::from\+\_\+yaml\+\_\+base (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{config = {\ttfamily \{\}} }\end{DoxyParamCaption})}
+
+
+
+Equivalent to from\+\_\+yaml$<$ptr\+\_\+type\+\_\+t$<$base\+\_\+type$>$$>$(config) 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & The factory baes type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a5c72b55cccde908a9828431855e3b5e5}\label{namespaceyadi_a5c72b55cccde908a9828431855e3b5e5}} 
+\index{yadi@{yadi}!from\+\_\+yamls@{from\+\_\+yamls}}
+\index{from\+\_\+yamls@{from\+\_\+yamls}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{from\+\_\+yamls()}{from\_yamls()}}
+{\footnotesize\ttfamily template$<$typename OT , typename OI $>$ \\
+void yadi\+::from\+\_\+yamls (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{factory\+\_\+configs,  }\item[{OI}]{out }\end{DoxyParamCaption})}
+
+
+
+Populate output iterator from sequence of factory configs (anything from\+\_\+yaml accepts). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+{\em OI} & Output iterator \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em factory\+\_\+configs} & \\
+\hline
+{\em out} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a425268f5a35df74d449b5e1f44f39c22}\label{namespaceyadi_a425268f5a35df74d449b5e1f44f39c22}} 
+\index{yadi@{yadi}!from\+\_\+yamls\+\_\+base@{from\+\_\+yamls\+\_\+base}}
+\index{from\+\_\+yamls\+\_\+base@{from\+\_\+yamls\+\_\+base}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{from\+\_\+yamls\+\_\+base()}{from\_yamls\_base()}}
+{\footnotesize\ttfamily template$<$typename BT , typename OI $>$ \\
+void yadi\+::from\+\_\+yamls\+\_\+base (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{factory\+\_\+configs,  }\item[{OI}]{out }\end{DoxyParamCaption})}
+
+
+
+Equivalent to from\+\_\+yamls$<$ptr\+\_\+type\+\_\+t$<$base\+\_\+type$>$$>$(factory\+\_\+configs, out);. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+{\em OI} & output iterator \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em factory\+\_\+configs} & \\
+\hline
+{\em out} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a29e6a880477f8ed0163fbfc66aa6e5ba}\label{namespaceyadi_a29e6a880477f8ed0163fbfc66aa6e5ba}} 
+\index{yadi@{yadi}!init\+\_\+no\+\_\+arg@{init\+\_\+no\+\_\+arg}}
+\index{init\+\_\+no\+\_\+arg@{init\+\_\+no\+\_\+arg}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{init\+\_\+no\+\_\+arg()}{init\_no\_arg()}}
+{\footnotesize\ttfamily template$<$typename BT , typename IT $>$ \\
+\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ yadi\+::init\+\_\+no\+\_\+arg (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Call no argument constructor. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & Base type. \\
+\hline
+{\em IT} & Implementation type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The pointer type of base type. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}\label{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}} 
+\index{yadi@{yadi}!init\+\_\+yaml@{init\+\_\+yaml}}
+\index{init\+\_\+yaml@{init\+\_\+yaml}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{init\+\_\+yaml()}{init\_yaml()}}
+{\footnotesize\ttfamily template$<$typename BT , typename IT $>$ \\
+\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ yadi\+::init\+\_\+yaml (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{config }\end{DoxyParamCaption})}
+
+
+
+Constructs IT via a constructor that accepts Y\+A\+ML and returns as pointer to BT, ptr\+\_\+type\+\_\+t$<$\+B\+T$>$. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & Use to determine pointer type. \\
+\hline
+{\em IT} & Implementation type. Type to construct \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & Argument to constructor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The constructed type as ptr\+\_\+type\+\_\+t$<$\+B\+T$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}\label{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}} 
+\index{yadi@{yadi}!make\+\_\+map\+\_\+initializer@{make\+\_\+map\+\_\+initializer}}
+\index{make\+\_\+map\+\_\+initializer@{make\+\_\+map\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+map\+\_\+initializer()}{make\_map\_initializer()}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+initializer\+\_\+type\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+map\+\_\+initializer (\begin{DoxyParamCaption}\item[{F}]{func,  }\item[{std\+::vector$<$ std\+::string $>$}]{fields }\end{DoxyParamCaption})}
+
+
+
+Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as make\+\_\+initializer(\+F). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+{\em F} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & \\
+\hline
+{\em fields} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}\label{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}} 
+\index{yadi@{yadi}!make\+\_\+sequence\+\_\+initializer@{make\+\_\+sequence\+\_\+initializer}}
+\index{make\+\_\+sequence\+\_\+initializer@{make\+\_\+sequence\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+sequence\+\_\+initializer()}{make\_sequence\_initializer()}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+initializer\+\_\+type\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+sequence\+\_\+initializer (\begin{DoxyParamCaption}\item[{F}]{func }\end{DoxyParamCaption})}
+
+
+
+Creates factory initializer that expects a Y\+A\+ML sequence. The elements of the sequence will be passed as a Y\+A\+ML factory config to the factory of the argument type. The results will be passed in to function func. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+{\em F} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}\label{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}} 
+\index{yadi@{yadi}!make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help()}{make\_sequence\_initializer\_with\_help()}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+yadi\+\_\+info\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}\item[{F}]{func,  }\item[{std\+::vector$<$ std\+::string $>$}]{helps = {\ttfamily \{\}} }\end{DoxyParamCaption})}
+
+
+
+Makes yadi info with generated help for F. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+{\em F} & Function type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & Function to find yaml to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Generated yadi info 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}\label{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}} 
+\index{yadi@{yadi}!merge\+\_\+yaml@{merge\+\_\+yaml}}
+\index{merge\+\_\+yaml@{merge\+\_\+yaml}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{merge\+\_\+yaml()}{merge\_yaml()}}
+{\footnotesize\ttfamily Y\+A\+M\+L\+::\+Node yadi\+::merge\+\_\+yaml (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{left,  }\item[{Y\+A\+M\+L\+::\+Node const \&}]{right }\end{DoxyParamCaption})}
+
+If both types are maps then they are merged with left taking priority. If right is not defined or is null then left. If left is not defined or is null then right. Otherwise, error. 
+\begin{DoxyParams}{Parameters}
+{\em left} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_ace9d761848d60ab00f257fdd9f5f2f21}\label{namespaceyadi_ace9d761848d60ab00f257fdd9f5f2f21}} 
+\index{yadi@{yadi}!parse@{parse}}
+\index{parse@{parse}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily template$<$typename OT $>$ \\
+void yadi\+::parse (\begin{DoxyParamCaption}\item[{OT \&}]{out,  }\item[{Y\+A\+M\+L\+::\+Node const \&}]{factory\+\_\+config }\end{DoxyParamCaption})}
+
+
+
+Populate out from factory config. The factory type is derived from ptr\+\_\+type. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em OT} & output type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em out} & \\
+\hline
+{\em factory\+\_\+config} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a5f8e048a8bef5792a7c5b3aae435999d}\label{namespaceyadi_a5f8e048a8bef5792a7c5b3aae435999d}} 
+\index{yadi@{yadi}!register\+\_\+alias@{register\+\_\+alias}}
+\index{register\+\_\+alias@{register\+\_\+alias}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+alias()}{register\_alias()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+void yadi\+::register\+\_\+alias (\begin{DoxyParamCaption}\item[{std\+::string}]{alias,  }\item[{std\+::string}]{type,  }\item[{Y\+A\+M\+L\+::\+Node}]{config }\end{DoxyParamCaption})}
+
+
+
+Registers alias to type and config pair. When create is called for alias the passed in and registered configs are merged and the initializer registered to type is called with the result. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em alias} & \\
+\hline
+{\em type} & \\
+\hline
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a0879baf3dca6ee9a7d4387bfca43f8dd}\label{namespaceyadi_a0879baf3dca6ee9a7d4387bfca43f8dd}} 
+\index{yadi@{yadi}!register\+\_\+aliases@{register\+\_\+aliases}}
+\index{register\+\_\+aliases@{register\+\_\+aliases}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+aliases()}{register\_aliases()}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+void yadi\+::register\+\_\+aliases (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node}]{aliases }\end{DoxyParamCaption})}
+
+
+
+Loads aliases from a Y\+A\+ML file. The file should be a map of the format... alias\+: type\+: actual\+Type config\+: ... 
+
+For each entry \hyperlink{namespaceyadi_a5f8e048a8bef5792a7c5b3aae435999d}{register\+\_\+alias()} is called. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em aliases} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a848729993f692098bf175774503b80ee}\label{namespaceyadi_a848729993f692098bf175774503b80ee}} 
+\index{yadi@{yadi}!register\+\_\+type@{register\+\_\+type}}
+\index{register\+\_\+type@{register\+\_\+type}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+type()}{register\_type()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+void yadi\+::register\+\_\+type (\begin{DoxyParamCaption}\item[{std\+::string}]{type,  }\item[{yadi\+\_\+info\+\_\+t$<$ BT $>$}]{yadis }\end{DoxyParamCaption})}
+
+
+
+Equibalent to factory$<$\+B\+T$>$\+::register\+\_\+type(type, yadis) 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em initializer} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_acb78deb2170c9d148eee9194f632b03c}\label{namespaceyadi_acb78deb2170c9d148eee9194f632b03c}} 
+\index{yadi@{yadi}!register\+\_\+type@{register\+\_\+type}}
+\index{register\+\_\+type@{register\+\_\+type}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+type()}{register\_type()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+void yadi\+::register\+\_\+type (\begin{DoxyParamCaption}\item[{std\+::string}]{type,  }\item[{initializer\+\_\+type\+\_\+t$<$ BT $>$}]{initializer }\end{DoxyParamCaption})}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+{\em initializer} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a5041a043acc0144113854035fb8beb2a}\label{namespaceyadi_a5041a043acc0144113854035fb8beb2a}} 
+\index{yadi@{yadi}!register\+\_\+type@{register\+\_\+type}}
+\index{register\+\_\+type@{register\+\_\+type}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+type()}{register\_type()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename BT , typename IT $>$ \\
+void yadi\+::register\+\_\+type (\begin{DoxyParamCaption}\item[{std\+::string}]{type }\end{DoxyParamCaption})}
+
+
+
+Registers type using yaml\+\_\+init function as initializer. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & The factory type to use \\
+\hline
+{\em IT} & The type to create \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The name to register the type under \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_ad2b26848cc9dc3459c264cc734308204}\label{namespaceyadi_ad2b26848cc9dc3459c264cc734308204}} 
+\index{yadi@{yadi}!register\+\_\+type\+\_\+no\+\_\+arg@{register\+\_\+type\+\_\+no\+\_\+arg}}
+\index{register\+\_\+type\+\_\+no\+\_\+arg@{register\+\_\+type\+\_\+no\+\_\+arg}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{register\+\_\+type\+\_\+no\+\_\+arg()}{register\_type\_no\_arg()}}
+{\footnotesize\ttfamily template$<$typename BT , typename IT $>$ \\
+void yadi\+::register\+\_\+type\+\_\+no\+\_\+arg (\begin{DoxyParamCaption}\item[{std\+::string}]{type }\end{DoxyParamCaption})}
+
+
+
+Registers type to initializer that will construct IT using default constructor. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+{\em IT} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceyadi_a0058efe8131ffa9184aa772e88c8f160}\label{namespaceyadi_a0058efe8131ffa9184aa772e88c8f160}} 
+\index{yadi@{yadi}!type\+\_\+by\+\_\+value\+\_\+key@{type\+\_\+by\+\_\+value\+\_\+key}}
+\index{type\+\_\+by\+\_\+value\+\_\+key@{type\+\_\+by\+\_\+value\+\_\+key}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{type\+\_\+by\+\_\+value\+\_\+key()}{type\_by\_value\_key()}}
+{\footnotesize\ttfamily std\+::string const  \& yadi\+::type\+\_\+by\+\_\+value\+\_\+key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the key used for initializers creating by value directly from yaml. 
+
+\begin{DoxyReturn}{Returns}
+The key. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceyadi_a8552ed4e9350993901558fb0db1e0906}\label{namespaceyadi_a8552ed4e9350993901558fb0db1e0906}} 
+\index{yadi@{yadi}!yaml\+\_\+as@{yaml\+\_\+as}}
+\index{yaml\+\_\+as@{yaml\+\_\+as}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{yaml\+\_\+as()}{yaml\_as()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T yadi\+::yaml\+\_\+as (\begin{DoxyParamCaption}\item[{Y\+A\+M\+L\+::\+Node const \&}]{config }\end{DoxyParamCaption})}
+
+
+
+Returns config.\+as$<$\+T$>$(). Signature matches factory initializer. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
