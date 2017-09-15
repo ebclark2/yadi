@@ -1,0 +1,131 @@
+Y\+A\+DI aims to provide non-\/intrusive run time dependency injection via human readable Y\+A\+ML config with generated help information.
+
+Example help information, see test/yadi/example.\+cpp
+
+
+\begin{DoxyCode}
+double
+    "type\_by\_value" -> Direct conversion using yaml.as<double>()
+float
+    "type\_by\_value" -> Direct conversion using yaml.as<float>()
+int
+    "type\_by\_value" -> Direct conversion using yaml.as<int>()
+std::string
+    "type\_by\_value" -> Direct conversion using yaml.as<std::string>()
+yadi::car
+    "type\_by\_value" -> Expects yaml map with fields:
+        make: std::string, The make of the car!
+        power\_plant: yadi::power\_plant, What makes the car go!
+yadi::power\_plant
+    "electric" -> Expects yaml sequence with types:
+         - std::string, Origin of motor
+         - int, Watts
+         - list<int>, Random numbers for testing?
+    "gas" -> Expects yaml map with fields:
+        make: std::string, Engine make
+        cylinder\_count: int, The number of cylinders
+        bore: float, Cylidner bore in inches
+        stroke: float, Cylinder stroke in inches
+        vendors: set<std::string>, Vendors providing parts for engine
+\end{DoxyCode}
+ Example configuration 
+\begin{DoxyCode}
+---
+- make: "gm"
+  power\_plant:
+    type: gas
+    config:
+      make: LQ4
+      cylinder\_count: 8
+      bore: 3.72
+      stroke: 3.44
+      vendors:
+        - Currie
+        - Synergy
+        - Some other vendor
+- make: "tesla"
+  power\_plant:
+    type: electric
+    config:
+      - USA
+      - 1200
+      - - 1
+        - 2
+        - 3
+        - 4
+        - 5
+\end{DoxyCode}
+ Example classes 
+\begin{DoxyCode}
+\textcolor{keyword}{struct }power\_plant \{
+    \textcolor{keyword}{virtual} ~power\_plant() \{\}
+
+    \textcolor{keyword}{virtual} \textcolor{keywordtype}{int} power() \textcolor{keyword}{const} = 0;
+\};
+
+\textcolor{keyword}{struct }electric : \textcolor{keyword}{public} power\_plant \{
+    electric(std::string make, \textcolor{keywordtype}{int} watts, std::vector<int> numbers)
+        : make(std::move(make)), watts(std::move(watts)), numbers(numbers) \{\}
+
+    \textcolor{keywordtype}{int} power()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} this->watts; \}
+
+    std::string make;
+    \textcolor{keywordtype}{int} watts;
+    std::vector<int> numbers;
+\};
+
+\textcolor{keyword}{struct }gas : \textcolor{keyword}{public} power\_plant \{
+    gas(std::string make, \textcolor{keywordtype}{int} cylinder\_count, \textcolor{keywordtype}{float} bore, \textcolor{keywordtype}{float} stroke, std::set<std::string> vendors)
+        : make(make), cylinder\_count(cylinder\_count), bore(bore), stroke(stroke), vendors(std::move(vendors
+      )) \{\}
+
+    \textcolor{keywordtype}{int} power()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} this->bore * this->stroke * this->cylinder\_count; \}
+
+    std::string make;
+    \textcolor{keywordtype}{int} cylinder\_count;
+    \textcolor{keywordtype}{float} bore;
+    \textcolor{keywordtype}{float} stroke;
+    std::set<std::string> vendors;
+\};
+
+\textcolor{keyword}{struct }car \{
+    car(std::string make, std::unique\_ptr<power\_plant>&& motor) : make(std::move(make)), motor(std::move(
+      motor)) \{\}
+
+    std::string make;
+    std::unique\_ptr<power\_plant> motor;
+\};
+\end{DoxyCode}
+ \subsubsection*{Build requirements}
+
+
+\begin{DoxyItemize}
+\item c++14
+\item conan.\+io, see \href{http://conan.io}{\tt http\+://conan.\+io}
+\item edsidea conan remote, {\ttfamily conan remote add $<$R\+E\+M\+O\+TE$>$ \href{https://api.bintray.com/conan/edsidea/edsidea}{\tt https\+://api.\+bintray.\+com/conan/edsidea/edsidea}} where {\ttfamily $<$R\+E\+M\+O\+TE$>$} is your name for this remote
+\end{DoxyItemize}
+
+\subsubsection*{Building from repository}
+
+
+\begin{DoxyItemize}
+\item mkdir build
+\item cd build
+\item conan install .. --build missing
+\item conan build ..
+\item ctest
+\end{DoxyItemize}
+
+\subsubsection*{Definitions}
+
+
+\begin{DoxyItemize}
+\item base type\+: The type a factory instantiates. factory$<$foo$>$ would have a base type of foo.
+\item ptr type\+: The type created by a factory. The default pointer type is std\+::unique\+\_\+ptr$<$base\+\_\+type$>$. Returning by value is possible but implies no inheritance is used. This name is poor and will change soon.
+\item output type\+: The return type of a create function. By default the base types pointer type is used, but other types may be requested. Anything output type that\textquotesingle{}s true for std\+::is\+\_\+convertible$<$output\+\_\+type, base\+\_\+type$>$ is allowed and adapters may facilitate other conversions.
+\item initializer\+: A function capable of instantiaing the base type of a factory.
+\item adapter\+: A layer on top of factory$<$foo$>$\+::create to allow types such as templated containers to be created without having to register initializers for each element type.
+\item type\+: A string identifying an initializer.
+\item config\+: Y\+A\+ML to be passed to an initializer.
+\item factory config\+: Y\+A\+ML containing both type information and config to be passed to an initializer. 
+\end{DoxyItemize}
