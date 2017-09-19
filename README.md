@@ -1,7 +1,7 @@
 # YADI ![Build Status](https://travis-ci.org/ebclark2/yadi.svg?branch=master) [Documentation](https://ebclark2.github.io/yadi/)
 YADI aims to provide non-intrusive run time dependency injection via human readable YAML config with generated help information.  
 
-Example help information, see test/yadi/example.cpp
+Example help information, see [test/yadi/example.cpp](https://github.com/ebclark2/yadi/blob/master/test/yadi/example.cpp)
 
 ```text
 #base_type
