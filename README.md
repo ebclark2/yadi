@@ -4,6 +4,9 @@ YADI aims to provide non-intrusive run time dependency injection via human reada
 Example help information, see test/yadi/example.cpp
 
 ```text
+#base_type
+#    "implementation_type" -> Help information
+#        continued help information...
 double
 	"type_by_value" -> Direct conversion using yaml.as<double>()
 float
