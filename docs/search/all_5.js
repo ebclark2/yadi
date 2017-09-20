@@ -7,6 +7,5 @@ var searchData=
   ['make_5fsequence_5finitializer_5fwith_5fhelp',['make_sequence_initializer_with_help',['../namespaceyadi.html#aba056e293eb266e6ae286c6480ebe667',1,'yadi']]],
   ['make_5fyaml_5fas_5finitializer',['make_yaml_as_initializer',['../namespaceyadi.html#aa1f9807cc4def04330e0f1e4dd480c9f',1,'yadi::make_yaml_as_initializer()'],['../namespaceyadi.html#afb3e57191502ac483355c06b47fa228a',1,'yadi::make_yaml_as_initializer()']]],
   ['make_5fyaml_5fas_5finitializer_5fwith_5fhelp',['make_yaml_as_initializer_with_help',['../namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a',1,'yadi::make_yaml_as_initializer_with_help()'],['../namespaceyadi.html#ac1095a9041ff52bd8df8ccd475fc18fc',1,'yadi::make_yaml_as_initializer_with_help()']]],
-  ['merge_5fyaml',['merge_yaml',['../namespaceyadi.html#a495ab0c09cfb0aba37fd2115350d81d9',1,'yadi']]],
-  ['model',['model',['../structyadi_1_1yadi__help__fetcher_1_1model.html',1,'yadi::yadi_help_fetcher']]]
+  ['merge_5fyaml',['merge_yaml',['../namespaceyadi.html#a495ab0c09cfb0aba37fd2115350d81d9',1,'yadi']]]
 ];

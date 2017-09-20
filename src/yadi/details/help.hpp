@@ -24,6 +24,7 @@ namespace yadi {
  * information.  Only the help information is accessed.
  */
 struct yadi_help_fetcher {
+    // \cond DEV_DOCS
     struct concept {
         virtual std::string get_help(std::string const& type) const = 0;
 
@@ -61,6 +62,7 @@ struct yadi_help_fetcher {
 
         T const& types;
     };
+    // \endcond
 
     yadi_help_fetcher();
 
