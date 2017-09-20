@@ -85,6 +85,9 @@ struct factory {
     using initializer_type = std::function<ptr_type_t<base_type>(YAML::Node)>;
     using ptr_type = ptr_type_t<base_type>;
 
+    /**
+     * @brief Helps initialier and help informations for a type.
+     */
     struct yadi_info {
         initializer_type initializer;  ///< Initializer used to create an instance of a type.
         std::string help;              ///< Help information for the initializer.
