@@ -75,6 +75,10 @@ template <typename BT>
 using ptr_type_t = typename factory_traits<BT>::ptr_type;
 
 // TODO YADI_DECL and YADI_DEFN macros with bit to add factory type to something for help retrieval
+/**
+ * @brief A factory stores initializers and help informations for a given base type.
+ * @tparam BT base type
+ */
 template <typename BT>
 struct factory {
     using base_type = BT;

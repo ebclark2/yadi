@@ -19,13 +19,11 @@
  * @brief YADI
  */
 namespace yadi {
-// \cond DEV_DOCS
-namespace details {
 struct yadi_help_fetcher {
     struct concept {
-        virtual std::string getHelp(std::string const& type) const = 0;
+        virtual std::string get_help(std::string const& type) const = 0;
 
-        virtual std::vector<std::string> getTypes() const = 0;
+        virtual std::vector<std::string> get_types() const = 0;
 
         virtual std::unique_ptr<concept> clone() const = 0;
     };
@@ -34,7 +32,7 @@ struct yadi_help_fetcher {
     struct model : public concept {
         model(T const& types) : types(types) {}
 
-        std::string getHelp(std::string const& type) const override {
+        std::string get_help(std::string const& type) const override {
             auto types_iter = this->types.find(type);
             if (types_iter == this->types.end()) {
                 throw std::runtime_error("Type \"" + type + "\" not found");
@@ -43,7 +41,7 @@ struct yadi_help_fetcher {
             return types_iter->second.help;
         }
 
-        std::vector<std::string> getTypes() const override {
+        std::vector<std::string> get_types() const override {
             std::vector<std::string> ret;
             for (auto const& entry : this->types) {
                 ret.push_back(entry.first);
@@ -69,17 +67,20 @@ struct yadi_help_fetcher {
 
     yadi_help_fetcher& operator=(yadi_help_fetcher const& other);
 
-    inline std::string get_help(std::string const& type) const { return this->impl->getHelp(type); }
+    inline std::string get_help(std::string const& type) const { return this->impl->get_help(type); }
 
-    inline std::vector<std::string> get_types() const { return this->impl->getTypes(); }
+    inline std::vector<std::string> get_types() const { return this->impl->get_types(); }
 
    private:
     std::unique_ptr<concept> impl;
 };
-}  // namespace details
-// \endcond
+
+/**
+ * @brief Provides help information without requiring the base type.  yadi_help also allows a human readable name to
+ * be assigned to a base type.  For example, std::string is easier to read then std::basic_string<char, ...>.
+ */
 struct yadi_help {
-    using help_store = std::map<std::string, details::yadi_help_fetcher>;
+    using help_store = std::map<std::string, yadi_help_fetcher>;
     using name_store = std::map<std::type_index, std::string>;
 
     template <typename BT, typename TS>
