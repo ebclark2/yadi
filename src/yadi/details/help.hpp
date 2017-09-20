@@ -19,6 +19,7 @@
  * @brief YADI
  */
 namespace yadi {
+// \cond DEV_DOCS
 namespace details {
 struct yadi_help_fetcher {
     struct concept {
@@ -76,7 +77,7 @@ struct yadi_help_fetcher {
     std::unique_ptr<concept> impl;
 };
 }  // namespace details
-
+// \endcond
 struct yadi_help {
     using help_store = std::map<std::string, details::yadi_help_fetcher>;
     using name_store = std::map<std::type_index, std::string>;

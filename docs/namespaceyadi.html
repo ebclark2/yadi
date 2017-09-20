@@ -152,29 +152,29 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:afde7bc09c5c23344ded1f10f21386272"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceyadi.html#a92290eb27cd90666aa87b17d854af9fe">ptr_type_t</a>&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#afde7bc09c5c23344ded1f10f21386272">init_yaml</a> (YAML::Node const &amp;config)</td></tr>
 <tr class="memdesc:afde7bc09c5c23344ded1f10f21386272"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs IT via a constructor that accepts YAML and returns as pointer to BT, ptr_type_t&lt;BT&gt;.  <a href="#afde7bc09c5c23344ded1f10f21386272">More...</a><br /></td></tr>
 <tr class="separator:afde7bc09c5c23344ded1f10f21386272"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97efcea8efe1e35d98961c88e21d5b31"><td class="memTemplParams" colspan="2"><a id="a97efcea8efe1e35d98961c88e21d5b31"></a>
-template&lt;typename BT &gt; </td></tr>
-<tr class="memitem:a97efcea8efe1e35d98961c88e21d5b31"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_caching_initializer</b> (initializer_type_t&lt; BT &gt; const &amp;initializing_initializer)</td></tr>
+<tr class="memitem:a97efcea8efe1e35d98961c88e21d5b31"><td class="memTemplParams" colspan="2">template&lt;typename BT &gt; </td></tr>
+<tr class="memitem:a97efcea8efe1e35d98961c88e21d5b31"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#a97efcea8efe1e35d98961c88e21d5b31">make_caching_initializer</a> (initializer_type_t&lt; BT &gt; const &amp;initializing_initializer)</td></tr>
+<tr class="memdesc:a97efcea8efe1e35d98961c88e21d5b31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps initializer in caching functor. The wrapped initializer must produce a shared pointer. A weak pointer to the created shared pointer is stored upon first creation. In subsequence calls the weak pointer is checking and used if it's still valid, otherwise a new shared pointer is created and the weak pointer is updated.  <a href="#a97efcea8efe1e35d98961c88e21d5b31">More...</a><br /></td></tr>
 <tr class="separator:a97efcea8efe1e35d98961c88e21d5b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71eac695c975b9f2b7f9d9611725b94e"><td class="memTemplParams" colspan="2"><a id="a71eac695c975b9f2b7f9d9611725b94e"></a>
-template&lt;typename BT &gt; </td></tr>
-<tr class="memitem:a71eac695c975b9f2b7f9d9611725b94e"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_caching_initializer</b> (yadi_info_t&lt; BT &gt; yi)</td></tr>
+<tr class="memitem:a71eac695c975b9f2b7f9d9611725b94e"><td class="memTemplParams" colspan="2">template&lt;typename BT &gt; </td></tr>
+<tr class="memitem:a71eac695c975b9f2b7f9d9611725b94e"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#a71eac695c975b9f2b7f9d9611725b94e">make_caching_initializer</a> (yadi_info_t&lt; BT &gt; yi)</td></tr>
+<tr class="memdesc:a71eac695c975b9f2b7f9d9611725b94e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function which updated just the initializer of a yadi info. See make_caching_initializer(initializer_type_t&lt;BT&gt;)  <a href="#a71eac695c975b9f2b7f9d9611725b94e">More...</a><br /></td></tr>
 <tr class="separator:a71eac695c975b9f2b7f9d9611725b94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904dc2ee15dbdedd1b2dac4e0420fe15"><td class="memTemplParams" colspan="2">template&lt;typename BT , typename F &gt; </td></tr>
 <tr class="memitem:a904dc2ee15dbdedd1b2dac4e0420fe15"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15">make_map_initializer</a> (F func, std::vector&lt; std::string &gt; fields)</td></tr>
-<tr class="memdesc:a904dc2ee15dbdedd1b2dac4e0420fe15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it's treated the behavior is the same as make_initializer(F).  <a href="#a904dc2ee15dbdedd1b2dac4e0420fe15">More...</a><br /></td></tr>
+<tr class="memdesc:a904dc2ee15dbdedd1b2dac4e0420fe15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it's treated the behavior is the same as <a class="el" href="namespaceyadi.html#ac81e360a765ce7e454fa3971f1f06cdd" title="Creates factory initializer that expects a YAML sequence. The elements of the sequence will be passed...">make_sequence_initializer(F)</a>.  <a href="#a904dc2ee15dbdedd1b2dac4e0420fe15">More...</a><br /></td></tr>
 <tr class="separator:a904dc2ee15dbdedd1b2dac4e0420fe15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3b75d9038a0e5b77482456af2311b0d"><td class="memTemplParams" colspan="2"><a id="ad3b75d9038a0e5b77482456af2311b0d"></a>
-template&lt;typename BT , typename F &gt; </td></tr>
-<tr class="memitem:ad3b75d9038a0e5b77482456af2311b0d"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_map_initializer_with_help</b> (F func, std::vector&lt; std::string &gt; fields)</td></tr>
+<tr class="memitem:ad3b75d9038a0e5b77482456af2311b0d"><td class="memTemplParams" colspan="2">template&lt;typename BT , typename F &gt; </td></tr>
+<tr class="memitem:ad3b75d9038a0e5b77482456af2311b0d"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#ad3b75d9038a0e5b77482456af2311b0d">make_map_initializer_with_help</a> (F func, std::vector&lt; std::string &gt; fields)</td></tr>
+<tr class="memdesc:ad3b75d9038a0e5b77482456af2311b0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on fields.  <a href="#ad3b75d9038a0e5b77482456af2311b0d">More...</a><br /></td></tr>
 <tr class="separator:ad3b75d9038a0e5b77482456af2311b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="memTemplParams" colspan="2"><a id="acc00952238c78dc6fbfc89bfe6deb8ee"></a>
-template&lt;typename BT , typename F &gt; </td></tr>
-<tr class="memitem:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_map_initializer_with_help</b> (F func, std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; fields_with_help)</td></tr>
+<tr class="memitem:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="memTemplParams" colspan="2">template&lt;typename BT , typename F &gt; </td></tr>
+<tr class="memitem:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#acc00952238c78dc6fbfc89bfe6deb8ee">make_map_initializer_with_help</a> (F func, std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; fields_with_help)</td></tr>
+<tr class="memdesc:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on passed in pairs, which the first entry in a pair is a yaml map key, and the second describes the field.  <a href="#acc00952238c78dc6fbfc89bfe6deb8ee">More...</a><br /></td></tr>
 <tr class="separator:acc00952238c78dc6fbfc89bfe6deb8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="memTemplParams" colspan="2"><a id="aa63cb736dc5f8cbf6f6aad126825ab3d"></a>
-template&lt;typename BT , typename F &gt; </td></tr>
-<tr class="memitem:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_map_initializer_with_help</b> (F func, std::vector&lt; std::string &gt; fields, std::vector&lt; std::string &gt; fields_help)</td></tr>
+<tr class="memitem:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="memTemplParams" colspan="2">template&lt;typename BT , typename F &gt; </td></tr>
+<tr class="memitem:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#aa63cb736dc5f8cbf6f6aad126825ab3d">make_map_initializer_with_help</a> (F func, std::vector&lt; std::string &gt; fields, std::vector&lt; std::string &gt; fields_help)</td></tr>
+<tr class="memdesc:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on passed in vectors. The fields vector provides yaml map keys, and the fields_help vector provides help for the field at the same index.  <a href="#aa63cb736dc5f8cbf6f6aad126825ab3d">More...</a><br /></td></tr>
 <tr class="separator:aa63cb736dc5f8cbf6f6aad126825ab3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac81e360a765ce7e454fa3971f1f06cdd"><td class="memTemplParams" colspan="2">template&lt;typename BT , typename F &gt; </td></tr>
 <tr class="memitem:ac81e360a765ce7e454fa3971f1f06cdd"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#ac81e360a765ce7e454fa3971f1f06cdd">make_sequence_initializer</a> (F func)</td></tr>
@@ -184,14 +184,22 @@ template&lt;typename BT , typename F &gt; </td></tr>
 <tr class="memitem:aba056e293eb266e6ae286c6480ebe667"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#aba056e293eb266e6ae286c6480ebe667">make_sequence_initializer_with_help</a> (F func, std::vector&lt; std::string &gt; helps={})</td></tr>
 <tr class="memdesc:aba056e293eb266e6ae286c6480ebe667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes yadi info with generated help for F.  <a href="#aba056e293eb266e6ae286c6480ebe667">More...</a><br /></td></tr>
 <tr class="separator:aba056e293eb266e6ae286c6480ebe667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad014ac420b07a0194cbee5da4fb534b1"><td class="memTemplParams" colspan="2"><a id="ad014ac420b07a0194cbee5da4fb534b1"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad014ac420b07a0194cbee5da4fb534b1"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_yaml_as_initializer</b> ()</td></tr>
-<tr class="separator:ad014ac420b07a0194cbee5da4fb534b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adea1220ea992e73b916e1bc953498928"><td class="memTemplParams" colspan="2"><a id="adea1220ea992e73b916e1bc953498928"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:adea1220ea992e73b916e1bc953498928"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_yaml_as_initializer_with_help</b> ()</td></tr>
-<tr class="separator:adea1220ea992e73b916e1bc953498928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1f9807cc4def04330e0f1e4dd480c9f"><td class="memTemplParams" colspan="2">template&lt;typename BT &gt; </td></tr>
+<tr class="memitem:aa1f9807cc4def04330e0f1e4dd480c9f"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#aa1f9807cc4def04330e0f1e4dd480c9f">make_yaml_as_initializer</a> ()</td></tr>
+<tr class="memdesc:aa1f9807cc4def04330e0f1e4dd480c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an initializer which simply calls yaml.as&lt;BT&gt;() for some YAML node yaml.  <a href="#aa1f9807cc4def04330e0f1e4dd480c9f">More...</a><br /></td></tr>
+<tr class="separator:aa1f9807cc4def04330e0f1e4dd480c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bd6415252b551f9ffae445d25e30b7a"><td class="memTemplParams" colspan="2">template&lt;typename BT &gt; </td></tr>
+<tr class="memitem:a7bd6415252b551f9ffae445d25e30b7a"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; BT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a">make_yaml_as_initializer_with_help</a> ()</td></tr>
+<tr class="memdesc:a7bd6415252b551f9ffae445d25e30b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a" title="See make_yaml_as_initializer_with_help(). Adds help string with the yaml.as&lt;BT&gt;() call info...">make_yaml_as_initializer_with_help()</a>. Adds help string with the yaml.as&lt;BT&gt;() call info.  <a href="#a7bd6415252b551f9ffae445d25e30b7a">More...</a><br /></td></tr>
+<tr class="separator:a7bd6415252b551f9ffae445d25e30b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb3e57191502ac483355c06b47fa228a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:afb3e57191502ac483355c06b47fa228a"><td class="memTemplItemLeft" align="right" valign="top">initializer_type_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#afb3e57191502ac483355c06b47fa228a">make_yaml_as_initializer</a> ()</td></tr>
+<tr class="memdesc:afb3e57191502ac483355c06b47fa228a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an initializer which simply calls yaml.as&lt;BT&gt;() for some YAML node yaml.  <a href="#afb3e57191502ac483355c06b47fa228a">More...</a><br /></td></tr>
+<tr class="separator:afb3e57191502ac483355c06b47fa228a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1095a9041ff52bd8df8ccd475fc18fc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac1095a9041ff52bd8df8ccd475fc18fc"><td class="memTemplItemLeft" align="right" valign="top">yadi_info_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#ac1095a9041ff52bd8df8ccd475fc18fc">make_yaml_as_initializer_with_help</a> ()</td></tr>
+<tr class="memdesc:ac1095a9041ff52bd8df8ccd475fc18fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a" title="See make_yaml_as_initializer_with_help(). Adds help string with the yaml.as&lt;BT&gt;() call info...">make_yaml_as_initializer_with_help()</a>. Adds help string with the yaml.as&lt;BT&gt;() call info.  <a href="#ac1095a9041ff52bd8df8ccd475fc18fc">More...</a><br /></td></tr>
+<tr class="separator:ac1095a9041ff52bd8df8ccd475fc18fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a495ab0c09cfb0aba37fd2115350d81d9"><td class="memItemLeft" align="right" valign="top">YAML::Node&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceyadi.html#a495ab0c09cfb0aba37fd2115350d81d9">merge_yaml</a> (YAML::Node const &amp;left, YAML::Node const &amp;)</td></tr>
 <tr class="separator:a495ab0c09cfb0aba37fd2115350d81d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a848729993f692098bf175774503b80ee"><td class="memTemplParams" colspan="2">template&lt;typename BT &gt; </td></tr>
@@ -304,7 +312,7 @@ template&lt;typename BT , typename IT , typename... ARGS&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ptr_type_t&lt;BT&gt; via constructor of IT. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00322">322</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00374">374</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -506,7 +514,7 @@ template&lt;typename BT , typename IT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The pointer type of base type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00317">317</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00369">369</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -544,7 +552,81 @@ template&lt;typename BT , typename IT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The constructed type as ptr_type_t&lt;BT&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00312">312</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00364">364</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a97efcea8efe1e35d98961c88e21d5b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97efcea8efe1e35d98961c88e21d5b31">&#9670;&nbsp;</a></span>make_caching_initializer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">initializer_type_t&lt; BT &gt; yadi::make_caching_initializer </td>
+          <td>(</td>
+          <td class="paramtype">initializer_type_t&lt; BT &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>initializing_initializer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wraps initializer in caching functor. The wrapped initializer must produce a shared pointer. A weak pointer to the created shared pointer is stored upon first creation. In subsequence calls the weak pointer is checking and used if it's still valid, otherwise a new shared pointer is created and the weak pointer is updated. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initializing_initializer</td><td>The initializer to wrap, which is used to create the shared pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An existing instance if it exists, otherwise a new instance is created. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00459">459</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a71eac695c975b9f2b7f9d9611725b94e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71eac695c975b9f2b7f9d9611725b94e">&#9670;&nbsp;</a></span>make_caching_initializer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt; BT &gt; yadi::make_caching_initializer </td>
+          <td>(</td>
+          <td class="paramtype">yadi_info_t&lt; BT &gt;&#160;</td>
+          <td class="paramname"><em>yi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper function which updated just the initializer of a yadi info. See make_caching_initializer(initializer_type_t&lt;BT&gt;) </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yi</td><td>The yadi info to update </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The passed in yadi info with updated initializer. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00485">485</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -576,7 +658,7 @@ template&lt;typename BT , typename F &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it's treated the behavior is the same as make_initializer(F). </p>
+<p>Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it's treated the behavior is the same as <a class="el" href="namespaceyadi.html#ac81e360a765ce7e454fa3971f1f06cdd" title="Creates factory initializer that expects a YAML sequence. The elements of the sequence will be passed...">make_sequence_initializer(F)</a>. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">BT</td><td></td></tr>
@@ -593,7 +675,161 @@ template&lt;typename BT , typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00349">349</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00401">401</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad3b75d9038a0e5b77482456af2311b0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b75d9038a0e5b77482456af2311b0d">&#9670;&nbsp;</a></span>make_map_initializer_with_help() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT , typename F &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt; BT &gt; yadi::make_map_initializer_with_help </td>
+          <td>(</td>
+          <td class="paramtype">F&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>fields</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on fields. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+    <tr><td class="paramname">F</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td></td></tr>
+    <tr><td class="paramname">fields</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00415">415</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc00952238c78dc6fbfc89bfe6deb8ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc00952238c78dc6fbfc89bfe6deb8ee">&#9670;&nbsp;</a></span>make_map_initializer_with_help() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT , typename F &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt; BT &gt; yadi::make_map_initializer_with_help </td>
+          <td>(</td>
+          <td class="paramtype">F&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>fields_with_help</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on passed in pairs, which the first entry in a pair is a yaml map key, and the second describes the field. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+    <tr><td class="paramname">F</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td></td></tr>
+    <tr><td class="paramname">fields_with_help</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00420">420</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa63cb736dc5f8cbf6f6aad126825ab3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa63cb736dc5f8cbf6f6aad126825ab3d">&#9670;&nbsp;</a></span>make_map_initializer_with_help() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT , typename F &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt; BT &gt; yadi::make_map_initializer_with_help </td>
+          <td>(</td>
+          <td class="paramtype">F&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>fields</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>fields_help</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="namespaceyadi.html#a904dc2ee15dbdedd1b2dac4e0420fe15" title="Expects a YAML map. The fields are pulled from the map and their values are used to create a sequence...">make_map_initializer(F, std::vector&lt;std::string&gt;)</a>. Adds generated help information based on passed in vectors. The fields vector provides yaml map keys, and the fields_help vector provides help for the field at the same index. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td></td></tr>
+    <tr><td class="paramname">F</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td></td></tr>
+    <tr><td class="paramname">fields</td><td></td></tr>
+    <tr><td class="paramname">fields_help</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00433">433</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -631,7 +867,7 @@ template&lt;typename BT , typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00327">327</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00379">379</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -679,7 +915,127 @@ template&lt;typename BT , typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Generated yadi info </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00333">333</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00385">385</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa1f9807cc4def04330e0f1e4dd480c9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1f9807cc4def04330e0f1e4dd480c9f">&#9670;&nbsp;</a></span>make_yaml_as_initializer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">initializer_type_t&lt;BT&gt; yadi::make_yaml_as_initializer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an initializer which simply calls yaml.as&lt;BT&gt;() for some YAML node yaml. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the yaml.as&lt;BT&gt;() call. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00353">353</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afb3e57191502ac483355c06b47fa228a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb3e57191502ac483355c06b47fa228a">&#9670;&nbsp;</a></span>make_yaml_as_initializer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">initializer_type_t&lt;T&gt; yadi::make_yaml_as_initializer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an initializer which simply calls yaml.as&lt;BT&gt;() for some YAML node yaml. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td>base type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the yaml.as&lt;BT&gt;() call. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00353">353</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7bd6415252b551f9ffae445d25e30b7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bd6415252b551f9ffae445d25e30b7a">&#9670;&nbsp;</a></span>make_yaml_as_initializer_with_help() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt;BT&gt; yadi::make_yaml_as_initializer_with_help </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a" title="See make_yaml_as_initializer_with_help(). Adds help string with the yaml.as&lt;BT&gt;() call info...">make_yaml_as_initializer_with_help()</a>. Adds help string with the yaml.as&lt;BT&gt;() call info. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00358">358</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac1095a9041ff52bd8df8ccd475fc18fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1095a9041ff52bd8df8ccd475fc18fc">&#9670;&nbsp;</a></span>make_yaml_as_initializer_with_help() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">yadi_info_t&lt;T&gt; yadi::make_yaml_as_initializer_with_help </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="namespaceyadi.html#a7bd6415252b551f9ffae445d25e30b7a" title="See make_yaml_as_initializer_with_help(). Adds help string with the yaml.as&lt;BT&gt;() call info...">make_yaml_as_initializer_with_help()</a>. Adds help string with the yaml.as&lt;BT&gt;() call info. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BT</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00358">358</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>
@@ -1078,7 +1434,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00295">295</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="initializers_8hpp_source.html#l00347">347</a> of file <a class="el" href="initializers_8hpp_source.html">initializers.hpp</a>.</p>
 
 </div>
 </div>

@@ -59,33 +59,30 @@ std\+::string {\bfseries demangle} (const char $\ast$name)
 \begin{DoxyCompactList}\small\item\em Call no argument constructor. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename BT , typename IT $>$ }\\\hyperlink{namespaceyadi_a92290eb27cd90666aa87b17d854af9fe}{ptr\+\_\+type\+\_\+t}$<$ BT $>$ \hyperlink{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}{init\+\_\+yaml} (Y\+A\+M\+L\+::\+Node const \&config)
 \begin{DoxyCompactList}\small\item\em Constructs IT via a constructor that accepts Y\+A\+ML and returns as pointer to BT, ptr\+\_\+type\+\_\+t$<$\+B\+T$>$. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}\label{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}} 
-{\footnotesize template$<$typename BT $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+caching\+\_\+initializer} (initializer\+\_\+type\+\_\+t$<$ BT $>$ const \&initializing\+\_\+initializer)
-\item 
-\mbox{\Hypertarget{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}\label{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}} 
-{\footnotesize template$<$typename BT $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+caching\+\_\+initializer} (yadi\+\_\+info\+\_\+t$<$ BT $>$ yi)
-\item 
+{\footnotesize template$<$typename BT $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}{make\+\_\+caching\+\_\+initializer} (initializer\+\_\+type\+\_\+t$<$ BT $>$ const \&initializing\+\_\+initializer)
+\begin{DoxyCompactList}\small\item\em Wraps initializer in caching functor. The wrapped initializer must produce a shared pointer. A weak pointer to the created shared pointer is stored upon first creation. In subsequence calls the weak pointer is checking and used if it\textquotesingle{}s still valid, otherwise a new shared pointer is created and the weak pointer is updated. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}{make\+\_\+caching\+\_\+initializer} (yadi\+\_\+info\+\_\+t$<$ BT $>$ yi)
+\begin{DoxyCompactList}\small\item\em Helper function which updated just the initializer of a yadi info. See make\+\_\+caching\+\_\+initializer(initializer\+\_\+type\+\_\+t$<$\+B\+T$>$) \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename BT , typename F $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer} (F func, std\+::vector$<$ std\+::string $>$ fields)
-\begin{DoxyCompactList}\small\item\em Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as make\+\_\+initializer(\+F). \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}\label{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}} 
-{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields)
-\item 
-\mbox{\Hypertarget{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}\label{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}} 
-{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::pair$<$ std\+::string, std\+::string $>$$>$ fields\+\_\+with\+\_\+help)
-\item 
-\mbox{\Hypertarget{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}\label{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}} 
-{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ {\bfseries make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields, std\+::vector$<$ std\+::string $>$ fields\+\_\+help)
-\item 
+\begin{DoxyCompactList}\small\item\em Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as \hyperlink{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}{make\+\_\+sequence\+\_\+initializer(\+F)}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields)
+\begin{DoxyCompactList}\small\item\em See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on fields. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::pair$<$ std\+::string, std\+::string $>$$>$ fields\+\_\+with\+\_\+help)
+\begin{DoxyCompactList}\small\item\em See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on passed in pairs, which the first entry in a pair is a yaml map key, and the second describes the field. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ fields, std\+::vector$<$ std\+::string $>$ fields\+\_\+help)
+\begin{DoxyCompactList}\small\item\em See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on passed in vectors. The fields vector provides yaml map keys, and the fields\+\_\+help vector provides help for the field at the same index. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename BT , typename F $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}{make\+\_\+sequence\+\_\+initializer} (F func)
 \begin{DoxyCompactList}\small\item\em Creates factory initializer that expects a Y\+A\+ML sequence. The elements of the sequence will be passed as a Y\+A\+ML factory config to the factory of the argument type. The results will be passed in to function func. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename BT , typename F $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help} (F func, std\+::vector$<$ std\+::string $>$ helps=\{\})
 \begin{DoxyCompactList}\small\item\em Makes yadi info with generated help for F. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{namespaceyadi_ad014ac420b07a0194cbee5da4fb534b1}\label{namespaceyadi_ad014ac420b07a0194cbee5da4fb534b1}} 
-{\footnotesize template$<$typename T $>$ }\\initializer\+\_\+type\+\_\+t$<$ T $>$ {\bfseries make\+\_\+yaml\+\_\+as\+\_\+initializer} ()
-\item 
-\mbox{\Hypertarget{namespaceyadi_adea1220ea992e73b916e1bc953498928}\label{namespaceyadi_adea1220ea992e73b916e1bc953498928}} 
-{\footnotesize template$<$typename T $>$ }\\yadi\+\_\+info\+\_\+t$<$ T $>$ {\bfseries make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help} ()
-\item 
+{\footnotesize template$<$typename BT $>$ }\\initializer\+\_\+type\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_aa1f9807cc4def04330e0f1e4dd480c9f}{make\+\_\+yaml\+\_\+as\+\_\+initializer} ()
+\begin{DoxyCompactList}\small\item\em Creates an initializer which simply calls yaml.\+as$<$\+B\+T$>$() for some Y\+A\+ML node yaml. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename BT $>$ }\\yadi\+\_\+info\+\_\+t$<$ BT $>$ \hyperlink{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help} ()
+\begin{DoxyCompactList}\small\item\em See \hyperlink{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}. Adds help string with the yaml.\+as$<$\+B\+T$>$() call info. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\initializer\+\_\+type\+\_\+t$<$ T $>$ \hyperlink{namespaceyadi_afb3e57191502ac483355c06b47fa228a}{make\+\_\+yaml\+\_\+as\+\_\+initializer} ()
+\begin{DoxyCompactList}\small\item\em Creates an initializer which simply calls yaml.\+as$<$\+B\+T$>$() for some Y\+A\+ML node yaml. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\yadi\+\_\+info\+\_\+t$<$ T $>$ \hyperlink{namespaceyadi_ac1095a9041ff52bd8df8ccd475fc18fc}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help} ()
+\begin{DoxyCompactList}\small\item\em See \hyperlink{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}. Adds help string with the yaml.\+as$<$\+B\+T$>$() call info. \end{DoxyCompactList}\item 
 Y\+A\+M\+L\+::\+Node \hyperlink{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}{merge\+\_\+yaml} (Y\+A\+M\+L\+::\+Node const \&left, Y\+A\+M\+L\+::\+Node const \&)
 \item 
 {\footnotesize template$<$typename BT $>$ }\\void \hyperlink{namespaceyadi_a848729993f692098bf175774503b80ee}{register\+\_\+type} (std\+::string type, yadi\+\_\+info\+\_\+t$<$ BT $>$ yadis)
@@ -166,7 +163,7 @@ ptr\+\_\+type\+\_\+t$<$\+B\+T$>$ via constructor of IT.
 \end{DoxyReturn}
 
 
-Definition at line 322 of file initializers.\+hpp.
+Definition at line 374 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_a85138aa0433192beaf4d0e67dd50cb23}\label{namespaceyadi_a85138aa0433192beaf4d0e67dd50cb23}} 
 \index{yadi@{yadi}!from\+\_\+yaml@{from\+\_\+yaml}}
@@ -305,7 +302,7 @@ The pointer type of base type.
 \end{DoxyReturn}
 
 
-Definition at line 317 of file initializers.\+hpp.
+Definition at line 369 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}\label{namespaceyadi_afde7bc09c5c23344ded1f10f21386272}} 
 \index{yadi@{yadi}!init\+\_\+yaml@{init\+\_\+yaml}}
@@ -335,7 +332,63 @@ The constructed type as ptr\+\_\+type\+\_\+t$<$\+B\+T$>$
 \end{DoxyReturn}
 
 
-Definition at line 312 of file initializers.\+hpp.
+Definition at line 364 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}\label{namespaceyadi_a97efcea8efe1e35d98961c88e21d5b31}} 
+\index{yadi@{yadi}!make\+\_\+caching\+\_\+initializer@{make\+\_\+caching\+\_\+initializer}}
+\index{make\+\_\+caching\+\_\+initializer@{make\+\_\+caching\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+caching\+\_\+initializer()}{make\_caching\_initializer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+initializer\+\_\+type\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+caching\+\_\+initializer (\begin{DoxyParamCaption}\item[{initializer\+\_\+type\+\_\+t$<$ BT $>$ const \&}]{initializing\+\_\+initializer }\end{DoxyParamCaption})}
+
+
+
+Wraps initializer in caching functor. The wrapped initializer must produce a shared pointer. A weak pointer to the created shared pointer is stored upon first creation. In subsequence calls the weak pointer is checking and used if it\textquotesingle{}s still valid, otherwise a new shared pointer is created and the weak pointer is updated. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em initializing\+\_\+initializer} & The initializer to wrap, which is used to create the shared pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An existing instance if it exists, otherwise a new instance is created. 
+\end{DoxyReturn}
+
+
+Definition at line 459 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}\label{namespaceyadi_a71eac695c975b9f2b7f9d9611725b94e}} 
+\index{yadi@{yadi}!make\+\_\+caching\+\_\+initializer@{make\+\_\+caching\+\_\+initializer}}
+\index{make\+\_\+caching\+\_\+initializer@{make\+\_\+caching\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+caching\+\_\+initializer()}{make\_caching\_initializer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+yadi\+\_\+info\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+caching\+\_\+initializer (\begin{DoxyParamCaption}\item[{yadi\+\_\+info\+\_\+t$<$ BT $>$}]{yi }\end{DoxyParamCaption})}
+
+
+
+Helper function which updated just the initializer of a yadi info. See make\+\_\+caching\+\_\+initializer(initializer\+\_\+type\+\_\+t$<$\+B\+T$>$) 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em yi} & The yadi info to update \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The passed in yadi info with updated initializer. 
+\end{DoxyReturn}
+
+
+Definition at line 485 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}\label{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}} 
 \index{yadi@{yadi}!make\+\_\+map\+\_\+initializer@{make\+\_\+map\+\_\+initializer}}
@@ -346,7 +399,7 @@ initializer\+\_\+type\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+map\+\_\+initializer (\
 
 
 
-Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as make\+\_\+initializer(\+F). 
+Expects a Y\+A\+ML map. The fields are pulled from the map and their values are used to create a sequence in the order the fields are provided. Once the sequence is created it\textquotesingle{}s treated the behavior is the same as \hyperlink{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}{make\+\_\+sequence\+\_\+initializer(\+F)}. 
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -367,7 +420,105 @@ Expects a Y\+A\+ML map. The fields are pulled from the map and their values are 
 \end{DoxyReturn}
 
 
-Definition at line 349 of file initializers.\+hpp.
+Definition at line 401 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}\label{namespaceyadi_ad3b75d9038a0e5b77482456af2311b0d}} 
+\index{yadi@{yadi}!make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help()}{make\_map\_initializer\_with\_help()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+yadi\+\_\+info\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}\item[{F}]{func,  }\item[{std\+::vector$<$ std\+::string $>$}]{fields }\end{DoxyParamCaption})}
+
+
+
+See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on fields. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+{\em F} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & \\
+\hline
+{\em fields} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 415 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}\label{namespaceyadi_acc00952238c78dc6fbfc89bfe6deb8ee}} 
+\index{yadi@{yadi}!make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help()}{make\_map\_initializer\_with\_help()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+yadi\+\_\+info\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}\item[{F}]{func,  }\item[{std\+::vector$<$ std\+::pair$<$ std\+::string, std\+::string $>$$>$}]{fields\+\_\+with\+\_\+help }\end{DoxyParamCaption})}
+
+
+
+See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on passed in pairs, which the first entry in a pair is a yaml map key, and the second describes the field. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+{\em F} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & \\
+\hline
+{\em fields\+\_\+with\+\_\+help} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 420 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}\label{namespaceyadi_aa63cb736dc5f8cbf6f6aad126825ab3d}} 
+\index{yadi@{yadi}!make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help()}{make\_map\_initializer\_with\_help()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename BT , typename F $>$ \\
+yadi\+\_\+info\+\_\+t$<$ BT $>$ yadi\+::make\+\_\+map\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}\item[{F}]{func,  }\item[{std\+::vector$<$ std\+::string $>$}]{fields,  }\item[{std\+::vector$<$ std\+::string $>$}]{fields\+\_\+help }\end{DoxyParamCaption})}
+
+
+
+See \hyperlink{namespaceyadi_a904dc2ee15dbdedd1b2dac4e0420fe15}{make\+\_\+map\+\_\+initializer(\+F, std\+::vector$<$std\+::string$>$)}. Adds generated help information based on passed in vectors. The fields vector provides yaml map keys, and the fields\+\_\+help vector provides help for the field at the same index. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+{\em F} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em func} & \\
+\hline
+{\em fields} & \\
+\hline
+{\em fields\+\_\+help} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 433 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}\label{namespaceyadi_ac81e360a765ce7e454fa3971f1f06cdd}} 
 \index{yadi@{yadi}!make\+\_\+sequence\+\_\+initializer@{make\+\_\+sequence\+\_\+initializer}}
@@ -397,7 +548,7 @@ Creates factory initializer that expects a Y\+A\+ML sequence. The elements of th
 \end{DoxyReturn}
 
 
-Definition at line 327 of file initializers.\+hpp.
+Definition at line 379 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}\label{namespaceyadi_aba056e293eb266e6ae286c6480ebe667}} 
 \index{yadi@{yadi}!make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+sequence\+\_\+initializer\+\_\+with\+\_\+help}}
@@ -427,7 +578,99 @@ Generated yadi info
 \end{DoxyReturn}
 
 
-Definition at line 333 of file initializers.\+hpp.
+Definition at line 385 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_aa1f9807cc4def04330e0f1e4dd480c9f}\label{namespaceyadi_aa1f9807cc4def04330e0f1e4dd480c9f}} 
+\index{yadi@{yadi}!make\+\_\+yaml\+\_\+as\+\_\+initializer@{make\+\_\+yaml\+\_\+as\+\_\+initializer}}
+\index{make\+\_\+yaml\+\_\+as\+\_\+initializer@{make\+\_\+yaml\+\_\+as\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+yaml\+\_\+as\+\_\+initializer()}{make\_yaml\_as\_initializer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+initializer\+\_\+type\+\_\+t$<$BT$>$ yadi\+::make\+\_\+yaml\+\_\+as\+\_\+initializer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates an initializer which simply calls yaml.\+as$<$\+B\+T$>$() for some Y\+A\+ML node yaml. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The result of the yaml.\+as$<$\+B\+T$>$() call. 
+\end{DoxyReturn}
+
+
+Definition at line 353 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_afb3e57191502ac483355c06b47fa228a}\label{namespaceyadi_afb3e57191502ac483355c06b47fa228a}} 
+\index{yadi@{yadi}!make\+\_\+yaml\+\_\+as\+\_\+initializer@{make\+\_\+yaml\+\_\+as\+\_\+initializer}}
+\index{make\+\_\+yaml\+\_\+as\+\_\+initializer@{make\+\_\+yaml\+\_\+as\+\_\+initializer}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+yaml\+\_\+as\+\_\+initializer()}{make\_yaml\_as\_initializer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+initializer\+\_\+type\+\_\+t$<$T$>$ yadi\+::make\+\_\+yaml\+\_\+as\+\_\+initializer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates an initializer which simply calls yaml.\+as$<$\+B\+T$>$() for some Y\+A\+ML node yaml. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The result of the yaml.\+as$<$\+B\+T$>$() call. 
+\end{DoxyReturn}
+
+
+Definition at line 353 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}\label{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}} 
+\index{yadi@{yadi}!make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}{make\_yaml\_as\_initializer\_with\_help()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename BT $>$ \\
+yadi\+\_\+info\+\_\+t$<$BT$>$ yadi\+::make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+See \hyperlink{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}. Adds help string with the yaml.\+as$<$\+B\+T$>$() call info. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 358 of file initializers.\+hpp.
+
+\mbox{\Hypertarget{namespaceyadi_ac1095a9041ff52bd8df8ccd475fc18fc}\label{namespaceyadi_ac1095a9041ff52bd8df8ccd475fc18fc}} 
+\index{yadi@{yadi}!make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help}}
+\index{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help@{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help}!yadi@{yadi}}
+\subsubsection{\texorpdfstring{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}{make\_yaml\_as\_initializer\_with\_help()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+yadi\+\_\+info\+\_\+t$<$T$>$ yadi\+::make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+See \hyperlink{namespaceyadi_a7bd6415252b551f9ffae445d25e30b7a}{make\+\_\+yaml\+\_\+as\+\_\+initializer\+\_\+with\+\_\+help()}. Adds help string with the yaml.\+as$<$\+B\+T$>$() call info. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 358 of file initializers.\+hpp.
 
 \mbox{\Hypertarget{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}\label{namespaceyadi_a495ab0c09cfb0aba37fd2115350d81d9}} 
 \index{yadi@{yadi}!merge\+\_\+yaml@{merge\+\_\+yaml}}
@@ -675,5 +918,5 @@ Returns config.\+as$<$\+T$>$(). Signature matches factory initializer.
 \end{DoxyReturn}
 
 
-Definition at line 295 of file initializers.\+hpp.
+Definition at line 347 of file initializers.\+hpp.
 

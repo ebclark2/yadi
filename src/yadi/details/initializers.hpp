@@ -59,16 +59,31 @@ template <typename BT, typename IT>
 ptr_type_t<BT> init_yaml(YAML::Node const& config);
 
 // TODO thread safe
+/**
+ * @brief Wraps initializer in caching functor. The wrapped initializer must produce a shared pointer.  A weak pointer
+ * to the created shared pointer is stored upon first creation.  In subsequence calls the weak pointer is checking and
+ * used if it's still valid, otherwise a new shared pointer is created and the weak pointer is updated.
+ * @tparam BT base type
+ * @param initializing_initializer The initializer to wrap, which is used to create the shared pointer.
+ * @return An existing instance if it exists, otherwise a new instance is created.
+ */
 template <typename BT>
 initializer_type_t<BT> make_caching_initializer(initializer_type_t<BT> const& initializing_initializer);
 
+/**
+ * @brief Helper function which updated just the initializer of a yadi info.
+ * See make_caching_initializer(initializer_type_t<BT>)
+ * @tparam BT base type
+ * @param yi The yadi info to update
+ * @return The passed in yadi info with updated initializer.
+ */
 template <typename BT>
 yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
 
 /**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
  * in the order the fields are provided.  Once the sequence is created it's treated the behavior is the same as
- * make_initializer(F).
+ * make_sequence_initializer(F).
  * @tparam BT
  * @tparam F
  * @param func
@@ -78,14 +93,41 @@ yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
 template <typename BT, typename F>
 initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields);
 
-// TODO Comment
+/**
+ * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on fields.
+ * @tparam BT base type
+ * @tparam F
+ * @param func
+ * @param fields
+ * @return
+ */
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields);
 
+/**
+ * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on passed in
+ * pairs, which the first entry in a pair is a yaml map key, and the second describes the field.
+ * @tparam BT base type
+ * @tparam F
+ * @param func
+ * @param fields_with_help
+ * @return
+ */
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func,
                                                std::vector<std::pair<std::string, std::string>> fields_with_help);
 
+/**
+ * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on passed in
+ * vectors.  The fields vector provides yaml map keys, and the fields_help vector provides help for the field at the
+ * same index.
+ * @tparam BT
+ * @tparam F
+ * @param func
+ * @param fields
+ * @param fields_help
+ * @return
+ */
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
                                                std::vector<std::string> fields_help);
@@ -112,16 +154,25 @@ initializer_type_t<BT> make_sequence_initializer(F func);
 template <typename BT, typename F>
 yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::string> helps = {});
 
-// TODO comment
-template <typename T>
-initializer_type_t<T> make_yaml_as_initializer();
+/**
+ * @brief Creates an initializer which simply calls yaml.as<BT>() for some YAML node yaml.
+ * @tparam BT base type
+ * @return The result of the yaml.as<BT>() call.
+ */
+template <typename BT>
+initializer_type_t<BT> make_yaml_as_initializer();
 
-// TODO comment
-template <typename T>
-yadi_info_t<T> make_yaml_as_initializer_with_help();
+/**
+ * @brief See make_yaml_as_initializer_with_help().  Adds help string with the yaml.as<BT>() call info.
+ * @tparam BT
+ * @return
+ */
+template <typename BT>
+yadi_info_t<BT> make_yaml_as_initializer_with_help();
 
 // ################### IMPL ######################
 
+// \cond DEV_DOCS
 namespace details {
 template <typename BT, typename IT, bool by_value = meta::is_by_value<BT>::value>
 struct init_yaml_helper;
@@ -290,6 +341,7 @@ function_traits_result_type<F> call_from_yaml(F const& func, YAML::Node const& y
     return function_call_via_yaml<F>::call(func, yaml);
 }
 }  // namespace details
+// \endcond
 
 template <typename T>
 T yaml_as(YAML::Node const& config) {

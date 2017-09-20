@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['derive_5fbase_5ftype',['derive_base_type',['../structyadi_1_1meta_1_1derive__base__type.html',1,'yadi::meta']]]
+  ['factory',['factory',['../structyadi_1_1factory.html',1,'yadi']]],
+  ['factory_5ftraits',['factory_traits',['../structyadi_1_1factory__traits.html',1,'yadi']]]
 ];
