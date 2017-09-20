@@ -1,7 +1,7 @@
 //
 // Created by Ed Clark on 8/29/17.
 //
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+// \cond DEV_DOCS
 #ifndef YADI_FACTORY_SPECIALIZATIONS_HPP
 #define YADI_FACTORY_SPECIALIZATIONS_HPP
 
@@ -75,4 +75,4 @@ struct adapter<std::set<ET>, std::set<ET>> : public inserter_adapter<std::set<ET
 }  // namespace yadi
 
 #endif  // YADI_FACTORY_SPECIALIZATIONS_HPP
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+        // \endcond

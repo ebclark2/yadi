@@ -55,7 +55,7 @@ struct derive_base_type {
 template <typename T>
 using derive_base_type_t = typename derive_base_type<T>::base_type;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+// \cond DEV_DOCS
 template <typename T>
 struct derive_base_type<std::shared_ptr<T>> {
     using base_type = bare_t<T>;  // if_convertible_then_t<ptr_type_t<T>, std::shared_ptr<T>, bare_t<T>>;
@@ -70,7 +70,7 @@ template <typename T>
 struct derive_base_type<T*> {
     using base_type = bare_t<T>;  // if_convertible_then_t<ptr_type_t<T>, T*, bare_t<T>>;
 };
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+// \endcond
 
 }  // namespace meta
 }  // namespace yadi
