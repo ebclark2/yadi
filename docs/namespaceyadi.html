@@ -77,11 +77,16 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a layer above <a class="el" href="structyadi_1_1factory.html#a600474900d2c6fa5d09935a641298bd5" title="Calls the initializer associated with type passing the given YAML config. ">factory&lt;BT&gt;::create</a>. This allows types such as templated containers to be created without registering initializers for each element type.  <a href="structyadi_1_1adapter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structyadi_1_1factory.html">factory</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A factory stores initializers and help informations for a given base type.  <a href="structyadi_1_1factory.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structyadi_1_1factory__traits.html">factory_traits</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory traits that can be changed for BT.  <a href="structyadi_1_1factory__traits.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structyadi_1_1yadi__help.html">yadi_help</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides help information without requiring the base type. <a class="el" href="structyadi_1_1yadi__help.html" title="Provides help information without requiring the base type. yadi_help also allows a human readable nam...">yadi_help</a> also allows a human readable name to be assigned to a base type. For example, std::string is easier to read then std::basic_string&lt;char, ...&gt;.  <a href="structyadi_1_1yadi__help.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structyadi_1_1yadi__help__fetcher.html">yadi_help_fetcher</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type erasure for factory state, which is a map is string name to a struct with an initializer and help information. Only the help information is accessed.  <a href="structyadi_1_1yadi__help__fetcher.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>

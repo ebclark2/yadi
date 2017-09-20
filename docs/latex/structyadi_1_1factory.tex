@@ -1,5 +1,14 @@
 \hypertarget{structyadi_1_1factory}{}\section{yadi\+:\+:factory$<$ BT $>$ Struct Template Reference}
 \label{structyadi_1_1factory}\index{yadi\+::factory$<$ B\+T $>$@{yadi\+::factory$<$ B\+T $>$}}
+
+
+A factory stores initializers and help informations for a given base type.  
+
+
+
+
+{\ttfamily \#include $<$factory.\+hpp$>$}
+
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,9 +44,16 @@ static type\+\_\+store const  \& \hyperlink{structyadi_1_1factory_aa167d70b96356
 \subsubsection*{template$<$typename BT$>$\newline
 struct yadi\+::factory$<$ B\+T $>$}
 
+A factory stores initializers and help informations for a given base type. 
 
 
-Definition at line 79 of file factory.\+hpp.
+\begin{DoxyTemplParams}{Template Parameters}
+{\em BT} & base type \\
+\hline
+\end{DoxyTemplParams}
+
+
+Definition at line 83 of file factory.\+hpp.
 
 
 
@@ -70,7 +86,7 @@ The result of the registered initializer
 \end{DoxyExceptions}
 
 
-Definition at line 136 of file factory.\+hpp.
+Definition at line 140 of file factory.\+hpp.
 
 \mbox{\Hypertarget{structyadi_1_1factory_a512c17ea9ca1bde8dec81c22b08e5278}\label{structyadi_1_1factory_a512c17ea9ca1bde8dec81c22b08e5278}} 
 \index{yadi\+::factory@{yadi\+::factory}!register\+\_\+type@{register\+\_\+type}}
@@ -92,7 +108,7 @@ Registers initializer to type. When create is called with type this initializer 
 \end{DoxyParams}
 
 
-Definition at line 128 of file factory.\+hpp.
+Definition at line 132 of file factory.\+hpp.
 
 \mbox{\Hypertarget{structyadi_1_1factory_aa167d70b963561d24c8a32f680d7e8c0}\label{structyadi_1_1factory_aa167d70b963561d24c8a32f680d7e8c0}} 
 \index{yadi\+::factory@{yadi\+::factory}!types@{types}}
@@ -110,7 +126,7 @@ Stored types and their registered initializers and help.
 \end{DoxyReturn}
 
 
-Definition at line 146 of file factory.\+hpp.
+Definition at line 150 of file factory.\+hpp.
 
 
 

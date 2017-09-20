@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['yadi_5fhelp',['yadi_help',['../structyadi_1_1yadi__help.html',1,'yadi']]],
-  ['yadi_5finfo',['yadi_info',['../structyadi_1_1factory_1_1yadi__info.html',1,'yadi::factory']]]
+  ['if_5fconvertible_5fthen',['if_convertible_then',['../structyadi_1_1meta_1_1if__convertible__then.html',1,'yadi::meta']]],
+  ['is_5fby_5fvalue',['is_by_value',['../structyadi_1_1meta_1_1is__by__value.html',1,'yadi::meta']]]
 ];

@@ -11,11 +11,13 @@ Y\+A\+DI.
 struct \hyperlink{structyadi_1_1adapter}{adapter}
 \begin{DoxyCompactList}\small\item\em Provides a layer above \hyperlink{structyadi_1_1factory_a600474900d2c6fa5d09935a641298bd5}{factory$<$\+B\+T$>$\+::create}. This allows types such as templated containers to be created without registering initializers for each element type. \end{DoxyCompactList}\item 
 struct \hyperlink{structyadi_1_1factory}{factory}
-\item 
+\begin{DoxyCompactList}\small\item\em A factory stores initializers and help informations for a given base type. \end{DoxyCompactList}\item 
 struct \hyperlink{structyadi_1_1factory__traits}{factory\+\_\+traits}
 \begin{DoxyCompactList}\small\item\em Factory traits that can be changed for BT. \end{DoxyCompactList}\item 
 struct \hyperlink{structyadi_1_1yadi__help}{yadi\+\_\+help}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Provides help information without requiring the base type. \hyperlink{structyadi_1_1yadi__help}{yadi\+\_\+help} also allows a human readable name to be assigned to a base type. For example, std\+::string is easier to read then std\+::basic\+\_\+string$<$char, ...$>$. \end{DoxyCompactList}\item 
+struct \hyperlink{structyadi_1_1yadi__help__fetcher}{yadi\+\_\+help\+\_\+fetcher}
+\begin{DoxyCompactList}\small\item\em Type erasure for factory state, which is a map is string name to a struct with an initializer and help information. Only the help information is accessed. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 

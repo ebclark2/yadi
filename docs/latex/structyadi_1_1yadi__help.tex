@@ -1,10 +1,19 @@
 \hypertarget{structyadi_1_1yadi__help}{}\section{yadi\+:\+:yadi\+\_\+help Struct Reference}
 \label{structyadi_1_1yadi__help}\index{yadi\+::yadi\+\_\+help@{yadi\+::yadi\+\_\+help}}
+
+
+Provides help information without requiring the base type. \hyperlink{structyadi_1_1yadi__help}{yadi\+\_\+help} also allows a human readable name to be assigned to a base type. For example, std\+::string is easier to read then std\+::basic\+\_\+string$<$char, ...$>$.  
+
+
+
+
+{\ttfamily \#include $<$help.\+hpp$>$}
+
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{structyadi_1_1yadi__help_a3f208166dac982fc5ea2da59cccfd51e}\label{structyadi_1_1yadi__help_a3f208166dac982fc5ea2da59cccfd51e}} 
-using {\bfseries help\+\_\+store} = std\+::map$<$ std\+::string, details\+::yadi\+\_\+help\+\_\+fetcher $>$
+\mbox{\Hypertarget{structyadi_1_1yadi__help_a75ac18a2704307f2b4acddb4e45f66d5}\label{structyadi_1_1yadi__help_a75ac18a2704307f2b4acddb4e45f66d5}} 
+using {\bfseries help\+\_\+store} = std\+::map$<$ std\+::string, \hyperlink{structyadi_1_1yadi__help__fetcher}{yadi\+\_\+help\+\_\+fetcher} $>$
 \item 
 \mbox{\Hypertarget{structyadi_1_1yadi__help_aaa85b3a9116a8dd35a91db333576bf59}\label{structyadi_1_1yadi__help_aaa85b3a9116a8dd35a91db333576bf59}} 
 using {\bfseries name\+\_\+store} = std\+::map$<$ std\+::type\+\_\+index, std\+::string $>$
@@ -30,9 +39,9 @@ static name\+\_\+store const  \& {\bfseries names} ()
 
 
 \subsection{Detailed Description}
+Provides help information without requiring the base type. \hyperlink{structyadi_1_1yadi__help}{yadi\+\_\+help} also allows a human readable name to be assigned to a base type. For example, std\+::string is easier to read then std\+::basic\+\_\+string$<$char, ...$>$. 
 
-
-Definition at line 81 of file help.\+hpp.
+Definition at line 86 of file help.\+hpp.
 
 
 
