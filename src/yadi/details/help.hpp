@@ -19,6 +19,10 @@
  * @brief YADI
  */
 namespace yadi {
+/**
+ * @brief Type erasure for factory state, which is a map is string name to a struct with an initializer and help
+ * information.  Only the help information is accessed.
+ */
 struct yadi_help_fetcher {
     struct concept {
         virtual std::string get_help(std::string const& type) const = 0;
