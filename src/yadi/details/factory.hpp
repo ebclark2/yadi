@@ -86,8 +86,8 @@ struct factory {
     using ptr_type = ptr_type_t<base_type>;
 
     struct yadi_info {
-        initializer_type initializer;
-        std::string help;
+        initializer_type initializer;  ///< Initializer used to create an instance of a type.
+        std::string help;              ///< Help information for the initializer.
     };
 
     using type_store = std::map<std::string, yadi_info>;
