@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 project(yadi)
 
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_check_compiler()

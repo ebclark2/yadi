@@ -13,7 +13,7 @@ YADI_TEST(alias_config_test) {
     if (!ymlPtr) {
         return false;
     }
-    return ymlPtr->as<std::string>("Not a string") == "Hello World!";
+    return ymlPtr.as<std::string>("Not a string") == "Hello World!";
 }
 
 YADI_TEST(aliases_config_test) {
@@ -32,7 +32,7 @@ yaml2:
         if (!ymlPtr) {
             return false;
         }
-        if (!(ymlPtr->as<std::string>("Not a string") == "yaml1_config")) {
+        if (!(ymlPtr.as<std::string>("Not a string") == "yaml1_config")) {
             return false;
         }
     }
@@ -42,7 +42,7 @@ yaml2:
         if (!ymlPtr) {
             return false;
         }
-        if (!(ymlPtr->as<std::string>("Not a string") == "yaml2_config")) {
+        if (!(ymlPtr.as<std::string>("Not a string") == "yaml2_config")) {
             return false;
         }
     }

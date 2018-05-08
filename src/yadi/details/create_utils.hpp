@@ -33,6 +33,7 @@ template <typename FT, typename OT = ptr_type_t<meta::derive_base_type_t<FT>>>
 struct adapter {
     using base_type = meta::derive_base_type_t<FT>;
     using output_type = OT;
+    static constexpr bool direct_from_yaml = false;
 
     // TODO add some function to show factory return type in error message
     static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,

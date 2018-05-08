@@ -11,6 +11,9 @@
 #include "help.hpp"
 #include "type_utils.hpp"
 
+#include <optional>
+
+
 /**
  * @namespace yadi
  * @brief YADI
@@ -174,6 +177,20 @@ yadi_info_t<BT> make_yaml_as_initializer_with_help();
 
 // \cond DEV_DOCS
 namespace details {
+
+template <typename T>
+struct is_optional {
+    static constexpr bool value = false;
+};
+
+template <typename ... T>
+struct is_optional<std::optional<T...>> {
+    static constexpr bool value = true;
+};
+
+template <typename T>
+inline constexpr bool is_optional_v = is_optional<T>::value;
+
 template <typename BT, typename IT, bool by_value = meta::is_by_value<BT>::value>
 struct init_yaml_helper;
 
@@ -236,13 +253,45 @@ struct ctr_helper<BT, IT, false> {
     }
 };
 
+class yadi_mapping_exception : public std::exception {
+public:
+    yadi_mapping_exception(std::size_t index, std::string msg="", std::string field_name="")
+            : index(index)
+            , msg(msg)
+            , field_name(field_name)
+            , buffer("Field \"" + field_name + "\": " + msg) {
+
+    }
+    std::size_t const index;
+    std::string const msg;
+    std::string const field_name;
+
+    std::string const buffer;
+
+    const char*
+    what() const noexcept override {
+        return buffer.c_str();
+    }
+};
+
 template <typename tuple_t, size_t index = std::tuple_size<tuple_t>::value - 1>
 struct yaml_to_tuple {
     static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
         using element_type = meta::bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
-            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1 - index]);
-        yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
+        // Skip optional fields with undefined or null YAML
+        YAML::Node field_config = yaml[std::tuple_size<tuple_t>::value - 1 - index];
+        if (!is_optional_v<element_type> || (field_config.IsDefined() && !field_config.IsNull())) {
+            try {
+                std::get<std::tuple_size<tuple_t>::value - 1 - index>(out) =
+                        ::yadi::from_yaml<element_type>(field_config);
+            } catch(std::exception const& ex) {
+                throw yadi_mapping_exception(std::tuple_size<tuple_t>::value - 1 - index, ex.what());
+            }
+        }
+
+        if constexpr (index != 0) {
+            yaml_to_tuple<tuple_t, index - 1>::to_tuple(out, yaml);
+        }
     }
 
     template <typename arg_type_out>
@@ -250,23 +299,9 @@ struct yaml_to_tuple {
         using element_type = meta::bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
         arg_types = adapter<element_type, element_type>::get_name();
         arg_types++;
-        yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
-    }
-};
-
-template <typename tuple_t>
-struct yaml_to_tuple<tuple_t, 0> {
-    static void to_tuple(tuple_t& out, YAML::Node const& yaml) {
-        using element_type = meta::bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
-        std::get<std::tuple_size<tuple_t>::value - 1>(out) =
-            ::yadi::from_yaml<element_type>(yaml[std::tuple_size<tuple_t>::value - 1]);
-    }
-
-    template <typename arg_type_out>
-    static void to_arg_types(arg_type_out arg_types) {
-        using element_type = meta::bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1, tuple_t>>;
-        arg_types = adapter<element_type, element_type>::get_name();
-        arg_types++;
+        if constexpr (index != 0) {
+            yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
+        }
     }
 };
 
@@ -405,9 +440,18 @@ initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fie
         YAML::Node sequence;
         for (std::string const& field : fields) {
             // TODO error checking for field
-            sequence.push_back(yaml[field]);
+            YAML::Node fieldNode = yaml[field];
+            if(fieldNode) {
+                sequence.push_back(fieldNode);
+            } else {
+                sequence.push_back(YAML::Null);
+            }
         }
-        return details::call_from_yaml(func, sequence);
+        try {
+            return details::call_from_yaml(func, sequence);
+        } catch(details::yadi_mapping_exception & ex) {
+            throw details::yadi_mapping_exception(ex.index, ex.msg, fields[ex.index]);
+        }
     };
 }
 
@@ -490,3 +534,4 @@ yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi) {
 }  // namespace yadi
 
 #endif  // YADI_INITIALIZERS_HPP
+

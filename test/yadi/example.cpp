@@ -31,8 +31,16 @@ struct electric : public power_plant {
 };
 
 struct gas : public power_plant {
-    gas(std::string make, int cylinder_count, float bore, float stroke, std::set<std::string> vendors)
-        : make(make), cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {}
+    static std::string const DEFAULT_MAKE;
+
+    gas(std::optional<std::string> make, int cylinder_count, float bore, float stroke, std::set<std::string> vendors)
+        : cylinder_count(cylinder_count), bore(bore), stroke(stroke), vendors(std::move(vendors)) {
+        if(make) {
+            this->make = *make;
+        } else {
+            this->make = gas::DEFAULT_MAKE;
+        }
+    }
 
     int power() const { return this->bore * this->stroke * this->cylinder_count; }
 
@@ -42,6 +50,8 @@ struct gas : public power_plant {
     float stroke;
     std::set<std::string> vendors;
 };
+
+std::string const gas::DEFAULT_MAKE = "Unknown make";
 
 struct car {
     car(std::string make, std::unique_ptr<power_plant>&& motor) : make(std::move(make)), motor(std::move(motor)) {}
@@ -68,7 +78,7 @@ YADI_INIT_BEGIN
 
 // Make gas from mapped args
 register_type<power_plant>("gas", ::yadi::make_map_initializer_with_help<power_plant>(
-                                      &ctr<power_plant, gas, std::string, int, float, float, std::set<std::string>>,
+                                      &ctr<power_plant, gas, std::optional<std::string>, int, float, float, std::set<std::string>>,
                                       {std::make_pair("make", "Engine make"),
                                        std::make_pair("cylinder_count", "The number of cylinders"),
                                        std::make_pair("bore", "Cylidner bore in inches"),
@@ -106,12 +116,23 @@ YADI_TEST(nested_example_test) {
         - 3
         - 4
         - 5
+- make: "Ford"
+  power_plant:
+    type: gas
+    config:
+      cylinder_count: 8
+      bore: 3.72
+      stroke: 3.44
+      vendors:
+        - Currie
+        - Synergy
+        - Some other vendor
 )raw";
 
     std::vector<car> cars = from_yaml<std::vector<car>>(YAML::Load(YAML_CONFIG));
     // from_yamls<car>(YAML::Load(YAML_CONFIG), std::back_inserter(cars));
 
-    YADI_ASSERT_EQ(2u, cars.size());
+    YADI_ASSERT_EQ(3u, cars.size());
     {
         car const& c = cars[0];
         YADI_ASSERT_EQ("gm", c.make);
@@ -130,6 +151,16 @@ YADI_TEST(nested_example_test) {
         YADI_ASSERT_EQ(1200, pp.watts);
         std::vector<int> expectedNumbers = {1, 2, 3, 4, 5};
         YADI_ASSERT_EQ(expectedNumbers, pp.numbers);
+    }
+    {
+        car const& c = cars[2];
+        YADI_ASSERT_EQ("Ford", c.make);
+        gas const& pp = dynamic_cast<gas const&>(*c.motor);
+        YADI_ASSERT_EQ(gas::DEFAULT_MAKE, pp.make);
+        YADI_ASSERT_EQ(8, pp.cylinder_count);
+        YADI_ASSERT_EQ(372, (int)(pp.bore * 100.0f));
+        YADI_ASSERT_EQ(344, (int)(pp.stroke * 100.0f));
+        YADI_ASSERT_EQ(3, pp.vendors.size());
     }
     return true;
 }

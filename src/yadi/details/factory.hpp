@@ -146,7 +146,11 @@ typename factory<BT>::ptr_type factory<BT>::create(std::string const& type, YAML
         throw std::runtime_error("\"" + type + "\" not found in \"" + demangle_type<BT>() + "\" factory");
     }
 
-    return type_iter->second.initializer(config);
+    try {
+        return type_iter->second.initializer(config);
+    } catch(std::exception const& ex) {
+        throw std::runtime_error("Error creating \"" + type + "\": " + ex.what());
+    }
 }
 
 template <typename BT>
@@ -163,3 +167,4 @@ typename factory<BT>::type_store& factory<BT>::mut_types() {
 }  // namespace yadi
 
 #endif  // YADI_FACTORY_HPP
+

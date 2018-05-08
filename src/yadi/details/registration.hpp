@@ -70,7 +70,7 @@ void register_type_no_arg(std::string type);
  * @param config
  */
 template <typename BT>
-void register_alias(std::string alias, std::string type, YAML::Node config);
+void register_alias(std::string alias, std::string type, YAML::Node config={});
 
 /**
  * @brief Loads aliases from a YAML file.  The file should be a map of the format...
