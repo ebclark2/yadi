@@ -2,13 +2,13 @@ from conans import ConanFile, CMake, tools
 
 class YadiConan(ConanFile):
     name = "yadi"
-    version = "0.4.6"
+    version = "0.5.4"
     license = "<Put the package license here>"
     url = "<Package recipe repository url here, for issues about the package>"
     description = "<Description of Yadi here>"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
-    requires = "yaml-cpp/master@ebclark2/stable"
+    requires = "yaml-cpp/master@ebclar2/stable"
     build_requires = "cmake_installer/1.0@conan/stable"
     options = {"shared": [True, False]}
     default_options = "shared=True", "yaml-cpp:fPIC=True", "cmake_installer:version=3.9.0"
@@ -29,4 +29,4 @@ class YadiConan(ConanFile):
         self.copy("yadi_inspector", dst="bin", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["yadi"]
+        self.cpp_info.libs = ["yadi", "yadi_inspector_lib"]

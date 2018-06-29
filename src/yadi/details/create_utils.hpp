@@ -23,21 +23,24 @@ namespace yadi {
  */
 std::string const& type_by_value_key();
 
+using namespace std::string_literals;
+template <typename L, typename R>
+struct conversion_error_msg {
+
+    static constexpr std::string value = "Unable to convert "s + ::yadi::demangle_type<L>() + " to " + ::yadi::demangle_type<R>();
+};
+
 /**
  * @brief Provides a layer above factory<BT>::create.  This allows types such as templated containers to
  * be created without registering initializers for each element type.
  * @tparam FT The type the base type will be derived from via derived_base_type_t<FT>.
  * @tparam OT The desired output type.
  */
-template <typename FT, typename OT = ptr_type_t<meta::derive_base_type_t<FT>>>
+template <typename FT>
 struct adapter {
     using base_type = meta::derive_base_type_t<FT>;
-    using output_type = OT;
-    static constexpr bool direct_from_yaml = false;
-
-    // TODO add some function to show factory return type in error message
-    static_assert(std::is_convertible<ptr_type_t<base_type>, OT>::value,
-                  "Unable to convert factory return type to desired output type in ");
+    using output_type = ptr_type_t<base_type>;
+    static constexpr bool direct_from_yaml = factory_traits<base_type>::direct_from_yaml;
 
     /**
      * @brief The default is to forward to factory<base_type>::create(type, config);
@@ -127,9 +130,9 @@ typename adapter<FT>::output_type create(std::string const& type, YAML::Node con
 template <typename OT>
 OT from_yaml(YAML::Node const& factory_config) {
     using BT = meta::derive_base_type_t<OT>;
-    using DOT = OT;  // derive_output_type_t<OT>;
-    if (adapter<OT, OT>::direct_from_yaml) {
-        return adapter<BT, DOT>::create(type_by_value_key(), factory_config);
+//    using DOT = OT;  // derive_output_type_t<OT>;
+    if (adapter<OT>::direct_from_yaml) {
+        return adapter<BT>::create(type_by_value_key(), factory_config);
     }
 
     if (!factory_config.IsDefined()) {
@@ -142,7 +145,7 @@ OT from_yaml(YAML::Node const& factory_config) {
             throw std::runtime_error("Factory config scalar not valid");
         }
 
-        return adapter<BT, DOT>::create(type);
+        return adapter<BT>::create(type);
     }
 
     if (factory_config.IsMap()) {
@@ -156,7 +159,7 @@ OT from_yaml(YAML::Node const& factory_config) {
         }
 
         YAML::Node configNode = factory_config["config"];
-        return adapter<BT, DOT>::create(type, configNode);
+        return adapter<BT>::create(type, configNode);
     }
 
     throw std::runtime_error("Factory config not valid, YAML must be scalar string or map");

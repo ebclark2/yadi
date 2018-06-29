@@ -21,6 +21,11 @@
 namespace yadi {
 
 /**
+* @brief Helper function to pretty-print the valid fields in the make_map_initializer functions
+*/
+std::string formatFields(std::vector<std::string> const &fields);
+
+/**
  * @brief Construct IT via contructor with the given arguments.  This is intended to be used with a yaml binding
  * initializer such as make_sequence_initializer(&ctr<BT, IT, MyCtrArgs...>, ...).
  * @tparam BT Base type.
@@ -84,56 +89,86 @@ template <typename BT>
 yadi_info_t<BT> make_caching_initializer(yadi_info_t<BT> yi);
 
 /**
+ * @brief Uses the config node to construct the single argument type.
+ * @tparam BT
+ * @tparam F
+ * @param func Initialization function
+ * @return
+ */
+template <typename BT, typename F>
+initializer_type_t<BT> make_single_arg_initializer(F func);
+
+/**
+ * @brief Uses the config node to construct the single argument type.
+ * @tparam BT
+ * @tparam F
+ * @param func Initialization function
+ * @param help
+ * @return
+ */
+template <typename BT, typename F>
+yadi_info_t<BT> make_single_arg_initializer_with_help(F func, std::string help);
+
+/**
  * @brief Expects a YAML map.  The fields are pulled from the map and their values are used to create a sequence
  * in the order the fields are provided.  Once the sequence is created it's treated the behavior is the same as
- * make_sequence_initializer(F).
+ * make_sequence_initializer(F). Throws an exception if strictFields is true and the yaml contains an element that isn't one of the fields.
  * @tparam BT
  * @tparam F
  * @param func
  * @param fields
+ * @param strictFields Check to see if the keys in the yaml are included in the fields
  * @return
  */
 template <typename BT, typename F>
-initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields);
+initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields, bool strictFields = true);
 
 /**
  * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on fields.
+ * Throws an exception if strictFields is true and the yaml contains a key that isn't one of the fields.
  * @tparam BT base type
  * @tparam F
  * @param func
  * @param fields
+ * @param strictFields Check to see if the keys in the yaml are included in the fields
  * @return
  */
 template <typename BT, typename F>
-yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields);
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields, bool strictFields = true);
 
 /**
  * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on passed in
  * pairs, which the first entry in a pair is a yaml map key, and the second describes the field.
+ * Throws an exception if strictFields is true and the yaml contains a key that isn't one of the fields.
  * @tparam BT base type
  * @tparam F
  * @param func
  * @param fields_with_help
+ * @param strictFields Check to see if the keys in the yaml are included in the fields
  * @return
  */
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func,
-                                               std::vector<std::pair<std::string, std::string>> fields_with_help);
+                                               std::vector<std::pair<std::string, std::string>> fields_with_help,
+                                               bool strictFields = true);
 
 /**
  * @brief See make_map_initializer(F, std::vector<std::string>).  Adds generated help information based on passed in
  * vectors.  The fields vector provides yaml map keys, and the fields_help vector provides help for the field at the
  * same index.
+ * Throws an exception if strictFields is true and the yaml contains a key that isn't one of the fields.
  * @tparam BT
  * @tparam F
  * @param func
  * @param fields
  * @param fields_help
+ * @param strictFields Check to see if the keys in the yaml are included in the fields
  * @return
  */
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
-                                               std::vector<std::string> fields_help);
+                                               std::vector<std::string> fields_help,
+                                               bool strictFields = true);
 
 /**
  * @brief Creates factory initializer that expects a YAML sequence.  The elements of the sequence will be
@@ -297,7 +332,7 @@ struct yaml_to_tuple {
     template <typename arg_type_out>
     static void to_arg_types(arg_type_out arg_types) {
         using element_type = meta::bare_t<std::tuple_element_t<std::tuple_size<tuple_t>::value - 1 - index, tuple_t>>;
-        arg_types = adapter<element_type, element_type>::get_name();
+        arg_types = adapter<element_type>::get_name();
         arg_types++;
         if constexpr (index != 0) {
             yaml_to_tuple<tuple_t, index - 1>::to_arg_types(arg_types);
@@ -411,6 +446,34 @@ ptr_type_t<BT> ctr(ARGS... args) {
 }
 
 template <typename BT, typename F>
+initializer_type_t<BT> make_single_arg_initializer(F func) {
+    if constexpr (std::tuple_size<details::function_traits_params_type<F>>::value != 1u) {
+        throw std::runtime_error("Single arg initializer must accept only a single argument");
+    }
+
+    // Make sequence and call func
+    return [func](YAML::Node const& yaml) {
+        YAML::Node seq;
+        seq.push_back(yaml);
+        return details::call_from_yaml(func, seq);
+    };
+}
+
+template <typename BT, typename F>
+yadi_info_t<BT> make_single_arg_initializer_with_help(F func, std::string help) {
+    if constexpr (std::tuple_size<details::function_traits_params_type<F>>::value != 1u) {
+        throw std::runtime_error("Single arg initializer must accept only a single argument");
+    }
+
+    std::vector<std::string> field_types;
+    details::yaml_to_tuple<details::function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
+
+    help = "YAML configuration converted to single \"" + field_types.front() + "\": " + help;
+
+    return {make_single_arg_initializer<BT>(func), help};
+}
+
+template <typename BT, typename F>
 initializer_type_t<BT> make_sequence_initializer(F func) {
     // TODO Error checking for yaml sequence type
     return [func](YAML::Node const& yaml) { return details::call_from_yaml(func, yaml); };
@@ -433,8 +496,18 @@ yadi_info_t<BT> make_sequence_initializer_with_help(F func, std::vector<std::str
 }
 
 template <typename BT, typename F>
-initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields) {
-    return [func, fields](YAML::Node const& yaml) {
+initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fields, bool strictFields) {
+    return [func, fields, strictFields](YAML::Node const& yaml) {
+        if(strictFields) {
+            std::set<std::string> fieldSet{fields.begin(), fields.end()};
+            for(auto iter = yaml.begin(); iter != yaml.end(); ++iter) {
+                std::string value = iter->first.as<std::string>();
+                if(fieldSet.find(value) == fieldSet.end()) {
+                    throw std::runtime_error("Unexpected field \"" + value + "\" found in yaml configuration. Valid fields are " +
+                                                 formatFields(fields));
+                }
+            }
+        }
         // Convert yaml map to sequence via ordered field list
         // TODO error checking for yaml map type
         YAML::Node sequence;
@@ -456,13 +529,14 @@ initializer_type_t<BT> make_map_initializer(F func, std::vector<std::string> fie
 }
 
 template <typename BT, typename F>
-yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields) {
-    return make_map_initializer_with_help<BT>(func, fields, {});
+yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields, bool strictFields) {
+    return make_map_initializer_with_help<BT>(func, fields, {}, strictFields);
 }
 
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func,
-                                               std::vector<std::pair<std::string, std::string>> fields_with_help) {
+                                               std::vector<std::pair<std::string, std::string>> fields_with_help,
+                                               bool strictFields) {
     std::vector<std::string> fields;
     std::vector<std::string> fields_help;
     for (auto const& field_with_help : fields_with_help) {
@@ -470,12 +544,13 @@ yadi_info_t<BT> make_map_initializer_with_help(F func,
         fields_help.push_back(field_with_help.second);
     }
 
-    return make_map_initializer_with_help<BT>(func, fields, fields_help);
+    return make_map_initializer_with_help<BT>(func, fields, fields_help, strictFields);
 }
 
 template <typename BT, typename F>
 yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> fields,
-                                               std::vector<std::string> fields_help) {
+                                               std::vector<std::string> fields_help,
+                                               bool strictFields) {
     std::vector<std::string> field_types;
     details::yaml_to_tuple<details::function_traits_params_type<F>>::to_arg_types(std::back_inserter(field_types));
     if (field_types.size() != fields.size()) {
@@ -495,7 +570,7 @@ yadi_info_t<BT> make_map_initializer_with_help(F func, std::vector<std::string> 
             help += ", " + field_help;
         }
     }
-    return {make_map_initializer<BT>(func, fields), help};
+    return {make_map_initializer<BT>(func, fields, strictFields), help};
 }
 
 // TODO thread safe

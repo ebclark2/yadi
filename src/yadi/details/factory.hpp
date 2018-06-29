@@ -65,7 +65,7 @@ namespace yadi {
 template <typename BT>
 struct factory_traits {
     using ptr_type = std::unique_ptr<BT>;  /// The type of pointer to return from create.
-    static const bool direct_from_yaml = false;
+    static constexpr bool direct_from_yaml = false;
 };
 
 /**
@@ -129,6 +129,12 @@ using initializer_type_t = typename factory<BT>::initializer_type;
 template <typename BT>
 using yadi_info_t = typename factory<BT>::yadi_info;
 
+template <typename BT>
+struct registration_mod {
+    static yadi_info_t<BT> mod(yadi_info_t<BT> && yadis);
+};
+
+
 // ############################ IMPL ############################
 
 template <typename BT>
@@ -136,7 +142,7 @@ void factory<BT>::register_type(std::string type, yadi_info yadis) {
 #ifdef YADI_DEBUG
     std::cerr << "Registering \"" + type + "\" to \"" + demangle_type<BT>() + "\" factory\n";
 #endif
-    mut_types()[type] = yadis;
+    mut_types()[type] = registration_mod<BT>::mod(std::move(yadis));
 }
 
 template <typename BT>
@@ -163,6 +169,10 @@ typename factory<BT>::type_store& factory<BT>::mut_types() {
     static type_store TYPES;
     return TYPES;
 }
+
+template <typename BT>
+yadi_info_t<BT> registration_mod<BT>::mod(yadi_info_t<BT> && yadis) { return std::move(yadis); }
+
 
 }  // namespace yadi
 

@@ -59,3 +59,24 @@ a4: 4.5
 
     return true;
 }
+
+
+YADI_TEST(yaml_bindings_map_test2) {
+    std::string YAML = R"raw(
+---
+a1: 1.5
+a3: 3
+a2: 2.5
+a4: 4.5
+)raw";
+    try {
+        ::yadi::register_type<double>("mapped_sum", ::yadi::make_map_initializer<double>(&sum, {"a1", "a2", "a3"}));
+        ::yadi::create<double>("mapped_sum", YAML::Load(YAML));
+    }
+    catch(std::runtime_error const& err) {
+        std::string str = err.what();
+        return true;
+    }
+
+    return false;
+}
