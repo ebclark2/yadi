@@ -1,7 +1,7 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "yadi/0.1"
+     - CONAN_REFERENCE: "yadi/0.5.4"
      - CONAN_USERNAME: "ebclark2"
      - CONAN_LOGIN_USERNAME: "ebclark2"
      - CONAN_CHANNEL: "testing"
